@@ -1,5 +1,6 @@
 import  ReactDOM  from "react-dom";
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import './modal.css'
 
 const modalRoot = document.getElementById("react-modals");
 

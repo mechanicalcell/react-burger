@@ -2,7 +2,8 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DeleteIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import '../index.css';
+//import '../index.css';
+import './burgerconstructor.css';
 
 function ConstructorIngredients({ data }) {
   const image = (
@@ -34,7 +35,7 @@ export default function BurgerConstructor({data, onOpen, isVisible, modal1}) {
           !data.hasError &&
           data.length &&
           data.map((item, index) => 
-          <ConstructorIngredients data={item} /> )}
+          <ConstructorIngredients key={index} data={item} /> )}
         </div> 
         <div className='order_container mt-10 mb-2'>
           <p className="text_ingredient_container text text_type_digits-default mr-2">610</p>    

@@ -2,6 +2,7 @@ import React from "react"
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import './burgeringredients.css';
 
 function Ingredients({ data, onOpen, current }) {
   const image = (
@@ -63,7 +64,7 @@ export default function BurgerIngredients({data, onOpen }) {
             //data.hasError &&
             data.length &&
             data.map((item, index) => 
-            <Ingredients data={item} onOpen={onOpen} current={current} /> )}
+            <Ingredients key={index} data={item} onOpen={onOpen} current={current} /> )}
           </div>  
       </div> 
     </div>  
