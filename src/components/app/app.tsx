@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import './App.css';
-import AppHeader from './components/AppHeader';
-import BurgerIngredients from './components/BurgerIngredients';
-import BurgerConstructor from './components/BurgerConstructor';
-import Modal from './components/Modal';
+import styles from './app.module.css';
+import AppHeader from '../app-header/app-header';
+import BurgerIngredients from '../burger-ingredients/burger-ingredients';
+import BurgerConstructor from '../burger-constructor/burger-constructor';
+import Modal from '../modal/modal';
 
 export default function App() {
   const [state, setState] = useState({
@@ -18,11 +18,12 @@ export default function App() {
   });
   
   useEffect(() => {
+    const url='https://norma.nomoreparties.space/api/ingredients';
     const getIngredients = async () => {
-      setState({...state, hasError: false, isLoading: true});
-      const res = await fetch('https://norma.nomoreparties.space/api/ingredients');
-      const data = await res.json();
-      setState({...state, hasError: true, isLoading: false, data: data.data});
+      await fetch(url)
+      .then(res => res.json())
+      .then(data => setState({...state, data: data.data, isLoading: false}))
+      .catch(e => setState({ ...state, isLoading: false, hasError: true }))
     }
     getIngredients();
   }, [])
@@ -35,7 +36,7 @@ export default function App() {
     setIsVisible({ visible: false });
   }
  
-  const modal = (
+  const modal0 = (
     <Modal header="Детали ингредиента" onClose={handleCloseModal}> 
       <p>TEST</p>
       <p>TEST</p>
@@ -52,10 +53,10 @@ export default function App() {
   return (
     <>
       <AppHeader />
-      <div className='hidden'>
-        {isVisible.visible && modal}
+      <div className={styles.hidden}>
+        {isVisible.visible && modal0}
       </div>      
-      <div className='section_container'>  
+      <div className={styles.section_container}>  
         <BurgerIngredients data={state.data} onOpen={handleOpenModal} />
         <BurgerConstructor data={state.data} onOpen={handleOpenModal} modal1={modal1} isVisible={isVisible} />
       </div>  
