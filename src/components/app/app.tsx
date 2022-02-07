@@ -5,6 +5,7 @@ import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import Modal from '../modal/modal';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 
 export default function App() {
   const [state, setState] = useState({
@@ -38,8 +39,8 @@ export default function App() {
  
   const modal0 = (
     <Modal header="Детали ингредиента" onClose={handleCloseModal}> 
-      <p>TEST</p>
-      <p>TEST</p>
+      {state.data.map((item, index) =>  
+      <IngredientDetails key={index} data={item} onOpen={handleOpenModal}/> )}
     </Modal>
   );
 
@@ -55,7 +56,7 @@ export default function App() {
       <AppHeader />
       <div className={styles.hidden}>
         {isVisible.visible && modal0}
-      </div>      
+      </div>  
       <div className={styles.section_container}>  
         <BurgerIngredients data={state.data} onOpen={handleOpenModal} />
         <BurgerConstructor data={state.data} onOpen={handleOpenModal} modal1={modal1} isVisible={isVisible} />

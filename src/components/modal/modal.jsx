@@ -6,7 +6,7 @@ const modalRoot = document.getElementById("react-modals");
 
 function ModalHeader({header, onClose}) {
   return(
-    <p className={`${styles.modal__header} mr-10 ml-10`}>
+    <p className={`${styles.modal_header} mr-10 ml-10`}>
       {header}
       <CloseIcon onClick={onClose} type="primary" />
     </p>
@@ -14,14 +14,12 @@ function ModalHeader({header, onClose}) {
 } 
 
 export default function Modal({ children, header, onClose }) {
-  
-    return ReactDOM.createPortal(
-      <>
-        <div onClick={onClose} className={`${styles.ModalOverlay} pl-5 pr-5`}ßß>
-          <ModalHeader header={header} onClose={onClose}></ModalHeader>
-          {children}
-        </div>
-      </>,
-      modalRoot
-    );
+  return ReactDOM.createPortal(
+    <div onClick={onClose} className={`${styles.ModalOverlay} pl-5 pr-5`}>
+      <ModalHeader header={header} onClose={onClose}></ModalHeader>
+        {children}
+    </div>
+    ,
+    modalRoot
+  );
 } 

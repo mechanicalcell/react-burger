@@ -2,34 +2,61 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DeleteIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-//import '../index.css';
+import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
+import PropTypes from 'prop-types';
+
+const burgerConstructorPropTypes = PropTypes.shape({
+  calories: PropTypes.number,
+  carbohydrates: PropTypes.number,
+  fat: PropTypes.number,
+  image: PropTypes.string.isRequired,
+  image_large: PropTypes.string,
+  image_mobile: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  proteins: PropTypes.number,
+  type: PropTypes.string.isRequired,
+  __v: PropTypes.number,
+  _id: PropTypes.string.isRequired
+});  
 
 function ConstructorIngredients({ data }) {
   const image = (
     <img className={styles.imageSize} src={ data.image } alt={data.name} />
   );
   return ((
-    <>
       <div className={`${styles.main_list_container} mt-4`}>
-        <p><DragIcon type="primary" /></p>
-        <div className={`${styles.list_container} ml-2 pt-4 pb-4`}>
-          <div>{image}</div> 
-            <p className={`${styles.text_ingredient_container} text text_type_main-default ml-5 mr-5 pr-10 pl-10`}>{data.name}</p>
-            <p className={`${styles.text_ingredient_container} text text_type_digits-default mr-5`}>{data.price}
-            <CurrencyIcon type="primary" />
-          </p>
-          <p className={`${styles.text_ingredient_container} mr-8`}><DeleteIcon type="primary" /></p> 
-        </div>
+        <div><DragIcon type="primary" /></div>
+        <ConstructorElement
+          text={data.name}
+          price={data.price}
+          thumbnail={data.image}
+        /> 
       </div> 
-    </>     
   )) 
 } 
+
+ConstructorIngredients.propTypes = {
+  data: burgerConstructorPropTypes.isRequired
+};
  
 export default function BurgerConstructor({data, onOpen, isVisible, modal1}) {
-    return (
-      <div className={`${styles.right_section} ml-10`}>
-        <div className={`${styles.over_flow_container_BC} mt-25`}>
+  return (
+    <div className={`${styles.right_section} ml-10 pt-25`}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>
+        <div className='ml-10'>
+          {data.map((item) => item.name === 'Краторная булка N-200i' &&
+          <ConstructorElement
+            key={item._id}
+            type="top"
+            isLocked={true}
+            text="Краторная булка N-200i (верх)"
+            price={200}
+            thumbnail={item.image}
+          />)}
+        </div>     
+        <div className={styles.over_flow_container_BC}>
           {data.isLoading && 'Загрузка...'}
           {data.hasError && 'Произошла ошибка'}
           {!data.isLoading &&
@@ -38,13 +65,32 @@ export default function BurgerConstructor({data, onOpen, isVisible, modal1}) {
           data.map((item) => 
           <ConstructorIngredients key={item._id} data={item} /> )}
         </div> 
-        <div className={`${styles.order_container} mt-10 mb-2`}>
-          <p className={`${styles.text_ingredient_container} text text_type_digits-default mr-2`}>610</p>    
-          <p className='mr-10'><CurrencyIcon type="primary" /></p>
-          <Button onClick={onOpen}  type="primary" size="medium">
-            Оформить заказ {onOpen && isVisible.visible && modal1}
-          </Button>
+        <div className='ml-10'>
+          {data.map((item) => item.name === 'Краторная булка N-200i' &&
+          <ConstructorElement
+            key={item._id}
+            type="bottom"
+            isLocked={true}
+            text="Краторная булка N-200i (низ)"
+            price={200}
+            thumbnail={item.image}
+          />)}
         </div>
-      </div>  
-    )
-  }
+      </div>
+      <div className={`${styles.order_container} mt-10 mb-2`}>
+        <p className={`${styles.text_ingredient_container} text text_type_digits-default mr-2`}>610</p>    
+        <p className='mr-10'><CurrencyIcon type="primary" /></p>
+        <Button onClick={onOpen}  type="primary" size="medium">
+          {/* Оформить заказ {onOpen && isVisible.visible && modal1} */}
+        </Button>
+      </div>
+    </div>  
+  )
+}
+
+  BurgerConstructor.propTypes = {
+    data: PropTypes.arrayOf(burgerConstructorPropTypes).isRequired,
+    onOpen: PropTypes.func.isRequired,
+    isVisible: PropTypes.objectOf(PropTypes.bool).isRequired,
+    modal1: PropTypes.element 
+  };
