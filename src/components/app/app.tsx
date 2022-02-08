@@ -37,14 +37,14 @@ export default function App() {
     setIsVisible({ visible: false });
   }
  
-  const modal0 = (
+  const ingredientsModal = (
     <Modal header="Детали ингредиента" onClose={handleCloseModal}> 
       {state.data.map((item, index) =>  
       <IngredientDetails key={index} data={item} onOpen={handleOpenModal}/> )}
     </Modal>
   );
 
-  const modal1 = (
+  const orderModal = (
     <Modal header="" onClose={handleCloseModal}> 
       <p>TEST_034536</p>
       <p>TEST_идентификатор заказа</p>
@@ -55,11 +55,11 @@ export default function App() {
     <>
       <AppHeader />
       <div className={styles.hidden}>
-        {isVisible.visible && modal0}
+        {isVisible.visible && ingredientsModal}
       </div>  
       <div className={styles.section_container}>  
         <BurgerIngredients data={state.data} onOpen={handleOpenModal} />
-        <BurgerConstructor data={state.data} onOpen={handleOpenModal} modal1={modal1} isVisible={isVisible} />
+        <BurgerConstructor data={state.data} onOpen={handleOpenModal} orderModal={orderModal} isVisible={isVisible} />
       </div>  
     </> 
   );

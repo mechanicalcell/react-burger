@@ -41,7 +41,7 @@ ConstructorIngredients.propTypes = {
   data: burgerConstructorPropTypes.isRequired
 };
  
-export default function BurgerConstructor({data, onOpen, isVisible, modal1}) {
+export default function BurgerConstructor({data, onOpen, isVisible, orderModal}) {
   return (
     <div className={`${styles.right_section} ml-10 pt-25`}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>
@@ -81,7 +81,7 @@ export default function BurgerConstructor({data, onOpen, isVisible, modal1}) {
         <p className={`${styles.text_ingredient_container} text text_type_digits-default mr-2`}>610</p>    
         <p className='mr-10'><CurrencyIcon type="primary" /></p>
         <Button onClick={onOpen}  type="primary" size="medium">
-          {/* Оформить заказ {onOpen && isVisible.visible && modal1} */}
+           Оформить заказ {onOpen && isVisible.visible && orderModal}
         </Button>
       </div>
     </div>  

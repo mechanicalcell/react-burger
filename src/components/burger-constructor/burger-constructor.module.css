@@ -56,4 +56,6 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+  width: 568px;
+  height: 64px;
 }

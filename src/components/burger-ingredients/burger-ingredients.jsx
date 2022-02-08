@@ -23,7 +23,7 @@ function BunIngredients({ data, onOpen, current, index }) {
   const image = (
     <img className='' src={ data.image } alt={data.name} />
   );    
-  return (data.type === 'bun' && //(data.index === '1') &&
+  return (data.type === 'bun' && 
   (<article onClick={onOpen} className={`${styles.ingredients} mb-8`}>
     <div className='ml-4 mr-4'>{image}</div> 
     <p className={`${styles.price_and_icon} text text_type_digits-default`}>{data.price}
@@ -32,7 +32,7 @@ function BunIngredients({ data, onOpen, current, index }) {
     <p className={`${styles.text_container_0} name text text_type_main-small`}>{data.name}</p>
   </article>)
   )
-}  {/*onClick={onOpen}*/}
+}  
 
 function SauceIngredients({ data, onOpen, current }) {
   const image = (
