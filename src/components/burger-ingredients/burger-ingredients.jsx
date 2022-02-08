@@ -3,21 +3,7 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-ingredients.module.css';
 import PropTypes from 'prop-types';
-
-const burgerIngredientsPropTypes = PropTypes.shape({
-  calories: PropTypes.number,
-  carbohydrates: PropTypes.number,
-  fat: PropTypes.number,
-  image: PropTypes.string.isRequired,
-  image_large: PropTypes.string,
-  image_mobile: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  proteins: PropTypes.number,
-  type: PropTypes.string.isRequired,
-  __v: PropTypes.number,
-  _id: PropTypes.string.isRequired
-});  
+import ingredientPropTypes from '../utils/types';
 
 function BunIngredients({ data, onOpen, current, index }) {
   const image = (
@@ -117,6 +103,6 @@ export default function BurgerIngredients({data, onOpen }) {
 }
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(burgerIngredientsPropTypes).isRequired,
+  data: PropTypes.arrayOf(ingredientPropTypes).isRequired,
   onOpen: PropTypes.func.isRequired
 };

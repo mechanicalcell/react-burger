@@ -5,21 +5,7 @@ import { DeleteIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import PropTypes from 'prop-types';
-
-const burgerConstructorPropTypes = PropTypes.shape({
-  calories: PropTypes.number,
-  carbohydrates: PropTypes.number,
-  fat: PropTypes.number,
-  image: PropTypes.string.isRequired,
-  image_large: PropTypes.string,
-  image_mobile: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  proteins: PropTypes.number,
-  type: PropTypes.string.isRequired,
-  __v: PropTypes.number,
-  _id: PropTypes.string.isRequired
-});  
+import ingredientPropTypes from '../utils/types';
 
 function ConstructorIngredients({ data }) {
   const image = (
@@ -38,7 +24,7 @@ function ConstructorIngredients({ data }) {
 } 
 
 ConstructorIngredients.propTypes = {
-  data: burgerConstructorPropTypes.isRequired
+  data: ingredientPropTypes.isRequired
 };
  
 export default function BurgerConstructor({data, onOpen, isVisible, orderModal}) {
@@ -89,7 +75,7 @@ export default function BurgerConstructor({data, onOpen, isVisible, orderModal})
 }
 
   BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(burgerConstructorPropTypes).isRequired,
+    data: PropTypes.arrayOf(ingredientPropTypes).isRequired,
     onOpen: PropTypes.func.isRequired,
     isVisible: PropTypes.objectOf(PropTypes.bool).isRequired,
     modal1: PropTypes.element 
