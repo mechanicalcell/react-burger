@@ -62,7 +62,7 @@ export default function BurgerConstructor({data, onOpen, isVisible, modal1}) {
           {!data.isLoading &&
           !data.hasError &&
           !!data.length &&
-          data.map((item) => 
+          data.map((item) => item.type != 'bun' &&
           <ConstructorIngredients key={item._id} data={item} /> )}
         </div> 
         <div className='ml-10'>
