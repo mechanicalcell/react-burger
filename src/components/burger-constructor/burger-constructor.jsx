@@ -67,7 +67,7 @@ export default function BurgerConstructor({data, onOpen, isVisible, orderModal})
         <p className={`${styles.text_ingredient_container} text text_type_digits-default mr-2`}>610</p>    
         <p className='mr-10'><CurrencyIcon type="primary" /></p>
         <Button onClick={onOpen}  type="primary" size="medium">
-           Оформить заказ {onOpen && isVisible.visible && orderModal}
+           Оформить заказ 
         </Button>
       </div>
     </div>  

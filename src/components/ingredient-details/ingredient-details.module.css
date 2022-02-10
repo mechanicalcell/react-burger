@@ -4,6 +4,8 @@
   background: #1C1C21;
   margin-left: 100px;
   margin-right: 100px;
+  display: flex;
+  /* border: 1px dashed #4C4CFF;  */
 }
 
 .name_modal {
@@ -15,16 +17,24 @@
   background: #1C1C21;
   /* border: 1px dashed #4C4CFF;  */
   margin-left: 100px;
-   margin-right: 100px; 
+  margin-right: 100px; 
 }
 
 .modal_ingredients {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   padding: 0px;
-  /* width: 120px;
-  height: 56px; */
+  width: 520px;
+  height: 56px; 
   /* border: 1px dashed #4C4CFF; */
+  margin-left: 100px;
+  margin-right: 100px;   
+}
+
+.hidden_ingredient_details {
+  /* border: 1px dashed #4C4CFF; */
+  height: 539px;
+  overflow: hidden;
 }

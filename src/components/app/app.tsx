@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import styles from './app.module.css';
 import AppHeader from '../app-header/app-header';
@@ -6,8 +5,9 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import OrderDetails from '../order-details/order-details';
 
-export default function App() {
+function App() {
   const [state, setState] = useState({
     isLoading: false,
     hasError: false,
@@ -17,7 +17,7 @@ export default function App() {
   const [isVisible, setIsVisible] = useState({
     visible: false
   });
-  
+
   useEffect(() => {
     const url='https://norma.nomoreparties.space/api/ingredients';
     const getIngredients = async () => {
@@ -39,30 +39,29 @@ export default function App() {
  
   const ingredientModal = (
     <Modal header="Детали ингредиента" onClose={handleCloseModal}> 
-      {state.data.map((item, index) =>  
-      <IngredientDetails key={index} data={item} onOpen={handleOpenModal}/> )}
+      <IngredientDetails data={state.data} onOpen={handleOpenModal}/>
     </Modal>
   );
 
   const orderModal = (
-    <Modal header="" onClose={handleCloseModal}> 
-      <p>TEST_034536</p>
-      <p>TEST_идентификатор заказа</p>
+    <Modal header="test" onClose={handleCloseModal}> 
+      <OrderDetails />
     </Modal>
   );
 
   return (
     <>
       <AppHeader />
-      <div className={styles.hidden}>
-        {isVisible.visible && ingredientModal}
-      </div>  
       <div className={styles.section_container}>  
         <BurgerIngredients data={state.data} onOpen={handleOpenModal} />
         <BurgerConstructor data={state.data} onOpen={handleOpenModal} orderModal={orderModal} isVisible={isVisible} />
       </div>  
+      <div className={styles.hidden}>
+        {isVisible.visible && ingredientModal }
+        {/* {isVisible.visible && orderModal} */}
+      </div> 
     </> 
   );
 }
 
-
+export default App;

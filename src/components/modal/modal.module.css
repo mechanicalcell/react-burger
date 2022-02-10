@@ -1,18 +1,7 @@
-.ModalOverlay {
-  position:absolute;
-  left:50%;
-  top:30%;
-  border: 1px dashed #4C4CFF;
-  display: flex;
-  flex-direction: column;
-  width: 720px;
-  background: #1C1C21;
-  border-radius: 40px;
-} 
-  
 .modal_header {
-  border: 1px dashed #4C4CFF;
+  /* border: 1px dashed #4C4CFF; */
   display: flex; 
-  justify-content: flex-end; 
+  justify-content: space-between; 
+  align-items: center;
 }
   
