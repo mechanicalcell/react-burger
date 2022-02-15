@@ -60,7 +60,7 @@ function App() {
   );
 
   const orderModal = (
-    <Modal header="test" onClose={handleCloseModal}> 
+    <Modal header=" " onClose={handleCloseModal}> 
       <OrderDetails />
     </Modal>
   );

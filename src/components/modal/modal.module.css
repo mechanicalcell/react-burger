@@ -3,5 +3,15 @@
   display: flex; 
   justify-content: space-between; 
   align-items: center;
+  width: 640px;
+  height: 64px;
+}
+
+.modal_header_text {
+  /* border: 1px dashed #4C4CFF; */
+  display: flex;
+  align-items: center;
+  width: 580px;
+  height: 64px
 }
   
