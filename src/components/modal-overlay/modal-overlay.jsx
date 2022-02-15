@@ -11,5 +11,5 @@ return (
 
 ModalOverlay.propTypes = {
   children: PropTypes.arrayOf(PropTypes.element).isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func
 };

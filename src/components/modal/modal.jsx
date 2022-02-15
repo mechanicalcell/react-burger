@@ -26,6 +26,12 @@ ModalHeader.propTypes = {
 
 export default function Modal({ children, header, onClose }) {
   const ESC_KEYCODE = "Escape";
+
+  const handleOverlay = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };  
   
   const handleCloseByEsc = useCallback( (e) => {
     e.key === ESC_KEYCODE && onClose();
@@ -39,7 +45,7 @@ export default function Modal({ children, header, onClose }) {
   }, [handleCloseByEsc]);
 
   return ReactDOM.createPortal(
-    <ModalOverlay  onClose={e => e.stopPropagation()}>
+    <ModalOverlay  onClose={e => handleOverlay(e)}>
       <ModalHeader header={header} onClose={onClose}></ModalHeader>
       {children}
     </ModalOverlay>  
