@@ -1,7 +1,6 @@
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { DeleteIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import PropTypes from 'prop-types';
@@ -27,7 +26,8 @@ ConstructorIngredients.propTypes = {
   data: ingredientPropTypes.isRequired
 };
  
-export default function BurgerConstructor({data, onOpen, isVisible, orderModal}) {
+export default function BurgerConstructor({data, onOpen}) {
+
   return (
     <div className={`${styles.right_section} ml-10 pt-25`}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>
@@ -53,7 +53,7 @@ export default function BurgerConstructor({data, onOpen, isVisible, orderModal})
         </div> 
         <div className='ml-10'>
           {data.map((item) => item.name === 'Краторная булка N-200i' &&
-          <ConstructorElement
+          <ConstructorElement 
             key={item._id}
             type="bottom"
             isLocked={true}
@@ -63,10 +63,10 @@ export default function BurgerConstructor({data, onOpen, isVisible, orderModal})
           />)}
         </div>
       </div>
-      <div className={`${styles.order_container} mt-10 mb-2`}>
-        <p className={`${styles.text_ingredient_container} text text_type_digits-default mr-2`}>610</p>    
+      <div className={`${styles.order_container} mt-10 mb-2`} >
+        <p className={`${styles.text_ingredient_container} text text_type_digits-medium mr-2`}>610</p>    
         <p className='mr-10'><CurrencyIcon type="primary" /></p>
-        <Button onClick={onOpen}  type="primary" size="medium">
+        <Button onClick={onOpen} type="primary" size="medium" >
            Оформить заказ 
         </Button>
       </div>
@@ -74,9 +74,7 @@ export default function BurgerConstructor({data, onOpen, isVisible, orderModal})
   )
 }
 
-  BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(ingredientPropTypes).isRequired,
-    onOpen: PropTypes.func.isRequired,
-    isVisible: PropTypes.objectOf(PropTypes.bool).isRequired,
-    modal1: PropTypes.element 
-  };
+BurgerConstructor.propTypes = {
+  data: PropTypes.arrayOf(ingredientPropTypes).isRequired,
+  onOpen: PropTypes.func.isRequired
+};

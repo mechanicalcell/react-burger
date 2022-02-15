@@ -4,15 +4,15 @@ const ingredientPropTypes = PropTypes.shape({
   calories: PropTypes.number,
   carbohydrates: PropTypes.number,
   fat: PropTypes.number,
-  image: PropTypes.string.isRequired,
+  image: PropTypes.string,
   image_large: PropTypes.string,
   image_mobile: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
+  name: PropTypes.string,
+  price: PropTypes.number,
   proteins: PropTypes.number,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   __v: PropTypes.number,
-  _id: PropTypes.string.isRequired
+  _id: PropTypes.string
 });  
 
 export default ingredientPropTypes;

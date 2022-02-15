@@ -14,8 +14,11 @@ function App() {
     data: []
   });
 
+  const [isNewArr, setIsNewArr] = useState({ newArr: [] });
+
   const [isVisible, setIsVisible] = useState({
-    visible: false
+    ingredientModalVisible: false,
+    orderModalVisible: false
   });
 
   useEffect(() => {
@@ -29,17 +32,30 @@ function App() {
     getIngredients();
   }, [])
 
-  function handleOpenModal() {
-    setIsVisible({ visible: true });
+  function handleOpenIngredientModal() {
+    setIsVisible({ 
+      ingredientModalVisible: true,
+      orderModalVisible: false
+    });
+  }
+
+  function handleOpenOrderModal() {
+    setIsVisible({ 
+      ingredientModalVisible: false,
+      orderModalVisible: true
+    });
   }
 
   function handleCloseModal() {
-    setIsVisible({ visible: false });
+    setIsVisible({ 
+      ingredientModalVisible: false,
+      orderModalVisible: false
+    });
   }
- 
+
   const ingredientModal = (
     <Modal header="Детали ингредиента" onClose={handleCloseModal}> 
-      <IngredientDetails data={state.data} onOpen={handleOpenModal}/>
+      <IngredientDetails isNewArr={isNewArr} isVisible={isVisible.ingredientModalVisible}/>
     </Modal>
   );
 
@@ -53,13 +69,13 @@ function App() {
     <>
       <AppHeader />
       <div className={styles.section_container}>  
-        <BurgerIngredients data={state.data} onOpen={handleOpenModal} />
-        <BurgerConstructor data={state.data} onOpen={handleOpenModal} orderModal={orderModal} isVisible={isVisible} />
+        <BurgerIngredients data={state.data} setIsNewArr={setIsNewArr} onOpen={handleOpenIngredientModal} />
+        <BurgerConstructor data={state.data} onOpen={handleOpenOrderModal} />
       </div>  
       <div className={styles.hidden}>
-        {isVisible.visible && ingredientModal }
-        {/* {isVisible.visible && orderModal} */}
-      </div> 
+        {isVisible.ingredientModalVisible && ingredientModal} 
+        {isVisible.orderModalVisible && orderModal} 
+      </div>  
     </> 
   );
 }

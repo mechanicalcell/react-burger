@@ -1,22 +1,15 @@
 import styles from './modal-overlay.module.css';
-import { useEffect } from 'react';
-import { useCallback } from 'react';
+import PropTypes from 'prop-types';
 
 export default function ModalOverlay({children, onClose}) { 
-    var ESC_KEYCODE = 27;
-    const handleCloseByEsc = useCallback( (e) => {
-		e.key === ESC_KEYCODE && onClose();
-      },[onClose]);
-      
-    useEffect(() => {
-		document.addEventListener('keydown', handleCloseByEsc);
-		return () => {
-			document.removeEventListener('keydown', handleCloseByEsc);
-		};
-	}, [handleCloseByEsc]);
 
-    return (
-      <div onClick={onClose} className={`${styles.modal_overlay} pl-5 pr-5`} onClose={onClose}>
-        {children}
-      </div>);
+return (
+  <div onClick={onClose} className={`${styles.modal_overlay} pl-5 pr-5`} >
+    {children}
+  </div>);
 }
+
+ModalOverlay.propTypes = {
+  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  onClose: PropTypes.func.isRequired
+};
