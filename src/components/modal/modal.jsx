@@ -45,10 +45,13 @@ export default function Modal({ children, header, onClose }) {
   }, [handleCloseByEsc]);
 
   return ReactDOM.createPortal(
-    <ModalOverlay  onClose={e => handleOverlay(e)}>
-      <ModalHeader header={header} onClose={onClose}></ModalHeader>
-      {children}
-    </ModalOverlay>  
+    <>
+      <ModalOverlay  onClose={e => handleOverlay(e)}/>
+      <div className={styles.modal_box} >
+        <ModalHeader header={header} onClose={onClose}></ModalHeader>
+        {children}
+      </div>  
+    </>
     ,
     modalRoot
   );
