@@ -5,7 +5,7 @@ import ingredientPropTypes from '../utils/types';
 export default function IngredientDetails({ isVisible, isNewArr }) {
 
 return (isVisible && 
-  <div className={styles.hidden_ingredient_details}> 
+  <div className={styles.ingredient_details_box}> 
     <div className={styles.img_box}> 
       <img src={isNewArr.newArr.image} alt={isNewArr.newArr.name} />
     </div>

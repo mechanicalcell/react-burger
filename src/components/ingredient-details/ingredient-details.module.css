@@ -33,8 +33,7 @@
   margin-right: 100px;   
 }
 
-.hidden_ingredient_details {
+.ingredient_details_box {
   /* border: 1px dashed #4C4CFF; */
-  height: 539px;
   overflow: hidden;
 }
