@@ -26,7 +26,7 @@ export default function AppHeader() {
           </div>
           <nav className={styles.navigation_link}>
             <div className={styles.icon_container}>
-              <ProfileIcon type="secondary" />     
+              <ProfileIcon type="secondary"/>     
             </div>  
             <p className={`${styles.text_container} text text_type_main-small ml-2`}>Личный кабинет</p>
           </nav>
