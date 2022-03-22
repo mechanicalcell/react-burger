@@ -1,29 +1,27 @@
 import styles from '../ingredient-details/ingredient-details.module.css';
-import PropTypes from 'prop-types';
-import ingredientPropTypes from '../utils/types';
+import { NewArrContext } from '../../services/newarr-context';
+import { useContext } from 'react';
 
-export default function IngredientDetails({ isVisible, isNewArr }) {
+export default function IngredientDetails() {
 
-return (isVisible && 
+const isNewArr = useContext(NewArrContext);  
+
+return ( 
   <div className={styles.ingredient_details_box}> 
     <div className={styles.img_box}> 
-      <img src={isNewArr.newArr.image} alt={isNewArr.newArr.name} />
+      <img src={isNewArr.newArrIngredientDetails.image} alt={isNewArr.newArrIngredientDetails.name} />
     </div>
-    <div className={`${styles.name_modal} text text_type_main-medium mt-4`}>{isNewArr.newArr.name}</div>
+    <div className={`${styles.name_modal} text text_type_main-medium mt-4`}>{isNewArr.newArrIngredientDetails.name}</div>
     <div className={styles.modal_ingredients}>
-      <div className={'text text_type_main-small'}>Калории,ккал {isNewArr.newArr.calories}</div>  
-      <div className={'text text_type_main-small'}>Белки,г {isNewArr.newArr.proteins}</div>  
-      <div className={'text text_type_main-small'}>Жиры,г {isNewArr.newArr.fat}</div>
-      <div className={'text text_type_main-small'}>Углеводы,г {isNewArr.newArr.carbohydrates}</div>  
+      <div className={'text text_type_main-small'}>Калории,ккал {isNewArr.newArrIngredientDetails.calories}</div>  
+      <div className={'text text_type_main-small'}>Белки,г {isNewArr.newArrIngredientDetails.proteins}</div>  
+      <div className={'text text_type_main-small'}>Жиры,г {isNewArr.newArrIngredientDetails.fat}</div>
+      <div className={'text text_type_main-small'}>Углеводы,г {isNewArr.newArrIngredientDetails.carbohydrates}</div>  
     </div>
   </div>
 )
 }
 
-IngredientDetails.propTypes = {
-  isVisible: PropTypes.bool.isRequired,
-  isNewArr: ingredientPropTypes
-}; 
 
 
 

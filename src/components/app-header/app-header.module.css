@@ -63,4 +63,5 @@
   align-items: center;
   background: #1C1C21;
   /* border: 1px dashed #4C4CFF; */
+  transform:translate(-35%);   
 }
