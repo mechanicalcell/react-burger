@@ -1,10 +1,7 @@
 import styles from './order-details.module.css';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useContext } from 'react';
-import { OrderContext } from '../../services/order-context';
 
-export default function OrderDetails() {
-  const orderNumber = useContext(OrderContext);
+export default function OrderDetails({orderNumber}) {
   return (
     <div> 
       <p className={`${styles.order_number} mt-4`}>{orderNumber}</p>

@@ -6,15 +6,15 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
-import { StateContext } from '../../services/state-context';
-import { OrderContext } from '../../services/order-context';
-import { NewArrContext } from '../../services/newarr-context';
 import { NewArrStateContext } from '../../services/newarrstate-context';
-import { TotalPriceContext } from '../../services/totalprice-context';
 import { useReducer } from "react";
 import { CountContext } from '../../services/count-context';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux'
 
 function App() {
+
+  const baseUrl='https://norma.nomoreparties.space/api/';
 
   const [state, setState] = useState({
     isLoading: false,
@@ -30,7 +30,7 @@ function App() {
 
   const [isNewArr, setIsNewArr] = useState({ 
     newArrBurgerConstructor: [] as any, 
-    newArrIngredientDetails: [] as any,
+    newArrIngredientDetails: {} as any,
     newArrBun: [] as any
   });
 
@@ -48,11 +48,18 @@ function App() {
     setPrice();
   }, [isNewArr])
 
+  const checkResponse = (res: Response) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+        throw new Error(res.statusText);
+      }
+  }
+
   useEffect(() => {
-    const url='https://norma.nomoreparties.space/api/ingredients';
     const getIngredients = async () => {
-      await fetch(url)
-      .then(res => res.json())
+      await fetch(`${baseUrl}ingredients`)
+      .then(res => checkResponse(res))
       .then(data => setState({...state, data: data.data, isLoading: false}))
       .catch(e => setState({ ...state, isLoading: false, hasError: true }))
     }
@@ -60,12 +67,11 @@ function App() {
   }, [])
 
   function orderNumberRequest() {
-    const url='https://norma.nomoreparties.space/api/orders';
     const ingredientId: any[] = [];
     isNewArr.newArrBurgerConstructor.map((item: { _id: any; }) => ingredientId.push(item._id));
     isNewArr.newArrBun.map((item: { _id: any; }) => ingredientId.push(item._id));
     const getOrderNumber = () => {
-      fetch(`${url}`, {
+      fetch(`${baseUrl}orders`, {
         method: 'POST',
         body: JSON.stringify({
           ingredients: ingredientId 
@@ -74,7 +80,7 @@ function App() {
           'Content-type': 'application/json'
         },
       })    
-      .then(res => res.json())
+      .then(res => checkResponse(res))
       .then(data => setOrder({orderNumber: data.order.number}))
       .catch(e => console.log(e))
     } 
@@ -147,17 +153,13 @@ const [countState, countDispatcher] = useReducer(reducer, initialState);
 
   const ingredientModal = (
     <Modal header="Детали ингредиента" onClose={handleCloseModal}> 
-      <NewArrContext.Provider value={isNewArr}>
-        <IngredientDetails /> 
-      </NewArrContext.Provider>  
+      <IngredientDetails isNewArr={isNewArr} /> 
     </Modal>
   );
 
   const orderModal = (
     <Modal header=" " onClose={handleCloseModal}> 
-      <OrderContext.Provider value={order.orderNumber}>
-        <OrderDetails />
-      </OrderContext.Provider>  
+      <OrderDetails orderNumber={order.orderNumber} />
     </Modal>
   );
 
@@ -165,18 +167,15 @@ const [countState, countDispatcher] = useReducer(reducer, initialState);
     <>
       <AppHeader /> 
       <div className={styles.section_container}>  
-        <StateContext.Provider value={state.data}>
-          <NewArrContext.Provider value={isNewArr}>
-            <NewArrStateContext.Provider value={[isNewArr, setIsNewArr]}>
-              <TotalPriceContext.Provider value={[totalPrice, setTotalPrice]}>
-                <CountContext.Provider value={{countState, countDispatcher}}>
-                  <BurgerIngredients onOpen={handleOpenIngredientModal} />
-                  <BurgerConstructor onOpen={handleOpenOrderModal} deleteIngr={deleteIngredient} />
-                </CountContext.Provider>
-              </TotalPriceContext.Provider>  
-            </NewArrStateContext.Provider>
-          </NewArrContext.Provider>
-        </StateContext.Provider>
+        <NewArrStateContext.Provider value={[isNewArr, setIsNewArr]}>
+          <CountContext.Provider value={{countState, countDispatcher}}>
+            <BurgerIngredients onOpen={handleOpenIngredientModal} 
+                               data={state.data} />
+          </CountContext.Provider>  
+            <BurgerConstructor onOpen={handleOpenOrderModal} 
+                               deleteIngr={deleteIngredient}
+                               totalPrice={totalPrice} />
+        </NewArrStateContext.Provider>  
       </div>  
       <div className={styles.hidden}>
         {isVisible.ingredientModalVisible && ingredientModal} 

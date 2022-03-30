@@ -1,10 +1,6 @@
 import styles from '../ingredient-details/ingredient-details.module.css';
-import { NewArrContext } from '../../services/newarr-context';
-import { useContext } from 'react';
 
-export default function IngredientDetails() {
-
-const isNewArr = useContext(NewArrContext);  
+export default function IngredientDetails({isNewArr}) {
 
 return ( 
   <div className={styles.ingredient_details_box}> 

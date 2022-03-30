@@ -6,11 +6,10 @@ import PropTypes from 'prop-types';
 import ingredientPropTypes from '../utils/types';
 import { v4 as uuidv4 } from 'uuid';
 import { useContext } from 'react';
-import { StateContext } from '../../services/state-context';
 import { NewArrStateContext } from '../../services/newarrstate-context';
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CountContext } from "../../services/count-context";
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 
 const newArrayCount = ['count0', 'count1', 'count2', 'count3', 'count4', 'count5', 'count6', 'count7', 'count8', 'count9', 'count10', 'count11', 'count12', 'count13', 'count14']
 
@@ -91,8 +90,7 @@ Bun.propTypes = {
   index: PropTypes.number
 };
 
-export default function BurgerIngredients({ onOpen }) {
-const data = useContext(StateContext);
+export default function BurgerIngredients({ onOpen, data }) {
 const [current, setCurrent] = React.useState('one');
 const [textColor, setTextColor] = React.useState({
   bunColor: 'text text_type_main-medium text_color_inactive mb-6',
@@ -183,4 +181,5 @@ return (
 
 BurgerIngredients.propTypes = {
   onOpen: PropTypes.func.isRequired,
+  data: PropTypes.arrayOf(ingredientPropTypes)
 };
