@@ -52,7 +52,7 @@ function App() {
     if (res.ok) {
       return res.json();
     } else {
-        throw new Error(res.statusText);
+        return Promise.reject(`Ошибка ${res.status}`);
       }
   }
 
