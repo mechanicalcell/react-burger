@@ -59,7 +59,7 @@ function App() {
   useEffect(() => {
     const getIngredients = async () => {
       await fetch(`${baseUrl}ingredients`)
-      .then(res => checkResponse(res))
+      .then(checkResponse)
       .then(data => setState({...state, data: data.data, isLoading: false}))
       .catch(e => setState({ ...state, isLoading: false, hasError: true }))
     }
@@ -80,7 +80,7 @@ function App() {
           'Content-type': 'application/json'
         },
       })    
-      .then(res => checkResponse(res))
+      .then(checkResponse)
       .then(data => setOrder({orderNumber: data.order.number}))
       .catch(e => console.log(e))
     } 
