@@ -1,10 +1,10 @@
 import styles from './order-details.module.css';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export default function OrderDetails() {
+export default function OrderDetails({orderNumber}) {
   return (
     <div> 
-      <p className={`${styles.order_number} mt-4`}>034536</p>
+      <p className={`${styles.order_number} mt-4`}>{orderNumber}</p>
       <p className={`${styles.order_id_text} text text_type_main-medium mt-8`}>идентификатор заказа</p>  
       <div className={`${styles.order_icon} mt-15`}>
         <CheckMarkIcon type="primary" />

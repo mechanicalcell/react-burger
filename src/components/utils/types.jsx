@@ -15,4 +15,10 @@ const ingredientPropTypes = PropTypes.shape({
   _id: PropTypes.string
 });  
 
-export default ingredientPropTypes;
+const ingredientNewArrPropTypes = PropTypes.shape({
+  newArrBurgerConstructor: PropTypes.array,
+  newArrIngredientDetails: PropTypes.object,
+  newArrBun: PropTypes.array
+});
+
+export default ( ingredientPropTypes, ingredientNewArrPropTypes );
