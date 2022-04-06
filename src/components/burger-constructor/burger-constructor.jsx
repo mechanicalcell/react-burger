@@ -5,29 +5,24 @@ import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-comp
 import styles from './burger-constructor.module.css';
 import PropTypes from 'prop-types';
 import ingredientPropTypes from '../utils/types';
-import ingredientNewArrPropTypes from '../utils/types';
-import { useContext } from 'react';
-import { NewArrStateContext } from '../../services/newarrstate-context';
+import { useSelector } from 'react-redux';
 
-function ConstructorIngredients({data, deleteIngr, index}) {
-  const image = (
-    <img className={styles.imageSize} src={ data.image } alt={data.name} />
-  );
+function ConstructorIngredients({item, deleteIngr, index}) {
   return ((
       <div className={`${styles.main_list_container} mt-4`}>
         <div><DragIcon type="primary" /></div> 
         <ConstructorElement 
-          text={data.name}
-          price={data.price}
-          thumbnail={data.image}
-          handleClose={() => deleteIngr(data, index)}
+          text={item.name}
+          price={item.price}
+          thumbnail={item.image}
+          handleClose={() => deleteIngr(item, index)}
         /> 
       </div> 
   )) 
 } 
 
 ConstructorIngredients.propTypes = {
-  data: ingredientPropTypes.isRequired,
+  item: ingredientPropTypes.isRequired,
   deleteIngr: PropTypes.func.isRequired,
   index: PropTypes.number  
 };
@@ -35,12 +30,12 @@ ConstructorIngredients.propTypes = {
 export default function BurgerConstructor({ onOpen, 
                                             deleteIngr, 
                                             totalPrice }) {
-  const [isNewArr, setIsNewArr] = useContext(NewArrStateContext);                                              
+  const { newArrBurgerConstructor, newArrBun } = useSelector(store => store.isNewArr);
   return (
     <div className={`${styles.right_section} ml-10 pt-25`}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>
         <div className='ml-10'> 
-          {isNewArr.newArrBun.map(item => item.type === 'bun' && 
+          {newArrBun.map(item => item.type === 'bun' && 
           <ConstructorElement
             key={item._id}
             type="top"
@@ -51,11 +46,11 @@ export default function BurgerConstructor({ onOpen,
           />)} 
         </div>     
         <div className={styles.over_flow_container_BC}>
-          {isNewArr.newArrBurgerConstructor.map((item, index) => item.type != 'bun' &&
-          <ConstructorIngredients index={index} deleteIngr={deleteIngr} key={item.key} data={item} /> )}
+          {newArrBurgerConstructor.map((item, index) => item.type !== 'bun' &&
+          <ConstructorIngredients index={index} deleteIngr={deleteIngr} key={item.key} item={item} /> )}
         </div> 
         <div className='ml-10'> 
-          {isNewArr.newArrBun.map(item => item.type === 'bun' &&
+          {newArrBun.map(item => item.type === 'bun' &&
           <ConstructorElement 
             key={item._id}
             type="bottom"
