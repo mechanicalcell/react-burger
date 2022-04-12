@@ -4,40 +4,45 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import styles from './burger-ingredients.module.css';
 import PropTypes from 'prop-types';
 import ingredientPropTypes from '../utils/types';
-import { useContext } from 'react';
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
-import { CountContext } from "../../services/count-context";
 import { useRef } from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { COPY_ARR_INGREDIENTS,
-         COPY_ARR_BUN
+         COPY_ARR_BUN,
+         COUNT_INGREDIENT_UP,
+         COUNT_BUN_UP,
+         COUNT_BUN_DOWN
 } from "../../services/actions";
-
-const newArrayCount = ['count0', 'count1', 'count2', 'count3', 'count4', 'count5', 'count6', 'count7', 'count8', 'count9', 'count10', 'count11', 'count12', 'count13', 'count14']
+import { useDrag } from "react-dnd";
 
 const Ingredients = ({ onOpen, ingrType, item, index }) => {
-  const dispatch = useDispatch(); 
-  const {countState, countDispatcher} = useContext(CountContext);
-  const copyArrIngredients = (e) => { 
-    countDispatcher({ type: "countIngredientUp", index: newArrayCount[index] }); 
-    dispatch({type: COPY_ARR_INGREDIENTS, item, index}) 
-    onOpen();
-  }     
 
-  const image = (
-    <img className='' src={ item.image } alt={item.name} />
-  );    
-  return (item.type === ingrType && 
-  (<article style={{ position: "relative" }} onClick={e => copyArrIngredients(e)} className={`${styles.ingredients} mb-8`}>
-    {countState[newArrayCount[index]] > 0 && (<Counter count={countState[newArrayCount[index]]} size="default" />)} 
-    <div className='ml-4 mr-4'>{image}</div> 
-    <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
-      <CurrencyIcon type="primary" /> 
-    </div>           
-    <p className={`${styles.text_container_0} name text text_type_main-small`}>{item.name}</p>
-  </article>)
-  )
+const { count } = useSelector((store) => store.count);
+const [,dragRef] = useDrag({
+  type: "ingredient",
+  item: item
+});
+const dispatch = useDispatch(); 
+const copyArrIngredients = (e) => { 
+  dispatch({type: COUNT_INGREDIENT_UP, index }); 
+  dispatch({type: COPY_ARR_INGREDIENTS, item, index}) 
+  onOpen();
+}
+const image = (
+  <img className='' src={ item.image } alt={item.name} />
+);
+
+return (item.type === ingrType && 
+(<article ref={dragRef} style={{ position: "relative" }} onClick={e => copyArrIngredients(e)} className={`${styles.ingredients} mb-8`}>
+  {count[index] > 0 && (<Counter count={count[index]} size="default" />)} 
+  <div className='ml-4 mr-4'>{image}</div>
+  <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
+    <CurrencyIcon type="primary" /> 
+  </div>           
+  <p className={`${styles.text_container_0} name text text_type_main-small`}>{item.name}</p>
+</article>)
+)
 }  
 
 Ingredients.propTypes = {
@@ -48,34 +53,42 @@ Ingredients.propTypes = {
 };
 
 const Bun = ({ onOpen, ingrType, item, index }) => {
-  const dispatch = useDispatch(); 
-  const {countState, countDispatcher} = useContext(CountContext);
-  const copyArrBun = (e) => { 
-    if (index === 0) {
-      countDispatcher({ type: "countBunUp", index: 'count0' })
-      countDispatcher({ type: "countBunDown", index: 'count1' })
-    } 
-    else if (index === 1) {
-      countDispatcher({ type: "countBunUp", index: 'count1' })
-      countDispatcher({ type: "countBunDown", index: 'count0' })
-    }  
-    dispatch({type: COPY_ARR_BUN, item, index})       
-    onOpen(); 
+
+const { count } = useSelector((store) => store.count);
+const [{isDrag},dragRef] = useDrag({
+  type: "bun",
+  item: item,
+  collect: monitor => ({
+  isDrag: monitor.isDragging() 
+  })      
+});
+const dispatch = useDispatch(); 
+const copyArrBun = (e) => { 
+  if (index === 0) {
+    dispatch({ type: COUNT_BUN_UP, index: '0' })
+    dispatch({ type: COUNT_BUN_DOWN, index: '1' })
   } 
-  
-  const image = (
-    <img className='' src={ item.image } alt={item.name} />
-  );    
-  return (item.type === ingrType && 
-  (<article style={{ position: "relative" }} onClick={e => copyArrBun(e)} className={`${styles.ingredients} mb-8`}>
-    {countState[newArrayCount[index]] > 0 && (<Counter count={countState[newArrayCount[index]]} size="default" />)}
-    <div className='ml-4 mr-4'>{image}</div> 
-    <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
-      <CurrencyIcon type="primary" />
-    </div>           
-    <p className={`${styles.text_container_0} name text text_type_main-small`}>{item.name}</p>
-  </article>)
-  )
+  else if (index === 1) {
+    dispatch({ type: COUNT_BUN_UP, index: '1' })
+    dispatch({ type: COUNT_BUN_DOWN, index: '0' })
+  }  
+  dispatch({type: COPY_ARR_BUN, item, index})       
+  onOpen(); 
+} 
+const image = (
+  <img className='' src={ item.image } alt={item.name} />
+);
+
+return !isDrag && (item.type === ingrType && 
+(<article ref={dragRef} style={{ position: "relative" }} onClick={e => copyArrBun(e)} className={`${styles.ingredients} mb-8`}>
+  {count[index] > 0 && (<Counter count={count[index]} size="default" />)}
+  <div className='ml-4 mr-4'>{image}</div> 
+  <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
+    <CurrencyIcon type="primary" />
+  </div>           
+  <p className={`${styles.text_container_0} name text text_type_main-small`}>{item.name}</p>
+</article>)
+)
 }  
   
 Bun.propTypes = {
@@ -86,7 +99,7 @@ Bun.propTypes = {
 };
 
 export default function BurgerIngredients({ onOpen }) {
-
+  
 const { data } = useSelector((store) => store.data);
 const [current, setCurrent] = React.useState('one');
 const [textColor, setTextColor] = React.useState({
@@ -153,11 +166,11 @@ return (
       </div> 
       <p ref={headerSauceRef} className={textColor.sauceColor}>Соусы</p>  
       <div className={`${styles.BI_container} pl-4`}> 
-        {data.isLoading && 'Загрузка...'}
+        {data.isLoading && 'Загрузка...'} 
         {data.hasError && 'Произошла ошибка'}            
         {!data.isLoading &&
         !data.hasError &&
-        !!data.length &&
+        !!data.length && 
         data.map((item, index) => item.type ==='sauce' &&
         <Ingredients index={index} key={item._id} onOpen={onOpen} item={item} ingrType='sauce' /> )}
       </div>   

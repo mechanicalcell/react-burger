@@ -31,6 +31,7 @@
 }
 
 .over_flow_container_BC {
+  border: 2px solid #4C4CFF;
   overflow: scroll;
   overflow-x:hidden;
   height: 712px;

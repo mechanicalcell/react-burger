@@ -8,7 +8,13 @@ import { GET_INGREDIENTS,
          DELETE_INGREDIENTS,
          DELETE_INGREDIENT_DETAIL,
          ORDER_NUMBER_REQUEST,
-         DELETE_ORDER_NUMBER
+         DELETE_ORDER_NUMBER,
+         MOVE_INGREDIENTS,
+         MOVE_BUNS,
+         COUNT_BUN_UP,
+         COUNT_BUN_DOWN,
+         COUNT_INGREDIENT_UP,
+         COUNT_INGREDIENT_DOWN
 } from '../actions/index';
 
 const initialState = {
@@ -18,7 +24,22 @@ const initialState = {
   newArrBurgerConstructor: [], 
   newArrIngredientDetails: {},
   newArrBun: [],
-  orderNumber: null
+  orderNumber: null,
+  count: { 0: 0, 
+           1: 0, 
+           2: 0, 
+           3: 0, 
+           4: 0, 
+           5: 0,
+           6: 0, 
+           7: 0, 
+           8: 0, 
+           9: 0, 
+           10: 0,
+           11: 0, 
+           12: 0, 
+           13: 0, 
+           14: 0 }
 };
   
 const ingredientReducer = (state = initialState, action) => {
@@ -73,10 +94,25 @@ const copyArrReducer = (state = initialState, action) => {
     case COPY_ARR_INGREDIENTS: {
       return {
         ...state, 
-        newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: uuidv4(), qty: 1, count: `count${action.index}`}],
+        newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: uuidv4(), qty: 1 }],
         newArrIngredientDetails: action.item, 
         newArrBun: state.newArrBun
       }
+    }
+    case MOVE_INGREDIENTS: {
+      return {
+        ...state, 
+        newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: uuidv4(), qty: 1 }],
+        newArrIngredientDetails: action.item, 
+        newArrBun: state.newArrBun
+      }
+    }
+    case MOVE_BUNS: {
+      return {
+        ...state,
+        newArrIngredientDetails: action.item,      
+        newArrBun: [{...action.item, qty: 2}]
+      };
     }
     case DELETE_INGREDIENTS: {
       return { 
@@ -96,9 +132,42 @@ const copyArrReducer = (state = initialState, action) => {
   }
 };
 
+const countReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case COUNT_BUN_UP: {
+      return { 
+        ...state, 
+        count: {...state.count, [action.index]: state.count[action.index] = 2}
+      };
+    }
+    case COUNT_BUN_DOWN: {
+      return { 
+        ...state, 
+        count: {...state.count, [action.index]: state.count[action.index] = 0}
+      };
+    }
+    case COUNT_INGREDIENT_UP: {
+      return { 
+        ...state, 
+        count: {...state.count, [action.index]: ++ state.count[action.index] },
+      };
+    }
+    case COUNT_INGREDIENT_DOWN: {
+      return { 
+        ...state, 
+        count: {...state.count, [action.index]: -- state.count[action.index] }
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
 export const rootReducer = combineReducers({
   data: ingredientReducer,
   isNewArr: copyArrReducer,
-  order: orderReducer
+  order: orderReducer,
+  count: countReducer
 });
 

@@ -12,6 +12,14 @@ export const DELETE_INGREDIENT_DETAIL = 'DELETE_INGREDIENT_DETAIL';
 export const ORDER_NUMBER_REQUEST = 'ORDER_NUMBER_REQUEST';
 export const DELETE_ORDER_NUMBER = 'DELETE_ORDER_NUMBER';
 
+export const MOVE_INGREDIENTS = 'MOVE_INGREDIENTS';
+export const MOVE_BUNS = 'MOVE_BUNS';
+
+export const COUNT_BUN_UP = 'COUNT_BUN_UP';
+export const COUNT_BUN_DOWN = 'COUNT_BUN_DOWN';
+export const COUNT_INGREDIENT_UP = 'COUNT_INGREDIENT_UP';
+export const COUNT_INGREDIENT_DOWN = 'COUNT_INGREDIENT_DOWN';
+
 export function getItems() { 
   return function(dispatch) {
     dispatch({ type: GET_INGREDIENTS });
@@ -20,7 +28,7 @@ export function getItems() {
     .then(res => {
       if (res.success) {
         dispatch({ type: GET_INGREDIENTS_SUCCESS,
-                   data: res.data
+                   data: res.data.map((item, index) => { return {...item, index: index } })
         });
       } else {
         dispatch({ type: GET_INGREDIENTS_FAILED });
