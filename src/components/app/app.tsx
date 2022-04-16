@@ -16,7 +16,9 @@ import { DELETE_INGREDIENTS,
          COUNT_INGREDIENT_UP,
          COUNT_BUN_UP,
          COUNT_BUN_DOWN,
-         MOVE_BUNS
+         MOVE_BUNS,
+         DELETE_BURGER_CONSTRUCTOR,
+         DELETE_COUNT
 } from "../../services/actions";
 
 const baseUrl='https://norma.nomoreparties.space/api/';
@@ -86,6 +88,8 @@ function handleOpenOrderModal() {
     orderModalVisible: true
   });
   orderNumberRequest()
+  dispatch({ type: DELETE_COUNT })
+  dispatch({ type: DELETE_BURGER_CONSTRUCTOR })
 }  
 
 function handleCloseModal() {
@@ -93,8 +97,8 @@ function handleCloseModal() {
     ingredientModalVisible: false,
     orderModalVisible: false
   });
-  dispatch({type: DELETE_INGREDIENT_DETAIL})
-  dispatch({type: DELETE_ORDER_NUMBER})
+  dispatch({ type: DELETE_INGREDIENT_DETAIL })
+  dispatch({ type: DELETE_ORDER_NUMBER })
 }
   
 const ingredientModal = (

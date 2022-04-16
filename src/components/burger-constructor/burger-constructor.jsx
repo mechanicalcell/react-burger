@@ -7,23 +7,61 @@ import PropTypes from 'prop-types';
 import ingredientPropTypes from '../utils/types';
 import { useSelector } from 'react-redux';
 import { useDrop } from "react-dnd";
+import { useDrag } from "react-dnd";
+import { useDispatch } from 'react-redux';
+import { useRef } from 'react';
+import { useCallback } from 'react';
+import { useMemo } from 'react';
+import { REORDER_BURGER_CONSTRUCTOR
+} from "../../services/actions";
 
-function ConstructorIngredients({ingredients, deleteIngr}) {
-return (ingredients.map(item =>
-  <div key={item.key} className={`${styles.main_list_container} mt-4`}>
-    <div><DragIcon type="primary" /></div> 
-    <ConstructorElement 
-      text={item.name}
-      price={item.price}
-      thumbnail={item.image}
-      handleClose={() => deleteIngr(item, item.index)}
-    /> 
-  </div> 
-)) 
+function ConstructorIngredients({item, index, deleteIngr}) {
+const dispatch = useDispatch();
+const ref = useRef(null);
+const { newArrBurgerConstructor } = useSelector(store => store.isNewArr);
+const [{isDrag}, dragRef] = useDrag({
+  type: "ingredients",
+  item: {item, index},
+});
+
+const copyNewArrBurgerConstructor = useMemo(() => [...newArrBurgerConstructor],[newArrBurgerConstructor]);
+const hoverIndex = index;
+const ingredientsHandleDrop = useCallback((index) => {
+  copyNewArrBurgerConstructor.splice(hoverIndex, 0, copyNewArrBurgerConstructor.splice(index, 1)[0])
+  dispatch({ type: REORDER_BURGER_CONSTRUCTOR, payload: copyNewArrBurgerConstructor })
+}, 
+[hoverIndex, dispatch, copyNewArrBurgerConstructor]
+);
+
+const [{isHoverIngredients}, ingredientsDropTarget] = useDrop({
+  accept: "ingredients",
+  drop({item, index}) { 
+    ingredientsHandleDrop(index);
+  },
+  collect: monitor => ({ 
+    isHoverIngredients: monitor.isOver(),
+  })  
+});    
+
+const borderColor = isHoverIngredients ? 'gray' : 'transparent';
+    
+return (!isDrag && 
+(<div ref={dragRef(ingredientsDropTarget(ref))} 
+      className={`${styles.main_list_container} mt-4`}
+      style={{ border: '2px solid #4C4CFF', borderColor }}>  
+  <div><DragIcon type="primary" /></div> 
+  <ConstructorElement 
+    text={item.name}
+    price={item.price}
+    thumbnail={item.image}
+    handleClose={() => deleteIngr(item, item.index)}
+  /> 
+</div>)         
+) 
 } 
-
+  
 ConstructorIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
+  item: ingredientPropTypes.isRequired,
   deleteIngr: PropTypes.func.isRequired
 };
  
@@ -33,25 +71,27 @@ export default function BurgerConstructor({ onOpen,
                                             ingredientHandleDrop,
                                             bunHandleDrop }) {
 const { newArrBurgerConstructor, newArrBun } = useSelector(store => store.isNewArr);
-const ingredients  = newArrBurgerConstructor.map(item => item).filter((item, index) => item.type !== 'bun')
+
 const [{isHoverIngredient}, ingredientDropTarget] = useDrop({
   accept: "ingredient",
-  drop(item) {
+  drop(item) { 
     ingredientHandleDrop(item, item.index);
   },
-  collect: monitor => ({
+  collect: monitor => ({ 
     isHoverIngredient: monitor.isOver(),
   })  
-});
+});    
+
 const [{isHoverBun}, bunDropTarget] = useDrop({
   accept: "bun",
   drop(item) {
-    bunHandleDrop(item, item.index);
+    bunHandleDrop(item, item.index); 
   },
   collect: monitor => ({
     isHoverBun: monitor.isOver(),
   })  
 });
+
 const borderColor = isHoverBun || isHoverIngredient ? 'gray' : 'transparent';
 
 return (
@@ -73,7 +113,8 @@ return (
       <div ref={ingredientDropTarget} 
            style={{ borderColor }} 
            className={styles.over_flow_container_BC}>
-        <ConstructorIngredients deleteIngr={deleteIngr} ingredients={ingredients} />
+        {newArrBurgerConstructor.map((item, index) => item.type !== 'bun' &&
+        <ConstructorIngredients index={index} key={item.key} deleteIngr={deleteIngr} item={item} /> )}
       </div> 
       <div className='ml-10'> 
         {newArrBun.map(item => item.type === 'bun' &&

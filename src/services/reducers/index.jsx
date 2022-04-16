@@ -14,7 +14,10 @@ import { GET_INGREDIENTS,
          COUNT_BUN_UP,
          COUNT_BUN_DOWN,
          COUNT_INGREDIENT_UP,
-         COUNT_INGREDIENT_DOWN
+         COUNT_INGREDIENT_DOWN,
+         DELETE_COUNT,
+         DELETE_BURGER_CONSTRUCTOR,
+         REORDER_BURGER_CONSTRUCTOR
 } from '../actions/index';
 
 const initialState = {
@@ -26,7 +29,7 @@ const initialState = {
   newArrBun: [],
   orderNumber: null,
   count: { 0: 0, 
-           1: 0, 
+           1: 0,
            2: 0, 
            3: 0, 
            4: 0, 
@@ -94,7 +97,7 @@ const copyArrReducer = (state = initialState, action) => {
     case COPY_ARR_INGREDIENTS: {
       return {
         ...state, 
-        newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: uuidv4(), qty: 1 }],
+        newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: uuidv4(), qty: 1}],//, dragIndex: action.index }],
         newArrIngredientDetails: action.item, 
         newArrBun: state.newArrBun
       }
@@ -102,7 +105,7 @@ const copyArrReducer = (state = initialState, action) => {
     case MOVE_INGREDIENTS: {
       return {
         ...state, 
-        newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: uuidv4(), qty: 1 }],
+        newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: uuidv4(), qty: 1}],//, dragIndex: action.index }],
         newArrIngredientDetails: action.item, 
         newArrBun: state.newArrBun
       }
@@ -124,6 +127,20 @@ const copyArrReducer = (state = initialState, action) => {
       return { 
         ...state,
         newArrIngredientDetails: {}
+      }
+    }
+    case DELETE_BURGER_CONSTRUCTOR: {
+      return {
+        ...state, 
+        newArrBurgerConstructor: [],
+        newArrIngredientDetails: {}, 
+        newArrBun: []
+      }
+    }
+    case REORDER_BURGER_CONSTRUCTOR: {
+      return {
+        ...state, 
+        newArrBurgerConstructor: action.payload
       }
     }
     default: {
@@ -157,6 +174,25 @@ const countReducer = (state = initialState, action) => {
         ...state, 
         count: {...state.count, [action.index]: -- state.count[action.index] }
       };
+    }
+    case DELETE_COUNT: {
+      return {
+        ...state, count: { 0: 0,
+                           1: 0,
+                           2: 0, 
+                           3: 0, 
+                           4: 0, 
+                           5: 0,
+                           6: 0, 
+                           7: 0, 
+                           8: 0, 
+                           9: 0, 
+                           10: 0,
+                           11: 0, 
+                           12: 0, 
+                           13: 0, 
+                           14: 0 }
+      }
     }
     default: {
       return state;

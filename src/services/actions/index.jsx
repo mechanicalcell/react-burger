@@ -20,6 +20,11 @@ export const COUNT_BUN_DOWN = 'COUNT_BUN_DOWN';
 export const COUNT_INGREDIENT_UP = 'COUNT_INGREDIENT_UP';
 export const COUNT_INGREDIENT_DOWN = 'COUNT_INGREDIENT_DOWN';
 
+export const DELETE_COUNT = 'DELETE_COUNT';
+export const DELETE_BURGER_CONSTRUCTOR = 'DELETE_BURGER_CONSTRUCTOR';
+
+export const REORDER_BURGER_CONSTRUCTOR = 'REORDER_BURGER_CONSTRUCTOR';
+
 export function getItems() { 
   return function(dispatch) {
     dispatch({ type: GET_INGREDIENTS });

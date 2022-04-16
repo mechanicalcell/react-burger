@@ -28,7 +28,7 @@ const copyArrIngredients = (e) => {
   dispatch({type: COUNT_INGREDIENT_UP, index }); 
   dispatch({type: COPY_ARR_INGREDIENTS, item, index}) 
   onOpen();
-}
+}   
 const image = (
   <img className='' src={ item.image } alt={item.name} />
 );
@@ -36,7 +36,7 @@ const image = (
 return (item.type === ingrType && 
 (<article ref={dragRef} style={{ position: "relative" }} onClick={e => copyArrIngredients(e)} className={`${styles.ingredients} mb-8`}>
   {count[index] > 0 && (<Counter count={count[index]} size="default" />)} 
-  <div className='ml-4 mr-4'>{image}</div>
+  <div className='ml-4 mr-4'>{image}</div> 
   <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
     <CurrencyIcon type="primary" /> 
   </div>           
@@ -59,7 +59,7 @@ const [{isDrag},dragRef] = useDrag({
   type: "bun",
   item: item,
   collect: monitor => ({
-  isDrag: monitor.isDragging() 
+    isDrag: monitor.isDragging() 
   })      
 });
 const dispatch = useDispatch(); 
@@ -72,7 +72,7 @@ const copyArrBun = (e) => {
     dispatch({ type: COUNT_BUN_UP, index: '1' })
     dispatch({ type: COUNT_BUN_DOWN, index: '0' })
   }  
-  dispatch({type: COPY_ARR_BUN, item, index})       
+  dispatch({type: COPY_ARR_BUN, item, index})
   onOpen(); 
 } 
 const image = (
