@@ -9,6 +9,7 @@ import OrderDetails from '../order-details/order-details';
 import { useDispatch } from 'react-redux';
 import { DELETE_ORDER_NUMBER, getItems, getOrder } from '../../services/actions';
 import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import { DELETE_INGREDIENTS,
          DELETE_INGREDIENT_DETAIL,
          MOVE_INGREDIENTS,
@@ -113,8 +114,8 @@ const orderModal = (
   </Modal>
 );
 
-const ingredientHandleDrop = (item: any, index: any, key: any) => {
-  dispatch({ type: MOVE_INGREDIENTS, item, key })
+const ingredientHandleDrop = (item: any, index: any) => {
+  dispatch({ type: MOVE_INGREDIENTS, item, key: uuidv4() })
   dispatch({ type: COUNT_INGREDIENT_UP, index }); 
 };
 

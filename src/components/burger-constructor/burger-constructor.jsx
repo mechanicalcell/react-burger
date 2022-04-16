@@ -23,7 +23,7 @@ const [{isDrag}, dragRef] = useDrag({
   type: "ingredients",
   item: {item, index},
 });
-
+   
 const copyNewArrBurgerConstructor = useMemo(() => [...newArrBurgerConstructor],[newArrBurgerConstructor]);
 const hoverIndex = index;
 const ingredientsHandleDrop = useCallback((index) => {

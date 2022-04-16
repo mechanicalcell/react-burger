@@ -27,8 +27,8 @@ const [,dragRef] = useDrag({
 const dispatch = useDispatch(); 
 const copyArrIngredients = (e) => { 
   dispatch({type: COUNT_INGREDIENT_UP, index }); 
-  dispatch({type: COPY_ARR_INGREDIENTS, item, key: item.key}) 
-  onOpen();
+  dispatch({type: COPY_ARR_INGREDIENTS, item, key: uuidv4()}) 
+  onOpen(); 
 }   
 const image = (
   <img className='' src={ item.image } alt={item.name} />
@@ -166,7 +166,7 @@ return (
         !data.hasError &&
         !!data.length && 
         data.map((item, index) => item.type ==='bun' &&
-        <Bun index={index} key={uuidv4()} onOpen={onOpen} item={item} ingrType='bun' /> )} 
+        <Bun index={index} key={item._id} onOpen={onOpen} item={item} ingrType='bun' /> )} 
       </div> 
       <p ref={headerSauceRef} className={textColor.sauceColor}>Соусы</p>  
       <div className={`${styles.BI_container} pl-4`}> 
@@ -176,7 +176,7 @@ return (
         !data.hasError &&
         !!data.length && 
         data.map((item, index) => item.type ==='sauce' &&
-        <Ingredients index={index} key={uuidv4()} onOpen={onOpen} item={item} ingrType='sauce' /> )}
+        <Ingredients index={index} key={item._id} onOpen={onOpen} item={item} ingrType='sauce' /> )}
       </div>   
       <p ref={headerMainRef} className={textColor.mainColor}>Начинки</p>  
       <div className={`${styles.BI_container} pl-4`}>
@@ -186,7 +186,7 @@ return (
         !data.hasError &&
         !!data.length &&
         data.map((item, index) => item.type ==='main' &&
-        <Ingredients index={index} key={uuidv4()} onOpen={onOpen} item={item} ingrType='main' /> )}
+        <Ingredients index={index} key={item._id} onOpen={onOpen} item={item} ingrType='main' /> )}
       </div>                   
     </div> 
   </div>  
