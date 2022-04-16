@@ -8,6 +8,7 @@ import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useRef } from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from 'uuid';
 import { COPY_ARR_INGREDIENTS,
          COPY_ARR_BUN,
          COUNT_INGREDIENT_UP,
@@ -26,7 +27,7 @@ const [,dragRef] = useDrag({
 const dispatch = useDispatch(); 
 const copyArrIngredients = (e) => { 
   dispatch({type: COUNT_INGREDIENT_UP, index }); 
-  dispatch({type: COPY_ARR_INGREDIENTS, item, index}) 
+  dispatch({type: COPY_ARR_INGREDIENTS, item, key: item.key}) 
   onOpen();
 }   
 const image = (
@@ -101,7 +102,7 @@ Bun.propTypes = {
 export default function BurgerIngredients({ onOpen }) {
   
 const { data } = useSelector((store) => store.data);
-const [current, setCurrent] = React.useState('one');
+const [current, setCurrent] = React.useState('bun');
 const [textColor, setTextColor] = React.useState({
   bunColor: 'text text_type_main-medium text_color_inactive mb-6',
   sauceColor: 'text text_type_main-medium text_color_inactive mb-6',
@@ -122,6 +123,7 @@ const getDomRect = () => {
       sauceColor: 'text text_type_main-medium text_color_inactive mb-6',
       mainColor: 'text text_type_main-medium text_color_inactive mb-6'
     }); 
+    setCurrent('bun')
   }
   if (sauceDomRect.top + scrollY <= 383 && sauceDomRect.top + scrollY > 263) {
     setTextColor({
@@ -129,6 +131,7 @@ const getDomRect = () => {
       sauceColor: 'text text_type_main-medium mb-6',
       mainColor: 'text text_type_main-medium text_color_inactive mb-6'
     }); 
+    setCurrent('sauce')
   }
   if (mainDomRect.top + scrollY <= 383 && mainDomRect.top + scrollY > 263) {
     setTextColor({
@@ -136,6 +139,7 @@ const getDomRect = () => {
       sauceColor: 'text text_type_main-medium text_color_inactive mb-6',
       mainColor: 'text text_type_main-medium mb-6'
     }); 
+    setCurrent('main')
   }
 } 
 
@@ -143,13 +147,13 @@ return (
   <div className={styles.left_section}>
     <p className="text text_type_main-large mt-10 mb-5">Соберите бургер</p> 
     <div className="mb-10" style={{ display: 'flex' }}>
-      <Tab value="one" active={current === 'one'} onClick={setCurrent}>
+      <Tab value="bun" active={current === 'bun'} onClick={setCurrent}>
         Булки
       </Tab>
-      <Tab value="two" active={current === 'two'} onClick={setCurrent}>
+      <Tab value="sauce" active={current === 'sauce'} onClick={setCurrent}>
         Соусы
       </Tab>
-      <Tab value="three" active={current === 'three'} onClick={setCurrent}>
+      <Tab value="main" active={current === 'main'} onClick={setCurrent}>
         Начинки
       </Tab>
     </div>
@@ -162,7 +166,7 @@ return (
         !data.hasError &&
         !!data.length && 
         data.map((item, index) => item.type ==='bun' &&
-        <Bun index={index} key={item._id} onOpen={onOpen} item={item} ingrType='bun' /> )} 
+        <Bun index={index} key={uuidv4()} onOpen={onOpen} item={item} ingrType='bun' /> )} 
       </div> 
       <p ref={headerSauceRef} className={textColor.sauceColor}>Соусы</p>  
       <div className={`${styles.BI_container} pl-4`}> 
@@ -172,7 +176,7 @@ return (
         !data.hasError &&
         !!data.length && 
         data.map((item, index) => item.type ==='sauce' &&
-        <Ingredients index={index} key={item._id} onOpen={onOpen} item={item} ingrType='sauce' /> )}
+        <Ingredients index={index} key={uuidv4()} onOpen={onOpen} item={item} ingrType='sauce' /> )}
       </div>   
       <p ref={headerMainRef} className={textColor.mainColor}>Начинки</p>  
       <div className={`${styles.BI_container} pl-4`}>
@@ -182,7 +186,7 @@ return (
         !data.hasError &&
         !!data.length &&
         data.map((item, index) => item.type ==='main' &&
-        <Ingredients index={index} key={item._id} onOpen={onOpen} item={item} ingrType='main' /> )}
+        <Ingredients index={index} key={uuidv4()} onOpen={onOpen} item={item} ingrType='main' /> )}
       </div>                   
     </div> 
   </div>  

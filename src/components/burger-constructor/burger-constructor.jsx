@@ -75,7 +75,7 @@ const { newArrBurgerConstructor, newArrBun } = useSelector(store => store.isNewA
 const [{isHoverIngredient}, ingredientDropTarget] = useDrop({
   accept: "ingredient",
   drop(item) { 
-    ingredientHandleDrop(item, item.index);
+    ingredientHandleDrop(item, item.index, item.key);
   },
   collect: monitor => ({ 
     isHoverIngredient: monitor.isOver(),

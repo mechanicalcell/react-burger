@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { combineReducers } from 'redux';
 import { GET_INGREDIENTS,
          GET_INGREDIENTS_SUCCESS,
@@ -97,7 +96,7 @@ const copyArrReducer = (state = initialState, action) => {
     case COPY_ARR_INGREDIENTS: {
       return {
         ...state, 
-        newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: uuidv4(), qty: 1}],//, dragIndex: action.index }],
+        newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: action.key, qty: 1}],
         newArrIngredientDetails: action.item, 
         newArrBun: state.newArrBun
       }
@@ -105,7 +104,7 @@ const copyArrReducer = (state = initialState, action) => {
     case MOVE_INGREDIENTS: {
       return {
         ...state, 
-        newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: uuidv4(), qty: 1}],//, dragIndex: action.index }],
+        newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: action.key, qty: 1}],
         newArrIngredientDetails: action.item, 
         newArrBun: state.newArrBun
       }

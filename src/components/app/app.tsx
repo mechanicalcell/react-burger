@@ -113,8 +113,8 @@ const orderModal = (
   </Modal>
 );
 
-const ingredientHandleDrop = (item: any, index: any) => {
-  dispatch({ type: MOVE_INGREDIENTS, item, index })
+const ingredientHandleDrop = (item: any, index: any, key: any) => {
+  dispatch({ type: MOVE_INGREDIENTS, item, key })
   dispatch({ type: COUNT_INGREDIENT_UP, index }); 
 };
 
