@@ -9,22 +9,28 @@ import { useRef } from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
+import { useHistory } from 'react-router-dom';
 import { COPY_ARR_INGREDIENTS,
          COPY_ARR_BUN,
          COUNT_INGREDIENT_UP,
          COUNT_BUN_UP,
-         COUNT_BUN_DOWN
+         COUNT_BUN_DOWN,
+         INGREDIENT_ID
 } from "../../services/actions";
 import { useDrag } from "react-dnd";
 
 const Ingredients = ({ onOpen, ingrType, item, index }) => {
-
+const history = useHistory();   
 const { count } = useSelector((store) => store.count);
 const [,dragRef] = useDrag({
   type: "ingredient",
   item: item
 });
 const dispatch = useDispatch(); 
+const onClick = () => {
+  dispatch({ type: INGREDIENT_ID, payload: item })
+  history.replace({ pathname: `/ingredients/${item._id}` })
+}
 const copyArrIngredients = (e) => { 
   dispatch({type: COUNT_INGREDIENT_UP, index }); 
   dispatch({type: COPY_ARR_INGREDIENTS, item, key: uuidv4()}) 
@@ -35,7 +41,7 @@ const image = (
 );
 
 return (item.type === ingrType && 
-(<article ref={dragRef} style={{ position: "relative" }} onClick={e => copyArrIngredients(e)} className={`${styles.ingredients} mb-8`}>
+(<article ref={dragRef} style={{ position: "relative" }} onClick={onClick} className={`${styles.ingredients} mb-8`}>
   {count[index] > 0 && (<Counter count={count[index]} size="default" />)} 
   <div className='ml-4 mr-4'>{image}</div> 
   <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
@@ -54,7 +60,7 @@ Ingredients.propTypes = {
 };
 
 const Bun = ({ onOpen, ingrType, item, index }) => {
-
+const history = useHistory();   
 const { count } = useSelector((store) => store.count);
 const [{isDrag},dragRef] = useDrag({
   type: "bun",
@@ -64,6 +70,10 @@ const [{isDrag},dragRef] = useDrag({
   })      
 });
 const dispatch = useDispatch(); 
+const onClick = () => {
+  dispatch({ type: INGREDIENT_ID, payload: item })
+  history.replace({ pathname: `/ingredients/${item._id}` })
+}
 const copyArrBun = (e) => { 
   if (index === 0) {
     dispatch({ type: COUNT_BUN_UP, index: '0' })
@@ -81,7 +91,7 @@ const image = (
 );
 
 return !isDrag && (item.type === ingrType && 
-(<article ref={dragRef} style={{ position: "relative" }} onClick={e => copyArrBun(e)} className={`${styles.ingredients} mb-8`}>
+(<article ref={dragRef} style={{ position: "relative" }} onClick={onClick} className={`${styles.ingredients} mb-8`}>
   {count[index] > 0 && (<Counter count={count[index]} size="default" />)}
   <div className='ml-4 mr-4'>{image}</div> 
   <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}

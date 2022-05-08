@@ -16,7 +16,27 @@ import { GET_INGREDIENTS,
          COUNT_INGREDIENT_DOWN,
          DELETE_COUNT,
          DELETE_BURGER_CONSTRUCTOR,
-         REORDER_BURGER_CONSTRUCTOR
+         REORDER_BURGER_CONSTRUCTOR,
+         PASSWORD_REQUEST,
+         NEW_PASSWORD,
+         USER_REGISTRATION,
+         NEW_PASSWORD_INPUT,
+         CODE_INPUT,
+         REGISTER_NAME_INPUT,
+         REGISTER_EMAIL_INPUT,
+         REGISTER_PASSWORD_INPUT,
+         PROFILE_NAME_INPUT,
+         PROFILE_EMAIL_INPUT,
+         PROFILE_PASSWORD_INPUT,
+         LOGIN_EMAIL_INPUT,
+         LOGIN_PASSWORD_INPUT,
+         USER_LOGIN,
+         RESET_USER,
+         GET_PROFILE_RESULT,
+         PATCH_PROFILE_RESULT,
+         TOKEN_NULL,
+         TOKEN_REFRESH,
+         INGREDIENT_ID
 } from '../actions/index';
 
 const initialState = {
@@ -27,6 +47,53 @@ const initialState = {
   newArrIngredientDetails: {},
   newArrBun: [],
   orderNumber: null,
+  passwordResetResult: {success: null, message: null},
+  newPassword: '',
+  newPasswordInput: '',
+  codeInput: '',
+  registrationResult: {
+    "success": null,
+    "user": {},
+    "accessToken": null,
+    "refreshToken": null
+  } ,
+  registerNameInput: '',
+  registerEmailInput: '',
+  registerPasswordInput: '',
+  profileNameInput: '',
+  profileEmailInput: '',
+  profilePasswordInput: '',
+  loginResult: {
+    "success": null,
+    "accessToken": null,
+    "refreshToken": null,
+    "user": {
+      "email": null,
+      "name": null
+    }
+  }, 
+  loginEmailInput: '',
+  loginPasswordInput: '',
+  user : {},
+  logoutResult: {
+    "success": null,
+    "message": null
+  }, 
+  getResult: {
+    "success": null,
+    "user": {
+      "email": null,
+      "name": null
+    }
+  } ,
+  patchResult: {
+    "success": null,
+    "user": {
+      "email": null,
+      "name": null
+    }
+  } ,
+  ingredientIdCopy: null,
   count: { 0: 0, 
            1: 0,
            2: 0, 
@@ -83,6 +150,183 @@ const orderReducer = (state = initialState, action) => {
     }
   }
 };
+
+const passwordResetReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case PASSWORD_REQUEST: {
+      return {
+        ...state,
+        passwordResetResult: action.payload
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
+const newPasswordReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case NEW_PASSWORD: {
+      return {
+        ...state,
+        newPassword: action.newPassword
+      };
+    }
+    case NEW_PASSWORD_INPUT: {
+      return {
+        ...state,
+        newPasswordInput: action.payload
+      };
+    }
+    case CODE_INPUT: {
+      return {
+        ...state,
+        codeInput: action.payload
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
+const getPatchReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case GET_PROFILE_RESULT: {
+      return {
+        ...state,
+        getResult: action.payload
+      };
+    }
+    case PATCH_PROFILE_RESULT: {
+      return {
+        ...state,
+        patchResult: action.payload
+      };
+    }
+    case PROFILE_NAME_INPUT: {
+      return {
+        ...state,
+        profileNameInput: action.payload
+      };
+    }
+    case PROFILE_EMAIL_INPUT: {
+      return {
+        ...state,
+        profileEmailInput: action.payload
+      };
+    }
+    case PROFILE_PASSWORD_INPUT: {
+      return {
+        ...state,
+        profilePasswordInput: action.payload
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};   
+
+const userRegistrationReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case USER_REGISTRATION: {
+      return {
+        ...state,
+        registrationResult: action.payload
+      };
+    }
+    case REGISTER_NAME_INPUT: {
+      return {
+        ...state,
+        registerNameInput: action.payload
+      };
+    }
+    case REGISTER_EMAIL_INPUT: {
+      return {
+        ...state,
+        registerEmailInput: action.payload
+      };
+    }
+    case REGISTER_PASSWORD_INPUT: {
+      return {
+        ...state,
+        registerPasswordInput: action.payload
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};   
+
+const loginReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case USER_LOGIN: {
+      return {
+        ...state,
+        loginResult: action.payload,
+        logoutResult: {
+          "success": null,
+          "message": null
+        },
+        user: action.userLogin
+      };
+    }
+    case LOGIN_EMAIL_INPUT: {
+      return {
+        ...state,
+        loginEmailInput: action.payload
+      };
+    }
+    case LOGIN_PASSWORD_INPUT: {
+      return {
+        ...state,
+        loginPasswordInput: action.payload
+      };
+    }
+    case RESET_USER: {
+      return {
+        ...state,
+        logoutResult: action.payload,
+        loginResult: {
+          "success": null,
+          "accessToken": null,
+          "refreshToken": null,
+          "user": {
+            "email": null,
+            "name": null
+          }
+        },
+        user: action.userLogout
+      };
+    }
+    case TOKEN_NULL: {
+      return {
+        ...state,
+        loginResult: { 
+          ...state.loginResult,
+          "accessToken": null
+        }
+      };
+    }
+    case TOKEN_REFRESH: {
+      return {
+        ...state,
+        loginResult: { 
+          ...state.loginResult,
+          "success": action.success,
+          "accessToken": action.accessToken,
+          "refreshToken": action.refreshToken
+        }       
+      }
+    }
+    default: {
+      return state;
+    }
+  }
+};   
 
 const copyArrReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -142,6 +386,12 @@ const copyArrReducer = (state = initialState, action) => {
         newArrBurgerConstructor: action.payload
       }
     }
+    case INGREDIENT_ID: {
+      return { 
+        ...state,
+        ingredientIdCopy: action.payload
+      }
+    } 
     default: {
       return state;
     }
@@ -203,6 +453,11 @@ export const rootReducer = combineReducers({
   data: ingredientReducer,
   isNewArr: copyArrReducer,
   order: orderReducer,
-  count: countReducer
+  count: countReducer,
+  newPassword: newPasswordReducer,
+  register: userRegistrationReducer,
+  login: loginReducer,
+  reset: passwordResetReducer,
+  profile: getPatchReducer
 });
 
