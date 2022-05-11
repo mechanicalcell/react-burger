@@ -1,16 +1,17 @@
 import React from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
-import { patchProfileResult, tokenRefreshResult } from '../services/actions';
+import { patchProfileResult } from '../services/actions/get-patch';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import AppHeader from '../components/app-header/app-header';
 import { NavLink, useRouteMatch } from 'react-router-dom';
+import { getProfileResult } from '../services/actions/get-patch';
+import { getCookie } from '../components/utils/cookie';
+import styles from './page-container.module.css';
 import { PROFILE_NAME_INPUT,
          PROFILE_EMAIL_INPUT,
-         PROFILE_PASSWORD_INPUT } from '../services/actions';
-import { getProfileResult } from '../services/actions'; 
-import { getCookie, setCookie } from '../components/utils/cookie';
+         PROFILE_PASSWORD_INPUT 
+} from '../services/actions/get-patch';
 
 function ProfileNameInput() {
   const dispatch = useDispatch();
@@ -113,64 +114,47 @@ export function ProfilePage() {
   const { getResult, 
           patchResult } = useSelector(store => store.profile);  
   const { loginResult } = useSelector(store => store.login);  
-  localStorage.setItem('accessToken', loginResult.accessToken);
-  setCookie('token', loginResult.accessToken)
   const accessToken = getCookie('token');
+  const refreshToken = localStorage.getItem('token')
   const onClick = () => {
-    dispatch(getProfileResult(accessToken))    
+    dispatch(getProfileResult(accessToken, refreshToken))    
     dispatch(patchProfileResult(accessToken, profileNameInput, profileEmailInput, profilePasswordInput))
   }  
   useEffect(() => {
-    if (loginResult.accessToken === null) {  
-      dispatch(tokenRefreshResult(loginResult.refreshToken))
-    }  
-  }, [dispatch, loginResult])
-  useEffect(() => {
     if (getResult.user.name === null || getResult.user.email === null) {  
-      dispatch(getProfileResult(accessToken))
+      dispatch(getProfileResult(accessToken, refreshToken))
     }  
-  }, [dispatch, accessToken, getResult, patchResult, getProfileResult])
+  }, [dispatch, accessToken, refreshToken, getResult, getProfileResult])
   useEffect(() => {
     if (patchResult.success) {  
-      dispatch(getProfileResult(accessToken))
+      dispatch(getProfileResult(accessToken, refreshToken))
     }  
-  }, [dispatch, patchResult, accessToken])
+  }, [dispatch, patchResult, accessToken, refreshToken, getProfileResult])
   return (
     <div>
-    <AppHeader />
-    <div style={{ display: 'flex', 
-                  marginTop: '200px',
-                  marginLeft: '100px',
-                  flexDirection: 'column',
-                  justifyContent: 'start',
-                  width: '240px' }}>
-      <NavLink to={{ pathname: `/profile` }} className={profileStyle}> 
-        <p className="text text_type_main-medium">Профиль</p> 
-      </NavLink>
-      <NavLink to={{ pathname: `/profile/orders` }} className={`${orderHistoryStyle} mt-6`}> 
-        <p className="text text_type_main-medium">История заказов</p>  
-      </NavLink>
-      <NavLink to={{ pathname: `/logout` }} className={`${logoutStyle} mt-6`}> 
-        <p className="text text_type_main-medium">Выход</p>
-      </NavLink>
-    </div>       
-    <div style={{marginTop: '-200px',
-         display: 'flex', 
-         flexDirection: 'column',
-         justifyContent: 'center',
-         alignItems: 'center'}}>
-      {path === '/profile' &&
-      ((<><ProfileNameInput />
-      <div className={`text text_type_main-medium mt-6`}>
-        <ProfileEmailInput />
+      <div className={styles.profile_container}>
+        <NavLink to={{ pathname: `/profile` }} className={profileStyle}> 
+          <p className="text text_type_main-medium">Профиль</p> 
+        </NavLink>
+        <NavLink to={{ pathname: `/profile/orders` }} className={`${orderHistoryStyle} mt-6`}> 
+          <p className="text text_type_main-medium">История заказов</p>  
+        </NavLink>
+        <NavLink to={{ pathname: `/logout` }} className={`${logoutStyle} mt-6`}> 
+          <p className="text text_type_main-medium">Выход</p>
+        </NavLink>
+      </div>       
+      <div className={styles.profile_input_container}>
+        <ProfileNameInput />
+        <div className={`text text_type_main-medium mt-6`}>
+          <ProfileEmailInput />
+        </div>
+        <div className={`text text_type_main-medium mt-6`}>
+          <ProfilePasswordInput />            
+        </div> 
+        <div className={`text text_type_main-medium mt-6`} onClick={onClick}> 
+          <Button>Сохранить</Button>
+        </div>       
       </div>
-      <div className={`text text_type_main-medium mt-6`}>
-        <ProfilePasswordInput />            
-      </div></>))} 
-      {<div className={`text text_type_main-medium mt-6`} onClick={onClick}> 
-        <Button>Сохранить</Button>
-      </div>}       
-    </div>
     </div>
   );
 } 

@@ -2,22 +2,27 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
-import { getProfileResult, userLogout } from '../services/actions';
+import { getProfileResult } from '../services/actions/get-patch';
+import { userLogout } from '../services/actions'; 
 import { useSelector } from 'react-redux';
-import { getCookie } from '../components/utils/cookie';
+import { getCookie, setCookie } from '../components/utils/cookie';
 
 export function LogoutPage() {
   const { loginResult, logoutResult, user } = useSelector(store => store.login);  
+  const { getResult } = useSelector(store => store.profile);    
   const history = useHistory();     
   const { path } = useRouteMatch();
   const dispatch = useDispatch(); 
-  localStorage.setItem('token', loginResult.refreshToken);
+  console.log(logoutResult)
+
   const refreshToken = localStorage.getItem('token');
   const accessToken = getCookie('token');
   useEffect(() => {
-    if (path === '/logout' && user !== null) {
+    if (path === '/logout' && getResult.user !== null) {
       dispatch(getProfileResult(accessToken))
-      dispatch(userLogout(refreshToken))  
+      dispatch(userLogout(refreshToken)) 
+      localStorage.removeItem('token'); 
+      setCookie('token', null)
     }
   }, [path, history, refreshToken, dispatch, accessToken, user])
   useEffect(() => {

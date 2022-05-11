@@ -6,11 +6,10 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
-import AppHeader from '../components/app-header/app-header';
-import { userLogin } from '../services/actions';
+import { userLogin } from '../services/actions/login';
+import styles from './page-container.module.css';
 import { LOGIN_EMAIL_INPUT,
-         LOGIN_PASSWORD_INPUT } from '../services/actions';
-import { setCookie } from '../components/utils/cookie';
+         LOGIN_PASSWORD_INPUT } from '../services/actions/login';
 
 function LoginEmailInput() {
   const dispatch = useDispatch();
@@ -75,26 +74,22 @@ export function LoginPage() {
   const history = useHistory();   
   const { loginEmailInput,
           loginPasswordInput,
-          loginResult } = useSelector(store => store.login);  
+          loginResult,
+          user } = useSelector(store => store.login);  
   const onClick = useCallback(() => {
     dispatch(userLogin(loginEmailInput, loginPasswordInput))
   },
   [loginResult, history, dispatch, loginEmailInput, loginPasswordInput]
-  );     
+  ); 
   useEffect(() => {
     if (loginResult['success']) {
-      setCookie('token', loginResult.accessToken)
+      // localStorage.setItem('token', loginResult.refreshToken);
+      // setCookie('token', loginResult.accessToken)
       history.replace({ pathname: '/' })
     }
   }, [loginResult, history])
   return (
-    <>
-    <AppHeader />
-    <div style={{marginTop: '100px',
-         display: 'flex', 
-         flexDirection: 'column',
-         justifyContent: 'center',
-         alignItems: 'center'}}>
+    <div className={styles.login_container}>
       <h1 className={`text text_type_main-large mb-6`}>Вход</h1>    
       <LoginEmailInput />
       <div className={`text text_type_main-medium mt-6`}>
@@ -108,6 +103,5 @@ export function LoginPage() {
       <p className={` text text_type_main-medium mt-20`}>Вы - новый пользователь? <Link to='/register'>Зарегистрироваться</Link></p>
       <p className={` text text_type_main-medium mt-4`}>Забыли пароль? <Link to='/forgot'>Восстановить пароль</Link></p>                
     </div>
-    </>
   );
 } 

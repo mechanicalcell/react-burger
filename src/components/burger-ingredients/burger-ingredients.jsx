@@ -10,14 +10,15 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import { useHistory } from 'react-router-dom';
+import { useDrag } from "react-dnd";
 import { COPY_ARR_INGREDIENTS,
          COPY_ARR_BUN,
-         COUNT_INGREDIENT_UP,
-         COUNT_BUN_UP,
-         COUNT_BUN_DOWN,
          INGREDIENT_ID
-} from "../../services/actions";
-import { useDrag } from "react-dnd";
+} from "../../services/actions/copy-arr";
+import { COUNT_INGREDIENT_UP,
+         COUNT_BUN_UP,
+         COUNT_BUN_DOWN
+} from "../../services/actions/count";         
 
 const Ingredients = ({ onOpen, ingrType, item, index }) => {
 const history = useHistory();   

@@ -7,20 +7,10 @@ import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 import { useDispatch } from 'react-redux';
-import { DELETE_ORDER_NUMBER, getItems, getOrder } from '../../services/actions';
+import { getItems } from '../../services/actions';
+import { getOrder } from '../../services/actions/order';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { DELETE_INGREDIENTS,
-         DELETE_INGREDIENT_DETAIL,
-         MOVE_INGREDIENTS,
-         COUNT_INGREDIENT_DOWN,
-         COUNT_INGREDIENT_UP,
-         COUNT_BUN_UP,
-         COUNT_BUN_DOWN,
-         MOVE_BUNS,
-         DELETE_BURGER_CONSTRUCTOR,
-         DELETE_COUNT
-} from "../../services/actions";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { LoginPage } from '../../pages/login-page';
 import { RegisterPage } from '../../pages/register-page';
@@ -29,133 +19,52 @@ import { ResetPasswordPage } from '../../pages/reset-password';
 import { ProfilePage } from '../../pages/profile-page';
 import { LogoutPage } from '../../pages/logout-page';
 import { ProfileOrdersPage } from '../../pages/profile-orders-page';
-import { ProtectedRoute } from './protected-route';
+import { ProtectedRoute } from '../protected-route/protected-route';
 import { IngredientsPage } from '../../pages/ingredients-page';
-
-const baseUrl='https://norma.nomoreparties.space/api/';
-
-export const checkResponse = (res: Response) => {
-  if (res.ok) {
-    return res.json();
-  } else {
-      return Promise.reject(`Ошибка ${res.status}`);
-    }
-}
-
-export const getIngredients = async () => await fetch(`${baseUrl}ingredients`)
-
-export const getOrderNumber = (ingredientId: any) => 
-  fetch(`${baseUrl}orders`, {
-    method: 'POST',
-    body: JSON.stringify({
-      ingredients: ingredientId 
-    }),
-    headers: {
-      'Content-type': 'application/json'
-    },
-  })    
-
-export const passwordResetRequest = (email: any) => 
-  fetch(`${baseUrl}password-reset`, {
-    method: 'POST',
-    body: JSON.stringify({
-      "email": email 
-    }),
-    headers: {
-      'Content-type': 'application/json'
-    },
-  }) 
-
-export const newPasswordRequest = (newPassword: any, code: any) => 
-fetch(`${baseUrl}password-reset/reset`, {
-  method: 'POST',
-  body: JSON.stringify({
-    "password": newPassword,
-    "token": code
-  }),
-  headers: {
-    'Content-type': 'application/json'
-  },
-})
-
-export const userRegistrationRequest = (name: any, email: any, password: any) => 
-fetch(`${baseUrl}auth/register`, {
-  method: 'POST',
-  body: JSON.stringify({
-    "email": email,
-    "password": password,
-    "name": name
-  }),
-  headers: {
-    'Content-type': 'application/json'
-  },
-}) 
-
-export const loginRequest = async (email: any, password: any) => 
- await fetch(`${baseUrl}auth/login`, {
-  method: 'POST',
-  body: JSON.stringify({
-    "email": email,
-    "password": password,
-  }),
-  headers: {
-    'Content-type': 'application/json'
-  },
-})
-
-export const logoutRequest = async (refreshToken: any) => 
-await fetch(`${baseUrl}auth/logout`, {
-  method: 'POST',
-  body: JSON.stringify({
-    "token": refreshToken
-  }),
-  headers: {
-    'Content-type': 'application/json'
-  },
-})
-
-export const getUserDataRequest = async (accessToken: any) => 
-await fetch(`${baseUrl}auth/user`, {
-  method: 'GET',
-  headers: {
-    'Content-type': 'application/json',
-    Authorization: accessToken
-  },
-}).then(res => res.json())
-
-export const patchUserDataRequest = async (accessToken: any, name: any, email: any, password: any) => 
-await fetch(`${baseUrl}auth/user`, {
-  method: 'PATCH',
-  headers: {
-    'Content-type': 'application/json',
-    Authorization: accessToken
-  },
-  body: JSON.stringify({
-    email: email,
-    name: name, 
-    password: password
-  }),  
-})
-
-export const tokenRefreshRequest = async (refreshToken: any) => 
-await fetch(`${baseUrl}auth/token`, {
-  method: 'POST',
-  headers: {
-    'Content-type': 'application/json'
-  },
-  body: JSON.stringify({
-    "token": refreshToken
-  }),  
-})
+import { DELETE_INGREDIENTS,
+         DELETE_INGREDIENT_DETAIL,
+         MOVE_INGREDIENTS,
+         MOVE_BUNS,
+         DELETE_BURGER_CONSTRUCTOR
+} from "../../services/actions/copy-arr";
+import { COUNT_INGREDIENT_DOWN,
+         COUNT_INGREDIENT_UP,
+         COUNT_BUN_UP,
+         COUNT_BUN_DOWN,
+         DELETE_COUNT
+} from "../../services/actions/count";         
+import { DELETE_ORDER_NUMBER
+} from "../../services/actions/order";         
+import { getCookie, setCookie } from '../utils/cookie';
+import { getProfileResult } from '../../services/actions/get-patch';
 
 function App() {
 const dispatch = useDispatch();
 const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
+const { loginResult } = useSelector((store: any) => store.login);
+const { getResult } = useSelector((store: any) => store.profile);
+const { user } = useSelector((store: any) => store.login);
 const [totalPrice, setTotalPrice] = useState(0);
 const [isVisible, setIsVisible] = useState({
   ingredientModalVisible: false,
   orderModalVisible: false
 });
+console.log(loginResult)
+console.log(getResult)
+console.log(user)
+const refreshToken = localStorage.getItem('token')
+console.log(refreshToken)
+const accessToken = getCookie('token');
+console.log(accessToken)
+
+if (loginResult.refreshToken) {
+  localStorage.setItem('token', loginResult.refreshToken);
+  setCookie('token', loginResult.accessToken)
+} 
+
+useEffect(() => {
+  dispatch(getProfileResult(accessToken, refreshToken)) 
+}, [dispatch, getProfileResult, accessToken, refreshToken]);
 
 useEffect(() => {
   const setPrice = () => {
@@ -242,9 +151,9 @@ const deleteIngredient = (item: any, index: any) => {
 return (
   <>
     <Router>
+      <AppHeader />
       <Switch> 
         <Route path="/" exact={true}>
-          <AppHeader />
           <div className={styles.section_container}> 
             <BurgerIngredients onOpen={handleOpenIngredientModal} />
             <BurgerConstructor onOpen={handleOpenOrderModal} 

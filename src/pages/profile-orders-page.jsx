@@ -1,5 +1,5 @@
-import AppHeader from "../components/app-header/app-header";
 import { NavLink, useRouteMatch } from 'react-router-dom';
+import styles from './page-container.module.css';
 
 export function ProfileOrdersPage() {
     const { path } = useRouteMatch();
@@ -8,14 +8,7 @@ export function ProfileOrdersPage() {
     const logoutStyle = path === '/logout' ? 'text text_type_main-large' : 'text text_type_main-large text_color_inactive'  
   
   return (
-    <div>
-    <AppHeader />
-    <div style={{ display: 'flex', 
-                  marginTop: '200px',
-                  marginLeft: '100px',
-                  flexDirection: 'column',
-                  justifyContent: 'start',
-                  width: '240px' }}>
+    <div className={styles.profile_order_container}>
       <NavLink to={{ pathname: `/profile` }} className={profileStyle}> 
         <p className="text text_type_main-medium">Профиль</p> 
       </NavLink>
@@ -26,6 +19,5 @@ export function ProfileOrdersPage() {
         <p className="text text_type_main-medium">Выход</p>
       </NavLink>
     </div>       
-    </div>
   );
 } 

@@ -2,10 +2,11 @@ import { Redirect, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 export function ProtectedRoute({ children, ...rest }) {
-  const { loginResult } = useSelector(store => store.login);  
+  const { getResult } = useSelector(store => store.profile);  
+  console.log(getResult)         
   return <Route {...rest} render={({location}) =>
-               
-  loginResult.success ? (
+     
+  getResult.user.email ? (
           children
         ) : (
                     <Redirect

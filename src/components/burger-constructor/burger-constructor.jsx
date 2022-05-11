@@ -13,7 +13,7 @@ import { useRef } from 'react';
 import { useCallback } from 'react';
 import { useMemo } from 'react';
 import { REORDER_BURGER_CONSTRUCTOR
-} from "../../services/actions";
+} from "../../services/actions/copy-arr";
 
 function ConstructorIngredients({item, index, deleteIngr}) {
 const dispatch = useDispatch();

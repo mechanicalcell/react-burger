@@ -1,15 +1,16 @@
 import React from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
-import { getNewPassword } from '../services/actions';
+import { getNewPassword } from '../services/actions/new-password';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
-import { NEW_PASSWORD_INPUT,
-         CODE_INPUT } from '../services/actions';
 import { Link, Redirect } from 'react-router-dom';
-import AppHeader from '../components/app-header/app-header';
+import styles from './page-container.module.css';
+import { NEW_PASSWORD_INPUT,
+         CODE_INPUT 
+} from '../services/actions/new-password';
 
 function PasswordInput() {
   const dispatch = useDispatch();
@@ -90,13 +91,7 @@ export function ResetPasswordPage() {
     }
   }, [loginResult])  
   return ( 
-    <>
-    <AppHeader />
-    <div style={{ marginTop: '100px',
-                  display: 'flex', 
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center' }}> 
+    <div className={styles.reset_container}>
       <h1 className={`text text_type_main-large mb-6`}>Восстановление пароля</h1>    
       <PasswordInput /> 
       <div className={`text text_type_main-medium mt-6`}>
@@ -109,6 +104,5 @@ export function ResetPasswordPage() {
       </div>
       <p className={`text text_type_main-medium mt-20`}>Вспомнили пароль? <Link to='/login'>Войти</Link></p>
     </div>
-    </>
   );
 } 
