@@ -108,7 +108,8 @@ export function RegisterPage() {
           registerEmailInput,
           registerPasswordInput,
           registrationResult } = useSelector(store => store.register);  
-  const onClick = useCallback(() => {
+  const onSubmit = useCallback((e) => {
+    e.preventDefault()
     dispatch(userRegistration(registerNameInput, registerEmailInput, registerPasswordInput))
   },
   [dispatch, registerNameInput, registerEmailInput, registerPasswordInput]
@@ -126,18 +127,20 @@ export function RegisterPage() {
   return (
     <div className={styles.register_container}>
       <h1 className={`text text_type_main-large mb-6`}>Регистрация</h1>    
-      <RegisterNameInput />
-      <div className={`text text_type_main-medium mt-6`}>
-        <RegisterEmailInput />
-      </div>
-      <div className={`text text_type_main-medium mt-6`}>
-        <RegisterPasswordInput />            
-      </div>
-      <div className={`text text_type_main-medium mt-6`}>
-        <Button onClick={onClick} type="primary" size="large">
-          Зарегистрироваться 
-        </Button>
-      </div>
+      <form onSubmit={(e) => onSubmit(e)} className={styles.register_container}>
+        <RegisterNameInput />
+        <div className={`text text_type_main-medium mt-6`}>
+          <RegisterEmailInput />
+        </div>
+        <div className={`text text_type_main-medium mt-6`}>
+          <RegisterPasswordInput />            
+        </div>
+        <div className={`text text_type_main-medium mt-6`}>
+          <Button htmlType='submit' type="primary" size="large">
+            Зарегистрироваться 
+          </Button>
+        </div>
+      </form>
       <p className={` text text_type_main-medium mt-20`}>Уже зарегистрированы? <Link to='/login'>Войти</Link></p>
     </div>
   );

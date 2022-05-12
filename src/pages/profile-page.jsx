@@ -116,7 +116,8 @@ export function ProfilePage() {
   const { loginResult } = useSelector(store => store.login);  
   const accessToken = getCookie('token');
   const refreshToken = localStorage.getItem('token')
-  const onClick = () => {
+  const onSubmit = (e) => {
+    e.preventDefault()
     dispatch(getProfileResult(accessToken, refreshToken))    
     dispatch(patchProfileResult(accessToken, profileNameInput, profileEmailInput, profilePasswordInput))
   }  
@@ -143,18 +144,18 @@ export function ProfilePage() {
           <p className="text text_type_main-medium">Выход</p>
         </NavLink>
       </div>       
-      <div className={styles.profile_input_container}>
-        <ProfileNameInput />
-        <div className={`text text_type_main-medium mt-6`}>
-          <ProfileEmailInput />
-        </div>
-        <div className={`text text_type_main-medium mt-6`}>
-          <ProfilePasswordInput />            
-        </div> 
-        <div className={`text text_type_main-medium mt-6`} onClick={onClick}> 
-          <Button>Сохранить</Button>
-        </div>       
-      </div>
+        <form onSubmit={(e) => onSubmit(e)} className={styles.profile_input_container}>
+          <ProfileNameInput />
+          <div className={`text text_type_main-medium mt-6`}>
+            <ProfileEmailInput />
+          </div>
+          <div className={`text text_type_main-medium mt-6`}>
+            <ProfilePasswordInput />            
+          </div> 
+          <div className={`text text_type_main-medium mt-6`} > 
+            <Button htmlType='submit'>Сохранить</Button>
+          </div> 
+        </form>      
     </div>
   );
 } 

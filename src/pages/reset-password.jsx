@@ -75,7 +75,8 @@ export function ResetPasswordPage() {
   const { newPasswordInput, codeInput, newPassword } = useSelector(store => store.newPassword);
   const { loginResult } = useSelector(store => store.login);    
   const history = useHistory();   
-  const onClick = useCallback(() => {
+  const onSubmit = useCallback((e) => {
+    e.preventDefault()  
     dispatch(getNewPassword(newPasswordInput, codeInput))
   },
   [dispatch, newPasswordInput, codeInput]
@@ -93,15 +94,17 @@ export function ResetPasswordPage() {
   return ( 
     <div className={styles.reset_container}>
       <h1 className={`text text_type_main-large mb-6`}>Восстановление пароля</h1>    
-      <PasswordInput /> 
-      <div className={`text text_type_main-medium mt-6`}>
-        <CodeInput />
-      </div>
-      <div className={`text text_type_main-medium mt-6`}>
-        <Button onClick={onClick} type="primary" size="large"> 
-          Сохранить
-        </Button>
-      </div>
+      <form onSubmit={(e) => onSubmit(e)} className={styles.reset_container}>
+        <PasswordInput /> 
+        <div className={`text text_type_main-medium mt-6`}>
+          <CodeInput />
+        </div>
+        <div className={`text text_type_main-medium mt-6`}>
+          <Button htmlType='submit' type="primary" size="large"> 
+            Сохранить
+          </Button>
+        </div>
+      </form>
       <p className={`text text_type_main-medium mt-20`}>Вспомнили пароль? <Link to='/login'>Войти</Link></p>
     </div>
   );
