@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
-import { getProfileResult } from '../services/actions/get-patch';
+import { getProfileResult, USER_RESET } from '../services/actions/get-patch';
 import { userLogout } from '../services/actions'; 
 import { useSelector } from 'react-redux';
 import { getCookie, setCookie } from '../components/utils/cookie';

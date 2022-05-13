@@ -14,7 +14,7 @@ export const newPasswordReducer = (state = initialState, action) => {
     case NEW_PASSWORD: {
       return {
         ...state,
-        newPassword: action.newPassword
+        newPassword: action.payload
       };
     }
     case NEW_PASSWORD_INPUT: {

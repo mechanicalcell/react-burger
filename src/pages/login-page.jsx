@@ -10,6 +10,7 @@ import { userLogin } from '../services/actions/login';
 import styles from './page-container.module.css';
 import { LOGIN_EMAIL_INPUT,
          LOGIN_PASSWORD_INPUT } from '../services/actions/login';
+import { USER_RESET } from '../services/actions/get-patch';
 
 function LoginEmailInput() {
   const dispatch = useDispatch();
@@ -82,13 +83,15 @@ export function LoginPage() {
   },
   [loginResult, history, dispatch, loginEmailInput, loginPasswordInput]
   ); 
+  
   useEffect(() => {
+    dispatch({ type: USER_RESET })
     if (loginResult['success']) {
       // localStorage.setItem('token', loginResult.refreshToken);
       // setCookie('token', loginResult.accessToken)
       history.replace({ pathname: '/' })
     }
-  }, [loginResult, history])
+  }, [loginResult, history, dispatch])
   return (
     <div className={styles.login_container}>
       <h1 className={`text text_type_main-large mb-6`}>Вход</h1>    

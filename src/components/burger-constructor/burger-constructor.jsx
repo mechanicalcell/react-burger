@@ -14,6 +14,7 @@ import { useCallback } from 'react';
 import { useMemo } from 'react';
 import { REORDER_BURGER_CONSTRUCTOR
 } from "../../services/actions/copy-arr";
+import { useHistory } from 'react-router-dom';
 
 function ConstructorIngredients({item, index, deleteIngr}) {
 const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const [{isHoverIngredients}, ingredientsDropTarget] = useDrop({
 });    
 
 const borderColor = isHoverIngredients ? 'gray' : 'transparent';
-    
+
 return (!isDrag && 
 (<div ref={dragRef(ingredientsDropTarget(ref))} 
       className={`${styles.main_list_container} mt-4`}
@@ -94,6 +95,20 @@ const [{isHoverBun}, bunDropTarget] = useDrop({
 
 const borderColor = isHoverBun || isHoverIngredient ? 'gray' : 'transparent';
 
+const history = useHistory()
+
+const { getResult } = useSelector(store => store.profile);  
+
+const onClick = useCallback(() => {
+  if (getResult.user.email === null) { 
+      history.replace("/login"); 
+    } else {
+      if (getResult.user.email) {  
+        onOpen()
+      }
+  }
+}, [getResult, history, onOpen]);  
+
 return (
   <div className={`${styles.right_section} ml-10 pt-25`}>
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -131,7 +146,7 @@ return (
     <div className={`${styles.order_container} mt-10 mb-2`} >
       <p className={`${styles.text_ingredient_container} text text_type_digits-medium mr-2`}>{totalPrice}</p>    
       <p className='mr-10'><CurrencyIcon type="primary" /></p>
-      <Button onClick={onOpen} type="primary" size="medium" >
+      <Button onClick={onClick} type="primary" size="medium" >
         Оформить заказ 
       </Button>
     </div>

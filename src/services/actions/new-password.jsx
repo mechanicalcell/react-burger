@@ -10,7 +10,7 @@ export function getNewPassword(newPassword, code) {
     newPasswordRequest(newPassword, code)
     .then(checkResponse)
     .then(res => dispatch({ type: NEW_PASSWORD,
-                            newPassword: res })
+                            payload: res })
     )
     .catch(e => console.log(e))
   };

@@ -10,6 +10,7 @@ export const PROFILE_PASSWORD_INPUT = 'PROFILE_PASSWORD_INPUT';
 export const GET_PROFILE_RESULT = 'GET_PROFILE_RESULT';
 export const PATCH_PROFILE_RESULT = 'PATCH_PROFILE_RESULT';
 export const TOKEN_NULL = 'TOKEN_NULL';
+export const USER_RESET = 'USER_RESET';
 
 export function getProfileResult(accessToken, refreshToken) { 
   return async function(dispatch) {

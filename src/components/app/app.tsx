@@ -11,7 +11,7 @@ import { getItems } from '../../services/actions';
 import { getOrder } from '../../services/actions/order';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { LoginPage } from '../../pages/login-page';
 import { RegisterPage } from '../../pages/register-page';
 import { ForgotPasswordPage } from '../../pages/forgot-password';
@@ -21,6 +21,8 @@ import { LogoutPage } from '../../pages/logout-page';
 import { ProfileOrdersPage } from '../../pages/profile-orders-page';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { IngredientsPage } from '../../pages/ingredients-page';
+import { useHistory } from 'react-router-dom';
+import { useCallback } from 'react';
 import { DELETE_INGREDIENTS,
          DELETE_INGREDIENT_DETAIL,
          MOVE_INGREDIENTS,
@@ -95,15 +97,15 @@ function handleOpenIngredientModal() {
   });
 }
 
-function handleOpenOrderModal() { 
+const handleOpenOrderModal = useCallback(() => {
   setIsVisible({ 
     ingredientModalVisible: false,
     orderModalVisible: true
-  });
+  })
   orderNumberRequest()
   dispatch({ type: DELETE_COUNT })
-  dispatch({ type: DELETE_BURGER_CONSTRUCTOR }) 
-}  
+  dispatch({ type: DELETE_BURGER_CONSTRUCTOR })
+}, [getResult, setIsVisible, dispatch, orderNumberRequest]);  
 
 function handleCloseModal() {
   setIsVisible({ 

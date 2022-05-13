@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './page-container.module.css';
 import { NEW_PASSWORD_INPUT,
          CODE_INPUT 
@@ -74,6 +74,8 @@ export function ResetPasswordPage() {
   const dispatch = useDispatch();  
   const { newPasswordInput, codeInput, newPassword } = useSelector(store => store.newPassword);
   const { loginResult } = useSelector(store => store.login);    
+  const { passwordResetResult } = useSelector(store => store.reset) 
+  const { getResult } = useSelector(store => store.profile);    
   const history = useHistory();   
   const onSubmit = useCallback((e) => {
     e.preventDefault()  
@@ -86,11 +88,12 @@ export function ResetPasswordPage() {
       history.replace({ pathname: '/login' })
     }
   }, [newPassword, history])
+  console.log(passwordResetResult)
   useEffect(() => {
-    if (loginResult['success']) {
-      return <Redirect to={'/login'} />;
+    if (passwordResetResult.success === null) {
+      history.replace({ pathname: '/forgot' })
     }
-  }, [loginResult])  
+  }, [newPassword, history])  
   return ( 
     <div className={styles.reset_container}>
       <h1 className={`text text_type_main-large mb-6`}>Восстановление пароля</h1>    
