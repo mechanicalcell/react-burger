@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -10,7 +10,6 @@ import { userLogin } from '../services/actions/login';
 import styles from './page-container.module.css';
 import { LOGIN_EMAIL_INPUT,
          LOGIN_PASSWORD_INPUT } from '../services/actions/login';
-import { USER_RESET } from '../services/actions/get-patch';
 
 function LoginEmailInput() {
   const dispatch = useDispatch();
@@ -71,6 +70,7 @@ function LoginPasswordInput() {
 } 
 
 export function LoginPage() {
+  const location = useLocation()
   const dispatch = useDispatch();    
   const history = useHistory();   
   const { loginEmailInput,
@@ -83,15 +83,16 @@ export function LoginPage() {
   },
   [loginResult, history, dispatch, loginEmailInput, loginPasswordInput]
   ); 
-  
+  console.log(loginResult['success'])
+  console.log(location)
+  console.log(history)  
+
   useEffect(() => {
-    dispatch({ type: USER_RESET })
-    if (loginResult['success']) {
-      // localStorage.setItem('token', loginResult.refreshToken);
-      // setCookie('token', loginResult.accessToken)
-      history.replace({ pathname: '/' })
-    }
-  }, [loginResult, history, dispatch])
+      if (loginResult['success']) { 
+        history.replace({ pathname: location.state ? (location.state.from.pathname) : ('/')})
+      }
+  }, [loginResult, history])
+
   return (
     <div className={styles.login_container}>
       <h1 className={`text text_type_main-large mb-6`}>Вход</h1>    

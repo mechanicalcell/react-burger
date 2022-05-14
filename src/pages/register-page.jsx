@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import { userRegistration } from '../services/actions/user-registration';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -103,6 +103,7 @@ function RegisterPasswordInput() {
 export function RegisterPage() {
   const dispatch = useDispatch();    
   const history = useHistory();   
+  const location = useLocation()
   const { loginResult } = useSelector(store => store.login);      
   const { registerNameInput, 
           registerEmailInput,
@@ -114,10 +115,13 @@ export function RegisterPage() {
   },
   [dispatch, registerNameInput, registerEmailInput, registerPasswordInput]
   );     
+
+  console.log(history)
+  console.log(location)
   useEffect(() => {
     if (registrationResult['success']) {
       history.replace({ pathname: '/login' })
-    }
+    } 
   }, [registrationResult, history])
   useEffect(() => {
     if (loginResult['success']) {

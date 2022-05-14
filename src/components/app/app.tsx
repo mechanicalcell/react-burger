@@ -38,12 +38,12 @@ import { COUNT_INGREDIENT_DOWN,
 import { DELETE_ORDER_NUMBER
 } from "../../services/actions/order";         
 import { getCookie, setCookie } from '../utils/cookie';
-import { getProfileResult } from '../../services/actions/get-patch';
+import { getProfileResult, USER_RESET } from '../../services/actions/get-patch';
 
 function App() {
 const dispatch = useDispatch();
 const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
-const { loginResult } = useSelector((store: any) => store.login);
+const { loginResult, logoutResult } = useSelector((store: any) => store.login);
 const { getResult } = useSelector((store: any) => store.profile);
 const { user } = useSelector((store: any) => store.login);
 const [totalPrice, setTotalPrice] = useState(0);
@@ -63,6 +63,12 @@ if (loginResult.refreshToken) {
   localStorage.setItem('token', loginResult.refreshToken);
   setCookie('token', loginResult.accessToken)
 } 
+console.log(logoutResult.success)
+useEffect(() => {
+if (logoutResult.success) {
+  dispatch({ type: USER_RESET })
+}
+}, [dispatch, logoutResult]);
 
 useEffect(() => {
   dispatch(getProfileResult(accessToken, refreshToken)) 
