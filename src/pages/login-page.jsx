@@ -83,9 +83,6 @@ export function LoginPage() {
   },
   [loginResult, history, dispatch, loginEmailInput, loginPasswordInput]
   ); 
-  console.log(loginResult['success'])
-  console.log(location)
-  console.log(history)  
 
   useEffect(() => {
       if (loginResult['success']) { 

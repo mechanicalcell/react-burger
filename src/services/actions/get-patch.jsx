@@ -20,15 +20,13 @@ export function getProfileResult(accessToken, refreshToken) {
                             payload: res }) )
     .catch(function(error) { 
       const err = error.json() 
-      console.log(err)
-      console.log(refreshToken)
       return err
     })
     .then(function(err) { 
       if ((err && err.message === 'jwt expired') ||
            err.message === 'Token is invalid') { 
         dispatch({ type: TOKEN_NULL })
-        console.log(refreshToken)
+
         tokenRefreshRequest(refreshToken)
         .then(checkResponse)
         .then(res => dispatch({ type: TOKEN_REFRESH,
@@ -38,20 +36,7 @@ export function getProfileResult(accessToken, refreshToken) {
         )
         .catch(function(error) { 
         const err = error.json() 
-        console.log(err) })
-        
-
-        // getUserDataRequest(accessToken)
-        // .then(res => dispatch({ type: GET_PROFILE_RESULT,
-        //              payload: res })
-        // )
-        // .catch(function(error) { 
-        //   const err = error.json() 
-        //   console.log(err)
-        //   return err
-        // })   
-            
-          
+        })
       }
     }) 
   }

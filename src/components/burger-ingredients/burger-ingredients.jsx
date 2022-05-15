@@ -9,7 +9,7 @@ import { useRef } from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDrag } from "react-dnd";
 import { COPY_ARR_INGREDIENTS,
          COPY_ARR_BUN,
@@ -21,7 +21,8 @@ import { COUNT_INGREDIENT_UP,
 } from "../../services/actions/count";         
 
 const Ingredients = ({ onOpen, ingrType, item, index }) => {
-const history = useHistory();   
+const history = useHistory(); 
+const location = useLocation()    
 const { count } = useSelector((store) => store.count);
 const [,dragRef] = useDrag({
   type: "ingredient",
@@ -30,7 +31,8 @@ const [,dragRef] = useDrag({
 const dispatch = useDispatch(); 
 const onClick = () => {
   dispatch({ type: INGREDIENT_ID, payload: item })
-  history.replace({ pathname: `/ingredients/${item._id}` })
+  history.push({ pathname: `/ingredients/${item._id}` })
+  onOpen();
 }
 const copyArrIngredients = (e) => { 
   dispatch({type: COUNT_INGREDIENT_UP, index }); 
@@ -42,14 +44,17 @@ const image = (
 );
 
 return (item.type === ingrType && 
-(<article ref={dragRef} style={{ position: "relative" }} onClick={onClick} className={`${styles.ingredients} mb-8`}>
+(<Link to={{
+  pathname: `/ingredients/${item._id}`,
+  state: { background: location }
+}} ref={dragRef} style={{ position: "relative" }} onClick={onClick} className={`${styles.ingredients} mb-8`}>
   {count[index] > 0 && (<Counter count={count[index]} size="default" />)} 
   <div className='ml-4 mr-4'>{image}</div> 
   <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
     <CurrencyIcon type="primary" /> 
   </div>           
   <p className={`${styles.text_container_0} name text text_type_main-small`}>{item.name}</p>
-</article>)
+</Link>)
 )
 }  
 
@@ -61,7 +66,8 @@ Ingredients.propTypes = {
 };
 
 const Bun = ({ onOpen, ingrType, item, index }) => {
-const history = useHistory();   
+const history = useHistory();  
+const location = useLocation()  
 const { count } = useSelector((store) => store.count);
 const [{isDrag},dragRef] = useDrag({
   type: "bun",
@@ -74,6 +80,7 @@ const dispatch = useDispatch();
 const onClick = () => {
   dispatch({ type: INGREDIENT_ID, payload: item })
   history.replace({ pathname: `/ingredients/${item._id}` })
+  onOpen();
 }
 const copyArrBun = (e) => { 
   if (index === 0) {
@@ -92,14 +99,17 @@ const image = (
 );
 
 return !isDrag && (item.type === ingrType && 
-(<article ref={dragRef} style={{ position: "relative" }} onClick={onClick} className={`${styles.ingredients} mb-8`}>
+(<Link to={{
+  pathname: `/ingredients/${item._id}`,
+  state: { background: location }
+}} ref={dragRef} style={{ position: "relative" }} onClick={onClick} className={`${styles.ingredients} mb-8`}>
   {count[index] > 0 && (<Counter count={count[index]} size="default" />)}
   <div className='ml-4 mr-4'>{image}</div> 
   <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
     <CurrencyIcon type="primary" />
   </div>           
   <p className={`${styles.text_container_0} name text text_type_main-small`}>{item.name}</p>
-</article>)
+</Link>)
 )
 }  
   

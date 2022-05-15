@@ -13,8 +13,6 @@ export function LogoutPage() {
   const history = useHistory();     
   const { path } = useRouteMatch();
   const dispatch = useDispatch(); 
-  console.log(logoutResult)
-
   const refreshToken = localStorage.getItem('token');
   const accessToken = getCookie('token');
   useEffect(() => {

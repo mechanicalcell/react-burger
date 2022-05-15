@@ -116,8 +116,6 @@ export function RegisterPage() {
   [dispatch, registerNameInput, registerEmailInput, registerPasswordInput]
   );     
 
-  console.log(history)
-  console.log(location)
   useEffect(() => {
     if (registrationResult['success']) {
       history.replace({ pathname: '/login' })
