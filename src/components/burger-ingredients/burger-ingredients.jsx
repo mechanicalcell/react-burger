@@ -102,7 +102,7 @@ return !isDrag && (item.type === ingrType &&
 (<Link to={{
   pathname: `/ingredients/${item._id}`,
   state: { background: location }
-}} ref={dragRef} style={{ position: "relative" }} onClick={onClick} className={`${styles.ingredients} mb-8`}>
+}} ref={dragRef} onClick={onClick} className={`${styles.ingredients} mb-8`}>
   {count[index] > 0 && (<Counter count={count[index]} size="default" />)}
   <div className='ml-4 mr-4'>{image}</div> 
   <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
