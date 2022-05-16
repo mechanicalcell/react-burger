@@ -1,64 +1,41 @@
-import { useState, useEffect } from 'react';
-import styles from './app.module.css';
+import { useEffect } from 'react';
 import AppHeader from '../app-header/app-header';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-import Modal from '../modal/modal';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import OrderDetails from '../order-details/order-details';
 import { useDispatch } from 'react-redux';
-import { DELETE_ORDER_NUMBER, getItems, getOrder } from '../../services/actions';
+import { getItems } from '../../services/actions';
+import { ORDER_TOTAL_PRICE } from '../../services/actions/order';
 import { useSelector } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
-import { DELETE_INGREDIENTS,
-         DELETE_INGREDIENT_DETAIL,
-         MOVE_INGREDIENTS,
-         COUNT_INGREDIENT_DOWN,
-         COUNT_INGREDIENT_UP,
-         COUNT_BUN_UP,
-         COUNT_BUN_DOWN,
-         MOVE_BUNS,
-         DELETE_BURGER_CONSTRUCTOR,
-         DELETE_COUNT
-} from "../../services/actions";
-
-const baseUrl='https://norma.nomoreparties.space/api/';
-
-export const checkResponse = (res: Response) => {
-  if (res.ok) {
-    return res.json();
-  } else {
-      return Promise.reject(`Ошибка ${res.status}`);
-    }
-}
-
-export const getIngredients = async () => await fetch(`${baseUrl}ingredients`)
-
-export const getOrderNumber = (ingredientId: any) => 
-  fetch(`${baseUrl}orders`, {
-    method: 'POST',
-    body: JSON.stringify({
-      ingredients: ingredientId 
-    }),
-    headers: {
-      'Content-type': 'application/json'
-    },
-  })    
+import { BrowserRouter as Router } from 'react-router-dom';
+import { getCookie, setCookie } from '../utils/cookie';
+import { getProfileResult, USER_RESET } from '../../services/actions/get-patch';
+import { ModalSwitch } from '../modal-switch/modal-switch';
 
 function App() {
 const dispatch = useDispatch();
 const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
-const [totalPrice, setTotalPrice] = useState(0);
-const [isVisible, setIsVisible] = useState({
-  ingredientModalVisible: false,
-  orderModalVisible: false
-});
+const { loginResult, logoutResult } = useSelector((store: any) => store.login);
+const refreshToken = localStorage.getItem('token')
+const accessToken = getCookie('token');
+
+if (loginResult.refreshToken) {
+  localStorage.setItem('token', loginResult.refreshToken);
+  setCookie('token', loginResult.accessToken)
+} 
+
+useEffect(() => {
+if (logoutResult.success) {
+  dispatch({ type: USER_RESET })
+}
+}, [dispatch, logoutResult]);
+
+useEffect(() => {
+  dispatch(getProfileResult(accessToken, refreshToken)) 
+}, [dispatch, getProfileResult, accessToken, refreshToken]);
 
 useEffect(() => {
   const setPrice = () => {
     const sum = newArrBurgerConstructor.reduce((sumIngredients: number, item: { price: any; qty: any }) => sumIngredients += item.price * item.qty,0)
     + newArrBun.reduce((sumBun: number, item: { price: any; qty: any }) => sumBun += item.price * item.qty,0)
-    setTotalPrice(sum)
+    dispatch({ type: ORDER_TOTAL_PRICE, payload: sum})
   }
   setPrice();
 }, [newArrBurgerConstructor, newArrBun])
@@ -67,90 +44,12 @@ useEffect(() => {
   dispatch(getItems());
 }, [dispatch])
 
-function orderNumberRequest() {
-  const ingredientId: any[] = [];
-  newArrBurgerConstructor.map((item: { _id: any; }) => ingredientId.push(item._id));
-  newArrBun.map((item: { _id: any; }) => ingredientId.push(item._id));
-  if (ingredientId.length !== 0) {
-  return dispatch(getOrder(ingredientId))
-  } 
-}
-
-function handleOpenIngredientModal() {
-  setIsVisible({ 
-    ingredientModalVisible: true,
-    orderModalVisible: false
-  });
-}
-
-function handleOpenOrderModal() { 
-  setIsVisible({ 
-    ingredientModalVisible: false,
-    orderModalVisible: true
-  });
-  orderNumberRequest()
-  dispatch({ type: DELETE_COUNT })
-  dispatch({ type: DELETE_BURGER_CONSTRUCTOR })
-}  
-
-function handleCloseModal() {
-  setIsVisible({ 
-    ingredientModalVisible: false,
-    orderModalVisible: false
-  });
-  dispatch({ type: DELETE_INGREDIENT_DETAIL })
-  dispatch({ type: DELETE_ORDER_NUMBER })
-}
-  
-const ingredientModal = (
-  <Modal header="Детали ингредиента" onClose={handleCloseModal}> 
-    <IngredientDetails /> 
-  </Modal>
-);
-
-const orderModal = (
-  <Modal header=" " onClose={handleCloseModal}> 
-    <OrderDetails />
-  </Modal>
-);
-
-const ingredientHandleDrop = (item: any, index: any) => {
-  dispatch({ type: MOVE_INGREDIENTS, item, key: uuidv4() })
-  dispatch({ type: COUNT_INGREDIENT_UP, index }); 
-};
-
-const bunHandleDrop = (item: any, index: any) => {
-  if (index === 0) {
-    dispatch({ type: COUNT_BUN_UP, index: '0' })
-    dispatch({ type: COUNT_BUN_DOWN, index: '1' })
-  } 
-  else if (index === 1) {
-    dispatch({ type: COUNT_BUN_UP, index: '1' })
-    dispatch({ type: COUNT_BUN_DOWN, index: '0' })
-  }  
-  dispatch({ type: MOVE_BUNS, item, index })
-};
-
-const deleteIngredient = (item: any, index: any) => {
-  dispatch({ type: DELETE_INGREDIENTS, item })  
-  dispatch({ type: COUNT_INGREDIENT_DOWN, index })
-};
-
 return (
   <>
-    <AppHeader /> 
-    <div className={styles.section_container}> 
-      <BurgerIngredients onOpen={handleOpenIngredientModal} />
-      <BurgerConstructor onOpen={handleOpenOrderModal} 
-                         deleteIngr={deleteIngredient}
-                         totalPrice={totalPrice} 
-                         ingredientHandleDrop={ingredientHandleDrop}
-                         bunHandleDrop={bunHandleDrop} />
-    </div>  
-    <div className={styles.hidden}>
-      {isVisible.ingredientModalVisible && ingredientModal} 
-      {isVisible.orderModalVisible && orderModal} 
-    </div>  
+    <Router>
+      <AppHeader />
+      <ModalSwitch />
+    </Router>
   </> 
 );
 }

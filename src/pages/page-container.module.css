@@ -1,0 +1,65 @@
+.register_container {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile_container {
+  display: flex; 
+  margin-top: 200px;
+  margin-left: 100px;
+  flex-direction: column;
+  justify-content: start;
+  width: 240px; 
+}
+
+.profile_input_container {
+  display: flex; 
+  margin-top: -200px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile_order_container {
+    display: flex; 
+    margin-top: 200px;
+    margin-left: 100px;
+    flex-direction: column;
+    justify-content: start;
+    width: 240px;
+}
+
+.login_container {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.reset_container {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.detail_container {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.forgot_container {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

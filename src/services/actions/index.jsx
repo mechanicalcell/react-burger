@@ -1,29 +1,11 @@
-import { getIngredients, getOrderNumber, checkResponse } from "../../components/app/app";
+import { getIngredients, 
+         logoutRequest } from "../api";
+import { checkResponse } from "../../components/utils/check-response";         
+import { RESET_USER } from "./login";
 
 export const GET_INGREDIENTS = 'GET_INGREDIENTS';
 export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
 export const GET_INGREDIENTS_FAILED = 'GET_INGREDIENTS_FAILED';
-
-export const COPY_ARR_BUN = 'COPY_ARR_BUN';
-export const COPY_ARR_INGREDIENTS = 'COPY_ARR_INGREDIENTS';
-export const DELETE_INGREDIENTS = 'DELETE_INGREDIENTS';
-export const DELETE_INGREDIENT_DETAIL = 'DELETE_INGREDIENT_DETAIL';
-
-export const ORDER_NUMBER_REQUEST = 'ORDER_NUMBER_REQUEST';
-export const DELETE_ORDER_NUMBER = 'DELETE_ORDER_NUMBER';
-
-export const MOVE_INGREDIENTS = 'MOVE_INGREDIENTS';
-export const MOVE_BUNS = 'MOVE_BUNS';
-
-export const COUNT_BUN_UP = 'COUNT_BUN_UP';
-export const COUNT_BUN_DOWN = 'COUNT_BUN_DOWN';
-export const COUNT_INGREDIENT_UP = 'COUNT_INGREDIENT_UP';
-export const COUNT_INGREDIENT_DOWN = 'COUNT_INGREDIENT_DOWN';
-
-export const DELETE_COUNT = 'DELETE_COUNT';
-export const DELETE_BURGER_CONSTRUCTOR = 'DELETE_BURGER_CONSTRUCTOR';
-
-export const REORDER_BURGER_CONSTRUCTOR = 'REORDER_BURGER_CONSTRUCTOR';
 
 export function getItems() { 
   return function(dispatch) {
@@ -42,13 +24,14 @@ export function getItems() {
   };
 }  
 
-export function getOrder(ingredientId) { 
+export function userLogout(refreshToken) { 
   return function(dispatch) {
-    getOrderNumber(ingredientId)
+    logoutRequest(refreshToken) 
     .then(checkResponse)
-    .then(res => dispatch({ type: ORDER_NUMBER_REQUEST,
-                            data: res.order.number })
+    .then(res => dispatch({ type: RESET_USER,
+                            payload: res,
+                            userLogout: null }) 
     )
     .catch(e => console.log(e))
   };
-}  
+}

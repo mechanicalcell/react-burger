@@ -6,6 +6,8 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+  position: relative;
+  text-decoration: none;
 }
 
 .price_and_icon {
