@@ -1,8 +1,10 @@
 import { Redirect, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { TProtectedRoute } from './protected-route-types';
+import { FC } from 'react';
 
-export function ProtectedRoute({ children, ...rest }) {
-  const { getResult } = useSelector(store => store.profile);  
+export const ProtectedRoute: FC<TProtectedRoute> = ({ children, ...rest }) => {
+  const { getResult } = useSelector((store: any) => store.profile);  
   return <Route {...rest} render={({location}) =>
      
   getResult.user.email ? (

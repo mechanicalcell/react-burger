@@ -8,8 +8,8 @@ import { useSelector } from 'react-redux';
 import { getCookie, setCookie } from '../components/utils/cookie';
 
 export function LogoutPage() {
-  const { loginResult, logoutResult, user } = useSelector(store => store.login);  
-  const { getResult } = useSelector(store => store.profile);    
+  const { loginResult, logoutResult, user } = useSelector((store: any) => store.login);  
+  const { getResult } = useSelector((store: any) => store.profile);    
   const history = useHistory();     
   const { path } = useRouteMatch();
   const dispatch = useDispatch(); 

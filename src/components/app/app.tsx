@@ -33,8 +33,8 @@ useEffect(() => {
 
 useEffect(() => {
   const setPrice = () => {
-    const sum = newArrBurgerConstructor.reduce((sumIngredients: number, item: { price: any; qty: any }) => sumIngredients += item.price * item.qty,0)
-    + newArrBun.reduce((sumBun: number, item: { price: any; qty: any }) => sumBun += item.price * item.qty,0)
+    const sum = newArrBurgerConstructor.reduce((sumIngredients: number, item: { price: number; qty: number }) => sumIngredients += item.price * item.qty,0)
+    + newArrBun.reduce((sumBun: number, item: { price: number; qty: number }) => sumBun += item.price * item.qty,0)
     dispatch({ type: ORDER_TOTAL_PRICE, payload: sum})
   }
   setPrice();

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { Link } from 'react-router-dom';
 import { getPasswordReset } from '../services/actions/password-reset';
@@ -10,14 +10,14 @@ import { useEffect } from 'react';
 import styles from './page-container.module.css';
 
 export function ForgotPasswordPage() {
-  const { passwordResetResult } = useSelector(store => store.reset) 
+  const { passwordResetResult } = useSelector((store: any) => store.reset) 
   const history = useHistory();   
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('')
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
   }  
-  const onSubmit = useCallback((e) => {
+  const onSubmit = useCallback((e: SyntheticEvent) => {
     e.preventDefault()  
     dispatch(getPasswordReset(value))
   },

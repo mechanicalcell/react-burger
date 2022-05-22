@@ -20,10 +20,12 @@ import { DELETE_BURGER_CONSTRUCTOR, DELETE_INGREDIENTS, DELETE_INGREDIENT_DETAIL
 import { COUNT_BUN_DOWN, COUNT_BUN_UP, COUNT_INGREDIENT_DOWN, COUNT_INGREDIENT_UP, DELETE_COUNT } from '../../services/actions/count';
 import { v4 as uuidv4 } from 'uuid';
 import { useCallback } from 'react';
+import { TingredientPropTypes } from '../utils/types';
+import { ILocation } from './modal-switch-types';
 
 export function ModalSwitch() {
-const { newArrBurgerConstructor, newArrBun } = useSelector(store => store.isNewArr);
-const { ingredientModalVisible, orderModalVisible } = useSelector(store => store.order);
+const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
+const { ingredientModalVisible, orderModalVisible } = useSelector((store: any) => store.order);
 const dispatch = useDispatch();
 
 const ingredientModal = (
@@ -39,17 +41,17 @@ const orderModal = (
 );
 
 function orderNumberRequest() {
-  const ingredientId = [];
-  newArrBurgerConstructor.map(item => ingredientId.push(item._id));
-  newArrBun.map(item => ingredientId.push(item._id));
+  const ingredientId: string[] = [];
+  newArrBurgerConstructor.map((item: TingredientPropTypes) => ingredientId.push(item._id));
+  newArrBun.map((item: TingredientPropTypes) => ingredientId.push(item._id));
   if (ingredientId.length !== 0) {
   return dispatch(getOrder(ingredientId))
   } 
 }
 
 function handleOpenIngredientModal() {
-    dispatch({ type: INGREDIENT_IS_VISIBLE, payload: true }) 
-    dispatch({ type: ORDER_IS_VISIBLE, payload: false })     
+  dispatch({ type: INGREDIENT_IS_VISIBLE, payload: true }) 
+  dispatch({ type: ORDER_IS_VISIBLE, payload: false })     
 }
 
 const handleOpenOrderModal = useCallback(() => {
@@ -67,12 +69,12 @@ function handleCloseModal() {
   dispatch({ type: DELETE_ORDER_NUMBER })
 }
   
-const ingredientHandleDrop = (item, index) => {
+const ingredientHandleDrop = (item: TingredientPropTypes , index: number) => {
   dispatch({ type: MOVE_INGREDIENTS, item, key: uuidv4() })
   dispatch({ type: COUNT_INGREDIENT_UP, index }); 
 };
 
-const bunHandleDrop = (item, index) => {
+const bunHandleDrop = (item: TingredientPropTypes , index: number) => {
   if (index === 0) {
     dispatch({ type: COUNT_BUN_UP, index: '0' })
     dispatch({ type: COUNT_BUN_DOWN, index: '1' })
@@ -84,13 +86,13 @@ const bunHandleDrop = (item, index) => {
   dispatch({ type: MOVE_BUNS, item, index })
 };
 
-const deleteIngredient = (item, index) => {
-  dispatch({ type: DELETE_INGREDIENTS, item })  
+const deleteIngredient = (item: TingredientPropTypes , index: number) => {
+  dispatch({ type: DELETE_INGREDIENTS, item }) 
   dispatch({ type: COUNT_INGREDIENT_DOWN, index })
 };
 
-const { orderTotalPrice } = useSelector(store => store.order);    
-  let location = useLocation()
+const { orderTotalPrice } = useSelector((store: any) => store.order);    
+  let location = useLocation<ILocation>()
   let background = location.state && location.state.background;
   return (
   <>
@@ -99,7 +101,7 @@ const { orderTotalPrice } = useSelector(store => store.order);
         <div className={styles.section_container}> 
           <BurgerIngredients onOpen={handleOpenIngredientModal} />
           <BurgerConstructor onOpen={handleOpenOrderModal} 
-                             deleteIngr={deleteIngredient}
+                             deleteIngredient={deleteIngredient}
                              totalPrice={orderTotalPrice} 
                              ingredientHandleDrop={ingredientHandleDrop}
                              bunHandleDrop={bunHandleDrop} />

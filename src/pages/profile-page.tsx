@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject, SyntheticEvent } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { patchProfileResult } from '../services/actions/get-patch';
 import { useDispatch } from 'react-redux';
@@ -15,15 +15,15 @@ import { PROFILE_NAME_INPUT,
 
 function ProfileNameInput() {
   const dispatch = useDispatch();
-  const { getResult } = useSelector(store => store.profile);  
+  const { getResult } = useSelector((store: any) => store.profile);  
   const [value, setValue] = React.useState('')
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
     dispatch({ type: PROFILE_NAME_INPUT, payload: e.target.value })
   }  
-  const inputRef = React.useRef(null)
+  const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
+    setTimeout(() => inputRef ? inputRef.current.focus() : null, 0)
     alert('Icon Click Callback')
   }  
   return ( 
@@ -45,15 +45,15 @@ function ProfileNameInput() {
   
 function ProfileEmailInput() {
   const dispatch = useDispatch();
-  const { getResult } = useSelector(store => store.profile);  
+  const { getResult } = useSelector((store: any) => store.profile);  
   const [value, setValue] = React.useState('')
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
     dispatch({ type: PROFILE_EMAIL_INPUT, payload: e.target.value })
   }  
-  const inputRef = React.useRef(null)
+  const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
+    setTimeout(() => inputRef ? inputRef.current.focus() : null, 0)
     alert('Icon Click Callback')
   }  
   return ( 
@@ -76,13 +76,13 @@ function ProfileEmailInput() {
 function ProfilePasswordInput() {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('')
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
     dispatch({ type: PROFILE_PASSWORD_INPUT, payload: e.target.value })
   }  
-  const inputRef = React.useRef(null)
+  const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
+    setTimeout(() => inputRef ? inputRef.current.focus() : null, 0)
     alert('Icon Click Callback')
   }  
   return ( 
@@ -110,13 +110,13 @@ export function ProfilePage() {
   const dispatch = useDispatch();    
   const { profileNameInput, 
           profileEmailInput,
-          profilePasswordInput } = useSelector(store => store.profile);  
+          profilePasswordInput } = useSelector((store: any) => store.profile);  
   const { getResult, 
-          patchResult } = useSelector(store => store.profile);  
-  const { loginResult } = useSelector(store => store.login);  
+          patchResult } = useSelector((store: any) => store.profile);  
+  const { loginResult } = useSelector((store: any) => store.login);  
   const accessToken = getCookie('token');
   const refreshToken = localStorage.getItem('token')
-  const onSubmit = (e) => {
+  const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
     dispatch(getProfileResult(accessToken, refreshToken))    
     dispatch(patchProfileResult(accessToken, profileNameInput, profileEmailInput, profilePasswordInput))

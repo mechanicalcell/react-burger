@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject, SyntheticEvent } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import { userRegistration } from '../services/actions/user-registration';
@@ -16,13 +16,13 @@ import { REGISTER_NAME_INPUT,
 function RegisterNameInput() {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('')
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
     dispatch({ type: REGISTER_NAME_INPUT, payload: e.target.value })
   }  
-  const inputRef = React.useRef(null)
+  const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
+    setTimeout(() => inputRef ? inputRef.current.focus() : null, 0)
     alert('Icon Click Callback')
   }  
   return ( 
@@ -30,7 +30,7 @@ function RegisterNameInput() {
       type={'text'}
       placeholder={'Имя'}
       onChange={onChange}
-      icon={''}
+      icon={undefined}
       value={value}
       name={'name'}
       error={false} 
@@ -45,13 +45,13 @@ function RegisterNameInput() {
 function RegisterEmailInput() {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('')
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
     dispatch({ type: REGISTER_EMAIL_INPUT, payload: e.target.value })
   }  
-  const inputRef = React.useRef(null)
+  const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
+    setTimeout(() => inputRef ? inputRef.current.focus() : null, 0)
     alert('Icon Click Callback')
   }  
   return ( 
@@ -59,7 +59,7 @@ function RegisterEmailInput() {
       type={'text'}
       placeholder={'E-mail'}
       onChange={onChange}
-      icon={''}
+      icon={undefined}
       value={value}
       name={'name'}
       error={false} 
@@ -74,13 +74,13 @@ function RegisterEmailInput() {
 function RegisterPasswordInput() {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('')
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
     dispatch({ type: REGISTER_PASSWORD_INPUT, payload: e.target.value })
   }  
-  const inputRef = React.useRef(null)
+  const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
+    setTimeout(() => inputRef ? inputRef.current.focus() : null, 0)
     alert('Icon Click Callback')
   }  
   return ( 
@@ -104,11 +104,11 @@ export function RegisterPage() {
   const dispatch = useDispatch();    
   const history = useHistory();   
   const location = useLocation()
-  const { loginResult } = useSelector(store => store.login);      
+  const { loginResult } = useSelector((store: any) => store.login);      
   const { registerNameInput, 
           registerEmailInput,
           registerPasswordInput,
-          registrationResult } = useSelector(store => store.register);  
+          registrationResult } = useSelector((store: any) => store.register);  
   const onSubmit = useCallback((e) => {
     e.preventDefault()
     dispatch(userRegistration(registerNameInput, registerEmailInput, registerPasswordInput))
@@ -121,11 +121,6 @@ export function RegisterPage() {
       history.replace({ pathname: '/login' })
     } 
   }, [registrationResult, history])
-  useEffect(() => {
-    if (loginResult['success']) {
-      return <Redirect to={'/login'} />;
-    }
-  }, [loginResult])  
   return (
     <div className={styles.register_container}>
       <h1 className={`text text_type_main-large mb-6`}>Регистрация</h1>    
