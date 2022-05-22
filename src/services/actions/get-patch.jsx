@@ -36,6 +36,7 @@ export function getProfileResult(accessToken, refreshToken) {
         )
         .catch(function(error) { 
         const err = error.json() 
+        console.log(err)
         })
       }
     }) 

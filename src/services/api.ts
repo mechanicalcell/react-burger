@@ -1,8 +1,9 @@
 import { baseUrl } from "../components/utils/base-url"
+import { CustomResponse } from "./api-types"
 
-export const getIngredients = async () => await fetch(`${baseUrl}ingredients`)
+export const getIngredients = async (): Promise<CustomResponse> => await fetch(`${baseUrl}ingredients`)
 
-export const getOrderNumber = (ingredientId) => 
+export const getOrderNumber = (ingredientId: string[]): Promise<CustomResponse> => 
   fetch(`${baseUrl}orders`, {
     method: 'POST',
     body: JSON.stringify({
@@ -13,7 +14,7 @@ export const getOrderNumber = (ingredientId) =>
     },
   })    
 
-export const passwordResetRequest = (email) => 
+export const passwordResetRequest = (email: string): Promise<CustomResponse> => 
   fetch(`${baseUrl}password-reset`, {
     method: 'POST',
     body: JSON.stringify({
@@ -24,7 +25,7 @@ export const passwordResetRequest = (email) =>
     },
   }) 
 
-export const newPasswordRequest = (newPassword, code) => 
+export const newPasswordRequest = (newPassword: string, code: string): Promise<CustomResponse> => 
 fetch(`${baseUrl}password-reset/reset`, {
   method: 'POST',
   body: JSON.stringify({
@@ -36,7 +37,7 @@ fetch(`${baseUrl}password-reset/reset`, {
   },
 })
 
-export const userRegistrationRequest = (name, email, password) => 
+export const userRegistrationRequest = (name: string, email: string, password: string): Promise<CustomResponse> => 
 fetch(`${baseUrl}auth/register`, {
   method: 'POST',
   body: JSON.stringify({
@@ -49,7 +50,7 @@ fetch(`${baseUrl}auth/register`, {
   },
 }) 
 
-export const loginRequest = async (email, password) => 
+export const loginRequest = async (email: string, password: string): Promise<CustomResponse> => 
  await fetch(`${baseUrl}auth/login`, {
   method: 'POST',
   body: JSON.stringify({
@@ -61,7 +62,7 @@ export const loginRequest = async (email, password) =>
   },
 })
 
-export const logoutRequest = async (refreshToken) => 
+export const logoutRequest = async (refreshToken: string): Promise<CustomResponse> => 
 await fetch(`${baseUrl}auth/logout`, {
   method: 'POST',
   body: JSON.stringify({
@@ -72,7 +73,7 @@ await fetch(`${baseUrl}auth/logout`, {
   },
 })
 
-export const getUserDataRequest = async (accessToken) => 
+export const getUserDataRequest = async (accessToken: string): Promise<CustomResponse> => 
 await fetch(`${baseUrl}auth/user`, {
   method: 'GET',
   headers: {
@@ -81,7 +82,7 @@ await fetch(`${baseUrl}auth/user`, {
   },
 })
 
-export const patchUserDataRequest = async (accessToken, name, email, password) => 
+export const patchUserDataRequest = async (accessToken: string, name: string, email: string, password: string): Promise<CustomResponse> => 
 await fetch(`${baseUrl}auth/user`, {
   method: 'PATCH',
   headers: {
@@ -95,7 +96,7 @@ await fetch(`${baseUrl}auth/user`, {
   }),  
 })
 
-export const tokenRefreshRequest = async (refreshToken) => 
+export const tokenRefreshRequest = async (refreshToken: string): Promise<CustomResponse> => 
 await fetch(`${baseUrl}auth/token`, {
   method: 'POST',
   headers: {

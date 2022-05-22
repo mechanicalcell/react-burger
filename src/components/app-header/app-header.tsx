@@ -14,7 +14,7 @@ export default function AppHeader() {
                      className={styles.navigation_link}
                      activeClassName={styles.navigation_link}>  
               <div className={styles.icon_container}>
-                <BurgerIcon />     
+                <BurgerIcon type="primary" />     
               </div> 
               <p className={`${styles.text_container} text text_type_main-small ml-2`}>Конструктор</p>
             </NavLink>

@@ -1,9 +1,7 @@
-import React from "react"
+import React, { FC, RefObject, SyntheticEvent } from "react"
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-ingredients.module.css';
-import PropTypes from 'prop-types';
-import ingredientPropTypes from '../utils/types';
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useRef } from 'react';
 import { useSelector } from "react-redux";
@@ -18,15 +16,17 @@ import { COPY_ARR_INGREDIENTS,
 import { COUNT_INGREDIENT_UP,
          COUNT_BUN_UP,
          COUNT_BUN_DOWN
-} from "../../services/actions/count";         
+} from "../../services/actions/count"; 
+import { TIngredients } from "./burger-ingredients-types";
+import { TingredientPropTypes } from "../utils/types";
 
-const Ingredients = ({ onOpen, ingrType, item, index }) => {
+const Ingredients: FC<TIngredients> = ({ onOpen, ingrType, item, index }) => {
 const history = useHistory(); 
 const location = useLocation()    
-const { count } = useSelector((store) => store.count);
+const { count } = useSelector((store: any) => store.count);
 const [,dragRef] = useDrag({
   type: "ingredient",
-  item: item
+  item: {item}
 });
 const dispatch = useDispatch(); 
 const onClick = () => {
@@ -34,7 +34,7 @@ const onClick = () => {
   history.push({ pathname: `/ingredients/${item._id}` })
   onOpen();
 }
-const copyArrIngredients = (e) => { 
+const copyArrIngredients = (e: SyntheticEvent) => { 
   dispatch({type: COUNT_INGREDIENT_UP, index }); 
   dispatch({type: COPY_ARR_INGREDIENTS, item, key: uuidv4()}) 
   onOpen(); 
@@ -43,35 +43,34 @@ const image = (
   <img className='' src={ item.image } alt={item.name} />
 );
 
-return (item.type === ingrType && 
-(<Link to={{
-  pathname: `/ingredients/${item._id}`,
-  state: { background: location } 
-}} ref={dragRef} onClick={onClick} className={`${styles.ingredients} mb-8`}>
-  {count[index] > 0 && (<Counter count={count[index]} size="default" />)} 
-  <div className='ml-4 mr-4'>{image}</div> 
-  <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
-    <CurrencyIcon type="primary" /> 
-  </div>           
-  <p className={`${styles.text_container_0} name text text_type_main-small`}>{item.name}</p>
-</Link>)
-)
+return (
+  <div>
+    {(item.type === ingrType && 
+    (<Link to={{
+             pathname: `/ingredients/${item._id}`,
+             state: { background: location } 
+           }} 
+           ref={dragRef} 
+           onClick={onClick} 
+           className={`${styles.ingredients} mb-8`}>
+      {count[index] > 0 && (<Counter count={count[index]} size="default" />)} 
+      <div className='ml-4 mr-4'>{image}</div> 
+      <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
+        <CurrencyIcon type="primary" /> 
+      </div>           
+      <p className={`${styles.text_container_0} name text text_type_main-small`}>{item.name}</p>
+    </Link>)
+    )}
+  </div>)
 }  
 
-Ingredients.propTypes = {
-  item: ingredientPropTypes,
-  onOpen: PropTypes.func.isRequired,
-  ingrType: PropTypes.string,
-  index: PropTypes.number
-};
-
-const Bun = ({ onOpen, ingrType, item, index }) => {
+const Bun: FC<TIngredients> = ({ onOpen, ingrType, item, index }) => {
 const history = useHistory();  
 const location = useLocation()  
-const { count } = useSelector((store) => store.count);
-const [{isDrag},dragRef] = useDrag({
+const { count } = useSelector((store: any) => store.count);
+const [{isDrag},dragRef] = useDrag<{item: TingredientPropTypes}, void, {isDrag: boolean}>({
   type: "bun",
-  item: item,
+  item: {item},
   collect: monitor => ({
     isDrag: monitor.isDragging() 
   })      
@@ -82,7 +81,7 @@ const onClick = () => {
   history.replace({ pathname: `/ingredients/${item._id}` })
   onOpen();
 }
-const copyArrBun = (e) => { 
+const copyArrBun = (e: SyntheticEvent) => { 
   if (index === 0) {
     dispatch({ type: COUNT_BUN_UP, index: '0' })
     dispatch({ type: COUNT_BUN_DOWN, index: '1' })
@@ -98,46 +97,45 @@ const image = (
   <img className='' src={ item.image } alt={item.name} />
 );
 
-return !isDrag && (item.type === ingrType && 
-(<Link to={{
-  pathname: `/ingredients/${item._id}`,
-  state: { background: location }
-}} ref={dragRef} onClick={onClick} className={`${styles.ingredients} mb-8`}>
-  {count[index] > 0 && (<Counter count={count[index]} size="default" />)}
-  <div className='ml-4 mr-4'>{image}</div> 
-  <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
-    <CurrencyIcon type="primary" />
-  </div>           
-  <p className={`${styles.text_container_0} name text text_type_main-small`}>{item.name}</p>
-</Link>)
-)
+return (
+  <div>
+    {!isDrag && (item.type === ingrType && 
+    (<Link to={{
+             pathname: `/ingredients/${item._id}`,
+             state: { background: location }
+           }} 
+           ref={dragRef} 
+           onClick={onClick} 
+           className={`${styles.ingredients} mb-8`}>
+      {count[index] > 0 && (<Counter count={count[index]} size="default" />)}
+      <div className='ml-4 mr-4'>{image}</div> 
+      <div className={`${styles.price_and_icon} text text_type_digits-default`}>{item.price}
+        <CurrencyIcon type="primary" />
+      </div>           
+      <p className={`${styles.text_container_0} name text text_type_main-small`}>{item.name}</p>
+    </Link>)
+    )}
+  </div>)
 }  
   
-Bun.propTypes = {
-  item: ingredientPropTypes,
-  onOpen: PropTypes.func.isRequired,
-  ingrType: PropTypes.string,
-  index: PropTypes.number
-};
-
-export default function BurgerIngredients({ onOpen }) {
+export default function BurgerIngredients({ onOpen }: { onOpen: () => void }) {
   
-const { data } = useSelector((store) => store.data);
+const { data } = useSelector((store: any) => store.data);
 const [current, setCurrent] = React.useState('bun');
 const [textColor, setTextColor] = React.useState({
   bunColor: 'text text_type_main-medium text_color_inactive mb-6',
   sauceColor: 'text text_type_main-medium text_color_inactive mb-6',
   mainColor: 'text text_type_main-medium text_color_inactive mb-6'
 });  
-const headerBunRef = useRef(null);
-const headerSauceRef = useRef(null);
-const headerMainRef = useRef(null);
+const headerBunRef = useRef(null) as RefObject<any> | null;
+const headerSauceRef = useRef(null) as RefObject<any> | null;
+const headerMainRef = useRef(null) as RefObject<any> | null;
 
 const getDomRect = () => {
   const scrollY = window.scrollY 
-  const bunDomRect = headerBunRef.current.getBoundingClientRect();
-  const sauceDomRect = headerSauceRef.current.getBoundingClientRect();
-  const mainDomRect = headerMainRef.current.getBoundingClientRect(); 
+  const bunDomRect = headerBunRef ? headerBunRef.current.getBoundingClientRect() : null;
+  const sauceDomRect = headerSauceRef ? headerSauceRef.current.getBoundingClientRect() : null;
+  const mainDomRect = headerMainRef ? headerMainRef.current.getBoundingClientRect() : null;    
   if (bunDomRect.top + scrollY <= 383 && bunDomRect.top + scrollY > 263) {
     setTextColor({
       bunColor: 'text text_type_main-medium mb-6',
@@ -186,7 +184,7 @@ return (
         {!data.isLoading &&
         !data.hasError &&
         !!data.length && 
-        data.map((item, index) => item.type ==='bun' &&
+        data.map((item: TingredientPropTypes, index: number) => item.type ==='bun' &&
         <Bun index={index} key={item._id} onOpen={onOpen} item={item} ingrType='bun' /> )} 
       </div> 
       <p ref={headerSauceRef} className={textColor.sauceColor}>Соусы</p>  
@@ -196,7 +194,7 @@ return (
         {!data.isLoading &&
         !data.hasError &&
         !!data.length && 
-        data.map((item, index) => item.type ==='sauce' &&
+        data.map((item: TingredientPropTypes, index: number) => item.type ==='sauce' &&
         <Ingredients index={index} key={item._id} onOpen={onOpen} item={item} ingrType='sauce' /> )}
       </div>   
       <p ref={headerMainRef} className={textColor.mainColor}>Начинки</p>  
@@ -206,14 +204,10 @@ return (
         {!data.isLoading &&
         !data.hasError &&
         !!data.length &&
-        data.map((item, index) => item.type ==='main' &&
+        data.map((item: TingredientPropTypes, index: number) => item.type ==='main' &&
         <Ingredients index={index} key={item._id} onOpen={onOpen} item={item} ingrType='main' /> )}
       </div>                   
     </div> 
   </div>  
 )
 }
-
-BurgerIngredients.propTypes = {
-  onOpen: PropTypes.func.isRequired
-};

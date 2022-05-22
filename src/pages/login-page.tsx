@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -10,17 +10,18 @@ import { userLogin } from '../services/actions/login';
 import styles from './page-container.module.css';
 import { LOGIN_EMAIL_INPUT,
          LOGIN_PASSWORD_INPUT } from '../services/actions/login';
+import { ILoginPage } from './login-page-types';        
 
 function LoginEmailInput() {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('')
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
     dispatch({ type: LOGIN_EMAIL_INPUT, payload: e.target.value })
   }  
-  const inputRef = React.useRef(null)
+  const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
+    setTimeout(() => inputRef ? inputRef.current.focus() : null, 0)
     alert('Icon Click Callback')
   }  
   return ( 
@@ -28,7 +29,7 @@ function LoginEmailInput() {
       type={'text'}
       placeholder={'E-mail'}
       onChange={onChange}
-      icon={''}
+      icon={undefined}
       value={value}
       name={'name'}
       error={false} 
@@ -43,13 +44,13 @@ function LoginEmailInput() {
 function LoginPasswordInput() {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('')
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
     dispatch({ type: LOGIN_PASSWORD_INPUT, payload: e.target.value })
   }  
-  const inputRef = React.useRef(null)
+  const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
+    setTimeout(() => inputRef ? inputRef.current.focus() : null, 0)
     alert('Icon Click Callback')
   }  
   return ( 
@@ -70,25 +71,24 @@ function LoginPasswordInput() {
 } 
 
 export function LoginPage() {
-  const location = useLocation()
+  const location = useLocation<ILoginPage>()
   const dispatch = useDispatch();    
   const history = useHistory();   
   const { loginEmailInput,
           loginPasswordInput,
-          loginResult,
-          user } = useSelector(store => store.login);  
-  const onSubmit = useCallback((e) => {
+          loginResult } = useSelector((store: any) => store.login);  
+  const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()
     dispatch(userLogin(loginEmailInput, loginPasswordInput))
   },
-  [loginResult, history, dispatch, loginEmailInput, loginPasswordInput]
+  [ dispatch, loginEmailInput, loginPasswordInput]
   ); 
 
   useEffect(() => {
       if (loginResult['success']) { 
         history.replace({ pathname: location.state ? (location.state.from.pathname) : ('/')})
       }
-  }, [loginResult, history])
+  }, [loginResult, history, location.state])
 
   return (
     <div className={styles.login_container}>

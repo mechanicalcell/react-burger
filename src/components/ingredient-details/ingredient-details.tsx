@@ -1,11 +1,12 @@
 import styles from '../ingredient-details/ingredient-details.module.css';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { TingredientPropTypes } from '../utils/types';
 
 export default function IngredientDetails() {
-const { id } = useParams()  
-const { data } = useSelector(store => store.data)  
-return (data.filter(item => item._id === id).map(item => 
+const { id } = useParams<{id: string}>()  
+const { data } = useSelector((store: any) => store.data)  
+return (data.filter((item: TingredientPropTypes) => item._id === id).map((item: TingredientPropTypes) => 
   (<div key={item._id} className={styles.ingredient_details_box}> 
     <div className={styles.img_box}> 
       <img src={item.image} alt={item.name} />

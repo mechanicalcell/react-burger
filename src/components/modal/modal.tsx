@@ -2,13 +2,13 @@ import  ReactDOM  from "react-dom";
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './modal.module.css';
 import ModalOverlay from "../modal-overlay/modal-overlay";
-import { useEffect } from 'react';
+import { FC, SyntheticEvent, useEffect } from 'react';
 import { useCallback } from 'react';
-import PropTypes from 'prop-types';
+import { TModalHeader } from "./modal-types";
 
-const modalRoot = document.getElementById("react-modals");
+const modalRoot = document.getElementById("react-modals") as HTMLElement;
 
-function ModalHeader({header, onClose}) {
+const ModalHeader: FC<TModalHeader> = ({header, onClose}) => {
   return(
     <div className={`${styles.modal_header} text text_type_main-large mt-10 mr-10 ml-10`}>
       <div className={styles.modal_header_text}>
@@ -19,21 +19,16 @@ function ModalHeader({header, onClose}) {
   )
 } 
 
-ModalHeader.propTypes = {
-  header: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired
-}; 
-
-export default function Modal({ children, header, onClose }) {
+const Modal: FC<TModalHeader> = ({ children, header, onClose }) => {
   const ESC_KEYCODE = "Escape";
 
-  const handleOverlay = (e) => {
+  const handleOverlay = (e: SyntheticEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };  
   
-  const handleCloseByEsc = useCallback( (e) => {
+  const handleCloseByEsc = useCallback((e: KeyboardEvent) => {
     e.key === ESC_KEYCODE && onClose();
       },[onClose]);
         
@@ -46,7 +41,7 @@ export default function Modal({ children, header, onClose }) {
 
   return ReactDOM.createPortal(
     <>
-      <ModalOverlay  onClose={e => handleOverlay(e)}/>
+      <ModalOverlay onClose={handleOverlay}/>
       <div className={styles.modal_box} >
         <ModalHeader header={header} onClose={onClose}></ModalHeader>
         {children}
@@ -57,7 +52,4 @@ export default function Modal({ children, header, onClose }) {
   );
 } 
 
-Modal.propTypes = {
-  children: PropTypes.element.isRequired,
-  onClose: PropTypes.func.isRequired
-}; 
+export default Modal;

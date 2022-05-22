@@ -2,14 +2,14 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
-import { getProfileResult, USER_RESET } from '../services/actions/get-patch';
+import { getProfileResult } from '../services/actions/get-patch';
 import { userLogout } from '../services/actions'; 
 import { useSelector } from 'react-redux';
 import { getCookie, setCookie } from '../components/utils/cookie';
 
 export function LogoutPage() {
-  const { loginResult, logoutResult, user } = useSelector(store => store.login);  
-  const { getResult } = useSelector(store => store.profile);    
+  const { logoutResult, user } = useSelector((store: any) => store.login);  
+  const { getResult } = useSelector((store: any) => store.profile);    
   const history = useHistory();     
   const { path } = useRouteMatch();
   const dispatch = useDispatch(); 
@@ -22,7 +22,7 @@ export function LogoutPage() {
       localStorage.removeItem('token'); 
       setCookie('token', null)
     }
-  }, [path, history, refreshToken, dispatch, accessToken, user])
+  }, [path, history, refreshToken, dispatch, accessToken, user, getResult.user])
   useEffect(() => {
     if (logoutResult['success']) {
       history.replace({ pathname: '/login' })

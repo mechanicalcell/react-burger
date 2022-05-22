@@ -3,92 +3,96 @@ import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
-import PropTypes from 'prop-types';
-import ingredientPropTypes from '../utils/types';
 import { useSelector } from 'react-redux';
-import { useDrop } from "react-dnd";
+import { DropTargetMonitor, useDrop } from "react-dnd";
 import { useDrag } from "react-dnd";
 import { useDispatch } from 'react-redux';
-import { useRef } from 'react';
+import { useRef, FC, ReactNode, ReactElement, ReactHTMLElement, HTMLAttributes, Ref, JSXElementConstructor, RefObject, MutableRefObject } from 'react';
 import { useCallback } from 'react';
 import { useMemo } from 'react';
 import { REORDER_BURGER_CONSTRUCTOR
 } from "../../services/actions/copy-arr";
 import { useHistory } from 'react-router-dom';
+import { TingredientPropTypes } from '../utils/types';
+import { TConstructorIngredientsProps,
+         TingredientsHandleDrop,
+         TBurgerConstructorProps,
+         TonClick } from './burger-constructor-types';
 
-function ConstructorIngredients({item, index, deleteIngr}) {
+const ConstructorIngredients: FC<TConstructorIngredientsProps> = ({item, index, deleteIngredient}) => {
 const dispatch = useDispatch();
-const ref = useRef(null);
-const { newArrBurgerConstructor } = useSelector(store => store.isNewArr);
-const [{isDrag}, dragRef] = useDrag({
+
+const { newArrBurgerConstructor } = useSelector((store: any) => store.isNewArr);
+const [{ isDrag }, dragRef] = useDrag<{item: TingredientPropTypes; index: number}, void, { isDrag: boolean; }>({
   type: "ingredients",
   item: {item, index},
 });
-   
+
 const copyNewArrBurgerConstructor = useMemo(() => [...newArrBurgerConstructor],[newArrBurgerConstructor]);
+
 const hoverIndex = index;
-const ingredientsHandleDrop = useCallback((index) => {
+const ingredientsHandleDrop = useCallback<TingredientsHandleDrop>((index) => {
   copyNewArrBurgerConstructor.splice(hoverIndex, 0, copyNewArrBurgerConstructor.splice(index, 1)[0])
   dispatch({ type: REORDER_BURGER_CONSTRUCTOR, payload: copyNewArrBurgerConstructor })
 }, 
 [hoverIndex, dispatch, copyNewArrBurgerConstructor]
 );
 
-const [{isHoverIngredients}, ingredientsDropTarget] = useDrop({
+const [{isHoverIngredients}, ingredientsDropTarget] = useDrop<{item: TingredientPropTypes; index: number}, void, {isHoverIngredients: boolean}>({
   accept: "ingredients",
   drop({item, index}) { 
     ingredientsHandleDrop(index);
   },
-  collect: monitor => ({ 
+  collect: (monitor: DropTargetMonitor) => ({ 
     isHoverIngredients: monitor.isOver(),
   })  
 });    
 
+const Ref = dragRef(ingredientsDropTarget(useRef<HTMLDivElement>(null)));
+const ref = (Ref: any) => Ref
 const borderColor = isHoverIngredients ? 'gray' : 'transparent';
 
-return (!isDrag && 
-(<div ref={dragRef(ingredientsDropTarget(ref))} 
-      className={`${styles.main_list_container} mt-4`}
-      style={{ border: '2px solid #4C4CFF', borderColor }}>  
-  <div><DragIcon type="primary" /></div> 
-  <ConstructorElement 
-    text={item.name}
-    price={item.price}
-    thumbnail={item.image}
-    handleClose={() => deleteIngr(item, item.index)}
-  /> 
-</div>)         
+return (
+<div>
+  {!isDrag && 
+  (<div ref={ref(Ref)} 
+        className={`${styles.main_list_container} mt-4`}
+        style={{ border: '2px solid #4C4CFF', borderColor }}>  
+    <div><DragIcon type="primary" /></div> 
+    <ConstructorElement 
+      text={item.name}
+      price={item.price}
+      thumbnail={item.image}
+      handleClose={() => deleteIngredient(item, item.index)}
+    /> 
+  </div>)}
+</div>     
 ) 
 } 
   
-ConstructorIngredients.propTypes = {
-  item: ingredientPropTypes.isRequired,
-  deleteIngr: PropTypes.func.isRequired
-};
- 
-export default function BurgerConstructor({ onOpen, 
-                                            deleteIngr, 
-                                            totalPrice,
-                                            ingredientHandleDrop,
-                                            bunHandleDrop }) {
-const { newArrBurgerConstructor, newArrBun } = useSelector(store => store.isNewArr);
+const BurgerConstructor: FC<TBurgerConstructorProps> = ({ onOpen, 
+                                                          deleteIngredient, 
+                                                          totalPrice,
+                                                          ingredientHandleDrop,
+                                                          bunHandleDrop }) => {
+const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
 
-const [{isHoverIngredient}, ingredientDropTarget] = useDrop({
+const [{isHoverIngredient}, ingredientDropTarget] = useDrop<{item: TingredientPropTypes; index: number}, void, { isHoverIngredient: boolean; }>({
   accept: "ingredient",
-  drop(item) { 
-    ingredientHandleDrop(item, item.index, item.key);
+  drop({item}) { 
+    ingredientHandleDrop(item, item.index);
   },
-  collect: monitor => ({ 
+  collect: (monitor: DropTargetMonitor) => ({ 
     isHoverIngredient: monitor.isOver(),
   })  
 });    
 
-const [{isHoverBun}, bunDropTarget] = useDrop({
+const [{isHoverBun}, bunDropTarget] = useDrop<{item: TingredientPropTypes; index: number}, void, { isHoverBun: boolean; }>({
   accept: "bun",
-  drop(item) {
+  drop({item}) {
     bunHandleDrop(item, item.index); 
   },
-  collect: monitor => ({
+  collect: (monitor: DropTargetMonitor) => ({
     isHoverBun: monitor.isOver(),
   })  
 });
@@ -97,9 +101,9 @@ const borderColor = isHoverBun || isHoverIngredient ? 'gray' : 'transparent';
 
 const history = useHistory()
 
-const { getResult } = useSelector(store => store.profile);  
+const { getResult } = useSelector((store: any) => store.profile);  
 
-const onClick = useCallback(() => {
+const onClick = useCallback<TonClick>(() => {
   if (getResult.user.email === null) { 
       history.replace("/login"); 
     } else {
@@ -115,7 +119,7 @@ return (
       <div ref={bunDropTarget} className='ml-10' style={{ border: '2px solid #4C4CFF',
                                                           height: '80px',
                                                           borderColor }}>
-        {newArrBun.map(item => item.type === 'bun' && 
+        {newArrBun.map((item: TingredientPropTypes) => item.type === 'bun' && 
         <ConstructorElement
           key={item._id}
           type="top"
@@ -128,11 +132,11 @@ return (
       <div ref={ingredientDropTarget} 
            style={{ borderColor }} 
            className={styles.over_flow_container_BC}>
-        {newArrBurgerConstructor.map((item, index) => item.type !== 'bun' &&
-        <ConstructorIngredients index={index} key={item.key} deleteIngr={deleteIngr} item={item} /> )}
+        {newArrBurgerConstructor.map((item: TingredientPropTypes, index: number) => item.type !== 'bun' &&
+        <ConstructorIngredients index={index} key={item.key} deleteIngredient={deleteIngredient} item={item} /> )}
       </div> 
       <div className='ml-10'> 
-        {newArrBun.map(item => item.type === 'bun' &&
+        {newArrBun.map((item: TingredientPropTypes) => item.type === 'bun' &&
         <ConstructorElement 
           key={item._id}
           type="bottom"
@@ -154,10 +158,4 @@ return (
 )
 }
 
-BurgerConstructor.propTypes = {
-  onOpen: PropTypes.func.isRequired,
-  deleteIngr: PropTypes.func.isRequired,
-  totalPrice: PropTypes.number,
-  ingredientHandleDrop: PropTypes.func,
-  bunHandleDrop: PropTypes.func
-};
+export default BurgerConstructor;

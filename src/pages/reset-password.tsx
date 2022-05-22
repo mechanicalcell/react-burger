@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { getNewPassword } from '../services/actions/new-password';
 import { useDispatch } from 'react-redux';
@@ -15,13 +15,13 @@ import { NEW_PASSWORD_INPUT,
 function PasswordInput() {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('')
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
     dispatch({ type: NEW_PASSWORD_INPUT, payload: e.target.value })
   }  
-  const inputRef = React.useRef(null)
+  const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
+    setTimeout(() => inputRef ? inputRef.current.focus() : null, 0)
     alert('Icon Click Callback')
   }  
   return ( 
@@ -44,13 +44,13 @@ function PasswordInput() {
 function CodeInput() {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('')
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
     dispatch({ type: CODE_INPUT, payload: e.target.value })
   }  
-  const inputRef = React.useRef(null)
+  const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
+    setTimeout(() => inputRef ? inputRef.current.focus() : null, 0)
     alert('Icon Click Callback')
   }  
   return ( 
@@ -58,7 +58,7 @@ function CodeInput() {
       type={'text'}
       placeholder={'Введите код из письма'}
       onChange={onChange}
-      icon={''}
+      icon={undefined}
       value={value}
       name={'name'}
       error={false} 
@@ -72,12 +72,10 @@ function CodeInput() {
   
 export function ResetPasswordPage() {
   const dispatch = useDispatch();  
-  const { newPasswordInput, codeInput, newPassword } = useSelector(store => store.newPassword);
-  const { loginResult } = useSelector(store => store.login);    
-  const { passwordResetResult } = useSelector(store => store.reset) 
-  const { getResult } = useSelector(store => store.profile);    
+  const { newPasswordInput, codeInput, newPassword } = useSelector((store: any) => store.newPassword);
+  const { passwordResetResult } = useSelector((store: any) => store.reset) 
   const history = useHistory();   
-  const onSubmit = useCallback((e) => {
+  const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()  
     dispatch(getNewPassword(newPasswordInput, codeInput))
   },
@@ -93,7 +91,7 @@ export function ResetPasswordPage() {
     if (passwordResetResult.success === null) {
       history.replace({ pathname: '/forgot' })
     }
-  }, [newPassword, history])  
+  }, [newPassword, history, passwordResetResult.success])  
   return ( 
     <div className={styles.reset_container}>
       <h1 className={`text text_type_main-large mb-6`}>Восстановление пароля</h1>    
