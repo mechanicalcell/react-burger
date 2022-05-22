@@ -41,7 +41,7 @@ const Modal: FC<TModalHeader> = ({ children, header, onClose }) => {
 
   return ReactDOM.createPortal(
     <>
-      <ModalOverlay onClose={(e: SyntheticEvent) => handleOverlay(e)}/>
+      <ModalOverlay onClose={handleOverlay}/>
       <div className={styles.modal_box} >
         <ModalHeader header={header} onClose={onClose}></ModalHeader>
         {children}

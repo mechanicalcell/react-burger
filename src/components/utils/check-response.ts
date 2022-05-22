@@ -1,4 +1,4 @@
-export const checkResponse = (res: { ok: any; json: () => any; }) => {
+export const checkResponse = (res: Response) => {
     if (res.ok) {
       return res.json();
     } else {
