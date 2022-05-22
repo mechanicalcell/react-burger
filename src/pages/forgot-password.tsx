@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import React, { FormEvent } from 'react';
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { Link } from 'react-router-dom';
 import { getPasswordReset } from '../services/actions/password-reset';
@@ -17,7 +17,7 @@ export function ForgotPasswordPage() {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
   }  
-  const onSubmit = useCallback((e: SyntheticEvent) => {
+  const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()  
     dispatch(getPasswordReset(value))
   },

@@ -1,4 +1,4 @@
-import React, { RefObject, SyntheticEvent } from 'react';
+import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { getNewPassword } from '../services/actions/new-password';
 import { useDispatch } from 'react-redux';
@@ -73,11 +73,9 @@ function CodeInput() {
 export function ResetPasswordPage() {
   const dispatch = useDispatch();  
   const { newPasswordInput, codeInput, newPassword } = useSelector((store: any) => store.newPassword);
-  const { loginResult } = useSelector((store: any) => store.login);    
   const { passwordResetResult } = useSelector((store: any) => store.reset) 
-  const { getResult } = useSelector((store: any) => store.profile);    
   const history = useHistory();   
-  const onSubmit = useCallback((e: SyntheticEvent) => {
+  const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()  
     dispatch(getNewPassword(newPasswordInput, codeInput))
   },
@@ -93,7 +91,7 @@ export function ResetPasswordPage() {
     if (passwordResetResult.success === null) {
       history.replace({ pathname: '/forgot' })
     }
-  }, [newPassword, history])  
+  }, [newPassword, history, passwordResetResult.success])  
   return ( 
     <div className={styles.reset_container}>
       <h1 className={`text text_type_main-large mb-6`}>Восстановление пароля</h1>    

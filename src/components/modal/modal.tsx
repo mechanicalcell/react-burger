@@ -28,7 +28,7 @@ const Modal: FC<TModalHeader> = ({ children, header, onClose }) => {
     }
   };  
   
-  const handleCloseByEsc = useCallback(e => {
+  const handleCloseByEsc = useCallback((e: KeyboardEvent) => {
     e.key === ESC_KEYCODE && onClose();
       },[onClose]);
         

@@ -1,4 +1,4 @@
-import React, { RefObject, SyntheticEvent } from 'react';
+import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -76,20 +76,19 @@ export function LoginPage() {
   const history = useHistory();   
   const { loginEmailInput,
           loginPasswordInput,
-          loginResult,
-          user } = useSelector((store: any) => store.login);  
-  const onSubmit = useCallback((e: SyntheticEvent) => {
+          loginResult } = useSelector((store: any) => store.login);  
+  const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()
     dispatch(userLogin(loginEmailInput, loginPasswordInput))
   },
-  [loginResult, history, dispatch, loginEmailInput, loginPasswordInput]
+  [ dispatch, loginEmailInput, loginPasswordInput]
   ); 
 
   useEffect(() => {
       if (loginResult['success']) { 
         history.replace({ pathname: location.state ? (location.state.from.pathname) : ('/')})
       }
-  }, [loginResult, history])
+  }, [loginResult, history, location.state])
 
   return (
     <div className={styles.login_container}>

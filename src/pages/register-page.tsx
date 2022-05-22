@@ -1,6 +1,6 @@
-import React, { RefObject, SyntheticEvent } from 'react';
+import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
-import { Link, Redirect, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { userRegistration } from '../services/actions/user-registration';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -102,14 +102,12 @@ function RegisterPasswordInput() {
     
 export function RegisterPage() {
   const dispatch = useDispatch();    
-  const history = useHistory();   
-  const location = useLocation()
-  const { loginResult } = useSelector((store: any) => store.login);      
+  const history = useHistory();
   const { registerNameInput, 
           registerEmailInput,
           registerPasswordInput,
           registrationResult } = useSelector((store: any) => store.register);  
-  const onSubmit = useCallback((e) => {
+  const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()
     dispatch(userRegistration(registerNameInput, registerEmailInput, registerPasswordInput))
   },

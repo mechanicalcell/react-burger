@@ -1,4 +1,4 @@
-import React, { RefObject, SyntheticEvent } from 'react';
+import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { patchProfileResult } from '../services/actions/get-patch';
 import { useDispatch } from 'react-redux';
@@ -113,10 +113,9 @@ export function ProfilePage() {
           profilePasswordInput } = useSelector((store: any) => store.profile);  
   const { getResult, 
           patchResult } = useSelector((store: any) => store.profile);  
-  const { loginResult } = useSelector((store: any) => store.login);  
   const accessToken = getCookie('token');
   const refreshToken = localStorage.getItem('token')
-  const onSubmit = (e: SyntheticEvent) => {
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault()
     dispatch(getProfileResult(accessToken, refreshToken))    
     dispatch(patchProfileResult(accessToken, profileNameInput, profileEmailInput, profilePasswordInput))
@@ -125,12 +124,12 @@ export function ProfilePage() {
     if (getResult.user.name === null || getResult.user.email === null) {  
       dispatch(getProfileResult(accessToken, refreshToken))
     }  
-  }, [dispatch, accessToken, refreshToken, getResult, getProfileResult])
+  }, [dispatch, accessToken, refreshToken, getResult])
   useEffect(() => {
     if (patchResult.success) {  
       dispatch(getProfileResult(accessToken, refreshToken))
     }  
-  }, [dispatch, patchResult, accessToken, refreshToken, getProfileResult])
+  }, [dispatch, patchResult, accessToken, refreshToken])
   return (
     <div>
       <div className={styles.profile_container}>
