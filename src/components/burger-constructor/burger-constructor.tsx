@@ -10,8 +10,7 @@ import { useDispatch } from 'react-redux';
 import { useRef, FC, ReactNode, ReactElement, ReactHTMLElement, HTMLAttributes, Ref, JSXElementConstructor, RefObject, MutableRefObject } from 'react';
 import { useCallback } from 'react';
 import { useMemo } from 'react';
-import { REORDER_BURGER_CONSTRUCTOR
-} from "../../services/actions/copy-arr";
+import { reorderBurgerConstructorAction } from "../../services/actions/copy-arr";
 import { useHistory } from 'react-router-dom';
 import { TingredientPropTypes } from '../utils/types';
 import { TConstructorIngredientsProps,
@@ -33,7 +32,7 @@ const copyNewArrBurgerConstructor = useMemo(() => [...newArrBurgerConstructor],[
 const hoverIndex = index;
 const ingredientsHandleDrop = useCallback<TingredientsHandleDrop>((index) => {
   copyNewArrBurgerConstructor.splice(hoverIndex, 0, copyNewArrBurgerConstructor.splice(index, 1)[0])
-  dispatch({ type: REORDER_BURGER_CONSTRUCTOR, payload: copyNewArrBurgerConstructor })
+  dispatch(reorderBurgerConstructorAction(copyNewArrBurgerConstructor))
 }, 
 [hoverIndex, dispatch, copyNewArrBurgerConstructor]
 );
@@ -102,16 +101,17 @@ const borderColor = isHoverBun || isHoverIngredient ? 'gray' : 'transparent';
 const history = useHistory()
 
 const { getResult } = useSelector((store: any) => store.profile);  
+const { loginResult } = useSelector((store: any) => store.login);  
 
 const onClick = useCallback<TonClick>(() => {
-  if (getResult.user.email === null) { 
+  if (getResult.user.email === null && loginResult.success === null) { 
       history.replace("/login"); 
     } else {
-      if (getResult.user.email) {  
+      if (getResult.user.email || loginResult.success) {  
         onOpen()
       }
   }
-}, [getResult, history, onOpen]);  
+}, [getResult, loginResult.success, history, onOpen]);  
 
 return (
   <div className={`${styles.right_section} ml-10 pt-25`}>

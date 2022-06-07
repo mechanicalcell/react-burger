@@ -1,6 +1,6 @@
 import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
-import { getNewPassword } from '../services/actions/new-password';
+import { codeInputAction, getNewPassword, newPasswordInputAction } from '../services/actions/new-password';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -8,16 +8,13 @@ import { useCallback } from 'react';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './page-container.module.css';
-import { NEW_PASSWORD_INPUT,
-         CODE_INPUT 
-} from '../services/actions/new-password';
 
 function PasswordInput() {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
-    dispatch({ type: NEW_PASSWORD_INPUT, payload: e.target.value })
+    dispatch(newPasswordInputAction(e.target.value))
   }  
   const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
@@ -46,7 +43,7 @@ function CodeInput() {
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
-    dispatch({ type: CODE_INPUT, payload: e.target.value })
+    dispatch(codeInputAction(e.target.value))
   }  
   const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {

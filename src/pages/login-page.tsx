@@ -6,10 +6,8 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
-import { userLogin } from '../services/actions/login';
+import { getLoginEmailInputAction, getLoginPasswordInputAction, userLogin } from '../services/actions/login';
 import styles from './page-container.module.css';
-import { LOGIN_EMAIL_INPUT,
-         LOGIN_PASSWORD_INPUT } from '../services/actions/login';
 import { ILoginPage } from './login-page-types';        
 
 function LoginEmailInput() {
@@ -17,7 +15,7 @@ function LoginEmailInput() {
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
-    dispatch({ type: LOGIN_EMAIL_INPUT, payload: e.target.value })
+    dispatch(getLoginEmailInputAction(e.target.value))
   }  
   const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
@@ -46,7 +44,7 @@ function LoginPasswordInput() {
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
-    dispatch({ type: LOGIN_PASSWORD_INPUT, payload: e.target.value })
+    dispatch(getLoginPasswordInputAction(e.target.value))
   }  
   const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
@@ -73,22 +71,23 @@ function LoginPasswordInput() {
 export function LoginPage() {
   const location = useLocation<ILoginPage>()
   const dispatch = useDispatch();    
-  const history = useHistory();   
+  const history = useHistory(); 
+  const { getResult } = useSelector((store: any) => store.profile);    
   const { loginEmailInput,
           loginPasswordInput,
-          loginResult } = useSelector((store: any) => store.login);  
+          loginResult,
+          logoutResult } = useSelector((store: any) => store.login);  
   const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()
     dispatch(userLogin(loginEmailInput, loginPasswordInput))
   },
   [ dispatch, loginEmailInput, loginPasswordInput]
   ); 
-
   useEffect(() => {
-      if (loginResult['success']) { 
+      if (!logoutResult.success && (loginResult['success'] || getResult.user.email)) { 
         history.replace({ pathname: location.state ? (location.state.from.pathname) : ('/')})
       }
-  }, [loginResult, history, location.state])
+  }, [loginResult['success'], getResult.user.email, history, location.state])
 
   return (
     <div className={styles.login_container}>

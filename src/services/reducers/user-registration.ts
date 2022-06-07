@@ -1,7 +1,8 @@
 import { USER_REGISTRATION,
          REGISTER_NAME_INPUT,
          REGISTER_EMAIL_INPUT,
-         REGISTER_PASSWORD_INPUT
+         REGISTER_PASSWORD_INPUT,
+         TUserRegistrationActions
 } from '../actions/user-registration';
 
 const initialState = {
@@ -16,30 +17,30 @@ const initialState = {
   registerPasswordInput: '',
 };
 
-export const userRegistrationReducer = (state = initialState, action) => {
+export const userRegistrationReducer = (state = initialState, action: TUserRegistrationActions) => {
   switch (action.type) {
     case USER_REGISTRATION: {
       return {
         ...state,
-        registrationResult: action.payload
+        registrationResult: action.registrationResult
       };
     }
     case REGISTER_NAME_INPUT: {
       return {
         ...state,
-        registerNameInput: action.payload
+        registerNameInput: action.registerNameInput
       };
     }
     case REGISTER_EMAIL_INPUT: {
       return {
         ...state,
-        registerEmailInput: action.payload
+        registerEmailInput: action.registerEmailInput
       };
     }
     case REGISTER_PASSWORD_INPUT: {
       return {
         ...state,
-        registerPasswordInput: action.payload
+        registerPasswordInput: action.registerPasswordInput
       };
     }
     default: {

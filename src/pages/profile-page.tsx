@@ -1,6 +1,6 @@
 import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
-import { patchProfileResult } from '../services/actions/get-patch';
+import { getProfileEmailInputAction, getProfileNameInputAction, getProfilePasswordInputAction, patchProfileResult, TOKEN_NULL } from '../services/actions/get-patch';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
@@ -8,10 +8,6 @@ import { NavLink, useRouteMatch } from 'react-router-dom';
 import { getProfileResult } from '../services/actions/get-patch';
 import { getCookie } from '../components/utils/cookie';
 import styles from './page-container.module.css';
-import { PROFILE_NAME_INPUT,
-         PROFILE_EMAIL_INPUT,
-         PROFILE_PASSWORD_INPUT 
-} from '../services/actions/get-patch';
 
 function ProfileNameInput() {
   const dispatch = useDispatch();
@@ -19,7 +15,7 @@ function ProfileNameInput() {
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
-    dispatch({ type: PROFILE_NAME_INPUT, payload: e.target.value })
+    dispatch(getProfileNameInputAction(e.target.value))
   }  
   const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
@@ -49,7 +45,7 @@ function ProfileEmailInput() {
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
-    dispatch({ type: PROFILE_EMAIL_INPUT, payload: e.target.value })
+    dispatch(getProfileEmailInputAction(e.target.value))
   }  
   const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
@@ -78,7 +74,7 @@ function ProfilePasswordInput() {
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
-    dispatch({ type: PROFILE_PASSWORD_INPUT, payload: e.target.value })
+    dispatch(getProfilePasswordInputAction(e.target.value))
   }  
   const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
@@ -110,26 +106,26 @@ export function ProfilePage() {
   const dispatch = useDispatch();    
   const { profileNameInput, 
           profileEmailInput,
-          profilePasswordInput } = useSelector((store: any) => store.profile);  
-  const { getResult, 
+          profilePasswordInput,
+          getResult, 
           patchResult } = useSelector((store: any) => store.profile);  
   const accessToken = getCookie('token');
   const refreshToken = localStorage.getItem('token')
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
-    dispatch(getProfileResult(accessToken, refreshToken))    
+    dispatch(getProfileResult(accessToken, refreshToken))
     dispatch(patchProfileResult(accessToken, profileNameInput, profileEmailInput, profilePasswordInput))
-  }  
+  }
   useEffect(() => {
     if (getResult.user.name === null || getResult.user.email === null) {  
       dispatch(getProfileResult(accessToken, refreshToken))
     }  
-  }, [dispatch, accessToken, refreshToken, getResult])
+  }, [dispatch, accessToken, refreshToken, getResult.user.name, getResult.user.email])
   useEffect(() => {
     if (patchResult.success) {  
       dispatch(getProfileResult(accessToken, refreshToken))
     }  
-  }, [dispatch, patchResult, accessToken, refreshToken])
+  }, [dispatch, patchResult.success, accessToken, refreshToken])
   return (
     <div>
       <div className={styles.profile_container}>

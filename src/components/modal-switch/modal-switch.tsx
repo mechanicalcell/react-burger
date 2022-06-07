@@ -3,7 +3,7 @@ import { ForgotPasswordPage } from '../../pages/forgot-password';
 import { IngredientsPage } from '../../pages/ingredients-page';
 import { LoginPage } from '../../pages/login-page';
 import { LogoutPage } from '../../pages/logout-page';
-import { ProfileOrdersPage } from '../../pages/profile-orders-page';
+import ProfileOrdersPage from '../../pages/profile-orders-page';
 import { ProfilePage } from '../../pages/profile-page';
 import { RegisterPage } from '../../pages/register-page';
 import { ResetPasswordPage } from '../../pages/reset-password';
@@ -15,13 +15,18 @@ import OrderDetails from '../order-details/order-details';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '../app/app.module.css';
-import { DELETE_ORDER_NUMBER, getOrder, INGREDIENT_IS_VISIBLE, ORDER_IS_VISIBLE } from '../../services/actions/order';
-import { DELETE_BURGER_CONSTRUCTOR, DELETE_INGREDIENTS, DELETE_INGREDIENT_DETAIL, MOVE_BUNS, MOVE_INGREDIENTS } from '../../services/actions/copy-arr';
-import { COUNT_BUN_DOWN, COUNT_BUN_UP, COUNT_INGREDIENT_DOWN, COUNT_INGREDIENT_UP, DELETE_COUNT } from '../../services/actions/count';
+import { deleteOrderNumberAction, getOrder, ingredientIsVisibleAction, orderIsVisibleAction } from '../../services/actions/order';
+import { deleteBurgerConstructorAction, deleteIngredientDetailAction, deleteIngredientsAction, moveBunsAction, moveIngredientsAction } from '../../services/actions/copy-arr';
+import { countBunDownAction, countBunUpAction, countIngredientDownAction, countIngredientUpAction, deleteCountAction } from '../../services/actions/count';
 import { v4 as uuidv4 } from 'uuid';
 import { useCallback } from 'react';
 import { TingredientPropTypes } from '../utils/types';
 import { ILocation } from './modal-switch-types';
+import FeedPage from '../../pages/feed-page';
+import FeedDetailsPage from '../../pages/feed-details-page';
+import FeedDetails from '../feed-details/feed-details';
+import OrdersDetailsPage from '../../pages/orders-details-page';
+import OrdersDetails from '../orders-details/orders-details';
 
 export function ModalSwitch() {
 const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
@@ -40,6 +45,18 @@ const orderModal = (
   </Modal>
 );
 
+const feedModal = (
+  <Modal header=" " onClose={handleCloseModal}> 
+    <FeedDetails />
+  </Modal>
+);
+
+const ordersModal = (
+  <Modal header=" " onClose={handleCloseModal}> 
+    <OrdersDetails />
+  </Modal>
+);
+
 function orderNumberRequest() {
   const ingredientId: string[] = [];
   newArrBurgerConstructor.map((item: TingredientPropTypes) => ingredientId.push(item._id));
@@ -50,45 +67,55 @@ function orderNumberRequest() {
 }
 
 function handleOpenIngredientModal() {
-  dispatch({ type: INGREDIENT_IS_VISIBLE, payload: true }) 
-  dispatch({ type: ORDER_IS_VISIBLE, payload: false })     
+  dispatch(ingredientIsVisibleAction(true)) 
+  dispatch(orderIsVisibleAction(false))     
 }
 
+function handleOpenFeedModal() {
+  dispatch(ingredientIsVisibleAction(true)) 
+  dispatch(orderIsVisibleAction(false))     
+}
+
+const handleOpenOrdersModal = useCallback(() => {
+  dispatch(ingredientIsVisibleAction(true)) 
+  dispatch(orderIsVisibleAction(false))     
+}, [dispatch]);  
+
 const handleOpenOrderModal = useCallback(() => {
-  dispatch({ type: INGREDIENT_IS_VISIBLE, payload: false }) 
-  dispatch({ type: ORDER_IS_VISIBLE, payload: true })     
+  dispatch(ingredientIsVisibleAction(false)) 
+  dispatch(orderIsVisibleAction(true))     
   orderNumberRequest()
-  dispatch({ type: DELETE_COUNT })
-  dispatch({ type: DELETE_BURGER_CONSTRUCTOR })
+  dispatch(deleteCountAction())
+  dispatch(deleteBurgerConstructorAction())
 }, [dispatch, orderNumberRequest]);  
 
 function handleCloseModal() {
-  dispatch({ type: INGREDIENT_IS_VISIBLE, payload: false }) 
-  dispatch({ type: ORDER_IS_VISIBLE, payload: false })     
-  dispatch({ type: DELETE_INGREDIENT_DETAIL })
-  dispatch({ type: DELETE_ORDER_NUMBER })
+  dispatch(ingredientIsVisibleAction(false)) 
+  dispatch(orderIsVisibleAction(false))     
+  dispatch(deleteIngredientDetailAction())
+  dispatch(deleteOrderNumberAction())
 }
   
 const ingredientHandleDrop = (item: TingredientPropTypes , index: number) => {
-  dispatch({ type: MOVE_INGREDIENTS, item, key: uuidv4() })
-  dispatch({ type: COUNT_INGREDIENT_UP, index }); 
+  dispatch(moveIngredientsAction(item, uuidv4()))
+  dispatch(countIngredientUpAction(index)); 
 };
 
 const bunHandleDrop = (item: TingredientPropTypes , index: number) => {
   if (index === 0) {
-    dispatch({ type: COUNT_BUN_UP, index: '0' })
-    dispatch({ type: COUNT_BUN_DOWN, index: '1' })
+    dispatch(countBunUpAction(0))
+    dispatch(countBunDownAction(1))
   } 
   else if (index === 1) {
-    dispatch({ type: COUNT_BUN_UP, index: '1' })
-    dispatch({ type: COUNT_BUN_DOWN, index: '0' })
+    dispatch(countBunUpAction(1))
+    dispatch(countBunDownAction(0))
   }  
-  dispatch({ type: MOVE_BUNS, item, index })
+  dispatch(moveBunsAction(item, index))
 };
 
 const deleteIngredient = (item: TingredientPropTypes , index: number) => {
-  dispatch({ type: DELETE_INGREDIENTS, item }) 
-  dispatch({ type: COUNT_INGREDIENT_DOWN, index })
+  dispatch(deleteIngredientsAction(item)) 
+  dispatch(countIngredientDownAction(index))
 };
 
 const { orderTotalPrice } = useSelector((store: any) => store.order);    
@@ -123,10 +150,10 @@ const { orderTotalPrice } = useSelector((store: any) => store.order);
         <ProfilePage />
       </ProtectedRoute>
       <Route path="/profile/orders" exact={true}>
-        <ProfileOrdersPage />
+        <ProfileOrdersPage onOpen={handleOpenOrdersModal} />
       </Route>
-      <Route path="/profile/orders:id" exact={true}>
-        <ProfileOrdersPage />
+      <Route path="/profile/orders/:id" exact={true}>
+        <OrdersDetailsPage />
       </Route>
       <Route path="/logout" exact={true}>
         <LogoutPage />
@@ -134,10 +161,20 @@ const { orderTotalPrice } = useSelector((store: any) => store.order);
       <Route path="/ingredients/:id" exact={true}>
         <IngredientsPage />
       </Route>
+      <Route path="/feed" exact={true}>
+        <FeedPage onOpen={handleOpenFeedModal} />
+      </Route>
+      <Route path="/feed/:id" exact={true}>
+        <FeedDetailsPage />
+      </Route>
     </Switch> 
     <div className={styles.hidden}> 
       {background && ingredientModalVisible &&
       <Route path='/ingredients/:id'>{ingredientModal}</Route>} 
+      {background && ingredientModalVisible &&
+      <Route path='/feed/:id'>{feedModal}</Route>} 
+      {background && ingredientModalVisible &&
+      <Route path='/profile/orders/:id'>{ordersModal}</Route>} 
       {orderModalVisible && orderModal} 
     </div>  
   </>     

@@ -1,12 +1,11 @@
-import { COPY_ARR_BUN,
-         COPY_ARR_INGREDIENTS,
-         DELETE_INGREDIENTS,
+import { DELETE_INGREDIENTS,
          DELETE_INGREDIENT_DETAIL,
          MOVE_INGREDIENTS,
          MOVE_BUNS,
          DELETE_BURGER_CONSTRUCTOR,
          REORDER_BURGER_CONSTRUCTOR,
-         INGREDIENT_ID
+         INGREDIENT_ID,
+         TCopyArrActions
 } from '../actions/copy-arr';
 
 const initialState = {
@@ -16,24 +15,8 @@ const initialState = {
   ingredientIdCopy: null
 };
 
-
-export const copyArrReducer = (state = initialState, action) => {
+export const copyArrReducer = (state = initialState, action: TCopyArrActions) => {
     switch (action.type) {
-      case COPY_ARR_BUN: {
-        return {
-          ...state,
-          newArrIngredientDetails: action.item,      
-          newArrBun: [{...action.item, qty: 2}]
-        };
-      }
-      case COPY_ARR_INGREDIENTS: {
-        return {
-          ...state, 
-          newArrBurgerConstructor: [...state.newArrBurgerConstructor, {...action.item, key: action.key, qty: 1}],
-          newArrIngredientDetails: action.item, 
-          newArrBun: state.newArrBun
-        }
-      }
       case MOVE_INGREDIENTS: {
         return {
           ...state, 
@@ -72,13 +55,13 @@ export const copyArrReducer = (state = initialState, action) => {
       case REORDER_BURGER_CONSTRUCTOR: {
         return {
           ...state, 
-          newArrBurgerConstructor: action.payload
+          newArrBurgerConstructor: action.newArrBurgerConstructor
         }
       }
       case INGREDIENT_ID: {
         return { 
           ...state,
-          ingredientIdCopy: action.payload
+          ingredientIdCopy: action.ingredientIdCopy
         }
       } 
       default: {
