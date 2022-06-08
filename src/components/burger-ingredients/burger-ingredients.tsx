@@ -6,17 +6,9 @@ import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useRef } from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { v4 as uuidv4 } from 'uuid';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDrag } from "react-dnd";
-import { COPY_ARR_INGREDIENTS,
-         COPY_ARR_BUN,
-         INGREDIENT_ID
-} from "../../services/actions/copy-arr";
-import { COUNT_INGREDIENT_UP,
-         COUNT_BUN_UP,
-         COUNT_BUN_DOWN
-} from "../../services/actions/count"; 
+import { ingredientIdCopyAction } from "../../services/actions/copy-arr";
 import { TIngredients } from "./burger-ingredients-types";
 import { TingredientPropTypes } from "../utils/types";
 
@@ -30,15 +22,10 @@ const [,dragRef] = useDrag({
 });
 const dispatch = useDispatch(); 
 const onClick = () => {
-  dispatch({ type: INGREDIENT_ID, payload: item })
+  dispatch(ingredientIdCopyAction(item))
   history.push({ pathname: `/ingredients/${item._id}` })
   onOpen();
 }
-const copyArrIngredients = (e: SyntheticEvent) => { 
-  dispatch({type: COUNT_INGREDIENT_UP, index }); 
-  dispatch({type: COPY_ARR_INGREDIENTS, item, key: uuidv4()}) 
-  onOpen(); 
-}   
 const image = (
   <img className='' src={ item.image } alt={item.name} />
 );
@@ -77,22 +64,10 @@ const [{isDrag},dragRef] = useDrag<{item: TingredientPropTypes}, void, {isDrag: 
 });
 const dispatch = useDispatch(); 
 const onClick = () => {
-  dispatch({ type: INGREDIENT_ID, payload: item })
+  dispatch(ingredientIdCopyAction(item))
   history.replace({ pathname: `/ingredients/${item._id}` })
   onOpen();
 }
-const copyArrBun = (e: SyntheticEvent) => { 
-  if (index === 0) {
-    dispatch({ type: COUNT_BUN_UP, index: '0' })
-    dispatch({ type: COUNT_BUN_DOWN, index: '1' })
-  } 
-  else if (index === 1) {
-    dispatch({ type: COUNT_BUN_UP, index: '1' })
-    dispatch({ type: COUNT_BUN_DOWN, index: '0' })
-  }  
-  dispatch({type: COPY_ARR_BUN, item, index})
-  onOpen(); 
-} 
 const image = (
   <img className='' src={ item.image } alt={item.name} />
 );

@@ -20,10 +20,12 @@ export default function AppHeader() {
             </NavLink>
             </nav>
             <nav className={`${styles.navigation_link} ml-2`}>
+            <Link to='/feed' className={styles.navigation_link}>  
               <div className={styles.icon_container}>
                 <ListIcon type="secondary" />    
               </div>
               <p className={`${styles.text_container} text text_type_main-small ml-2`}>Лента заказов</p>
+            </Link>
             </nav>
           </div>
           <div className={styles.logo_container}>

@@ -1,24 +1,20 @@
 import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { Link } from 'react-router-dom';
-import { userRegistration } from '../services/actions/user-registration';
+import { registerEmailInputAction, registerNameInputAction, registerPasswordInputAction, userRegistration } from '../services/actions/user-registration';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
 import styles from './page-container.module.css';
-import { REGISTER_NAME_INPUT,
-         REGISTER_EMAIL_INPUT,
-         REGISTER_PASSWORD_INPUT 
-} from '../services/actions/user-registration';
 
 function RegisterNameInput() {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
-    dispatch({ type: REGISTER_NAME_INPUT, payload: e.target.value })
+    dispatch(registerNameInputAction(e.target.value))
   }  
   const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
@@ -47,7 +43,7 @@ function RegisterEmailInput() {
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
-    dispatch({ type: REGISTER_EMAIL_INPUT, payload: e.target.value })
+    dispatch(registerEmailInputAction(e.target.value))
   }  
   const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {
@@ -76,7 +72,7 @@ function RegisterPasswordInput() {
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
-    dispatch({ type: REGISTER_PASSWORD_INPUT, payload: e.target.value })
+    dispatch(registerPasswordInputAction(e.target.value))
   }  
   const inputRef = React.useRef(null) as RefObject<any> | null;
   const onIconClick = () => {

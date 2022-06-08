@@ -1,0 +1,90 @@
+.main_container {
+  /* border: 2px dashed #4C4CFF; */
+  display: flex;
+  justify-content: center;
+}
+
+.main_feed_details_container {
+  /* border: 2px dashed #4C4CFF; */
+  margin-top: 50px;
+  margin-left: 100px;
+  margin-right: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 560px;
+}
+
+.feed_details_number_container {
+  /* border: 2px dashed #4C4CFF; */
+  display: flex;
+  justify-content: center;
+}
+
+.feed_details_name_container {
+  /* border: 2px dashed #4C4CFF; */
+  display: flex;
+  justify-content: center;
+}
+
+.feed_details_order_container {
+  /* border: 2px dashed #4C4CFF; */
+  display: flex;
+  flex-direction: column;
+  height: 105px;
+  margin-right: 24px;
+}
+
+.feed_details_sum_icon_container {
+  /* border: 2px dashed #4C4CFF; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.feed_sum_container {
+  /* border: 2px dashed #4C4CFF; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.round_ingredients_container {
+  border: 3px solid #4C4CFF;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;  
+}
+
+.left_feed_container {
+  height: 382px; 
+  overflow: scroll;
+  overflow-x: hidden;
+  /* border: 2px dashed #4C4CFF; */
+  margin-top: 16px;
+  margin-bottom: 40px;
+  padding-right: 24px;
+}
+
+.left_feed_container::-webkit-scrollbar-thumb {
+  background: #8585AD;
+  border: 3px solid #2F2F37;
+  width: 8px;
+}
+
+.left_feed_container::-webkit-scrollbar {
+  width: 12px;
+}
+
+.left_feed_container::-webkit-scrollbar-track {
+  background: #2F2F37;
+}
+
+.feed_ingredients_container {
+  /* border: 2px dashed #4C4CFF; */
+  height: 105px;
+  overflow: hidden;
+}
+
+

@@ -9,8 +9,10 @@ import { newPasswordReducer } from './new-password';
 import { passwordResetReducer } from './password-reset';
 import { GET_INGREDIENTS,
          GET_INGREDIENTS_SUCCESS,
-         GET_INGREDIENTS_FAILED
+         GET_INGREDIENTS_FAILED,
+         TIngredientActions
 } from '../actions/index';
+import { wsReducer } from '../ws-reducer';
 
 const initialState = {
   isLoading: false,
@@ -18,7 +20,7 @@ const initialState = {
   data: []
 };
   
-const ingredientReducer = (state = initialState, action) => {
+const ingredientReducer = (state = initialState, action: TIngredientActions) => {
   switch (action.type) {
     case GET_INGREDIENTS: {
       return {
@@ -47,6 +49,7 @@ export const rootReducer = combineReducers({
   register: userRegistrationReducer,
   login: loginReducer,
   reset: passwordResetReducer,
-  profile: getPatchReducer
+  profile: getPatchReducer,
+  orders: wsReducer
 });
 

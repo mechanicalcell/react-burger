@@ -3,9 +3,8 @@ import { LOGIN_EMAIL_INPUT,
          USER_LOGIN,
          RESET_USER,
          TOKEN_REFRESH,
-         SET_USER
+         TLoginActions
 } from '../actions/login';
-import { TOKEN_NULL } from '../actions/get-patch';
 
 const initialState = {
   loginResult: {
@@ -23,15 +22,14 @@ const initialState = {
     "success": null,
     "message": null
   },
-  user: null 
 };
 
-export const loginReducer = (state = initialState, action) => {
+export const loginReducer = (state = initialState, action: TLoginActions) => {
   switch (action.type) {
     case USER_LOGIN: {
       return {
         ...state,
-        loginResult: action.payload,
+        loginResult: action.loginResult,
         logoutResult: {
           "success": null,
           "message": null
@@ -42,19 +40,19 @@ export const loginReducer = (state = initialState, action) => {
     case LOGIN_EMAIL_INPUT: {
       return {
         ...state,
-        loginEmailInput: action.payload
+        loginEmailInput: action.loginEmailInput
       };
     }
     case LOGIN_PASSWORD_INPUT: {
       return {
         ...state,
-        loginPasswordInput: action.payload
+        loginPasswordInput: action.loginPasswordInput
       };
     }
     case RESET_USER: {
       return {
         ...state,
-        logoutResult: action.payload,
+        logoutResult: action.logoutResult,
         loginResult: {
           "success": null,
           "accessToken": null,
@@ -64,16 +62,6 @@ export const loginReducer = (state = initialState, action) => {
             "name": null
           }
         },
-        user: action.userLogout
-      };
-    }
-    case TOKEN_NULL: {
-      return {
-        ...state,
-        loginResult: { 
-          ...state.loginResult,
-          "accessToken": null
-        }
       };
     }
     case TOKEN_REFRESH: {
@@ -87,14 +75,8 @@ export const loginReducer = (state = initialState, action) => {
         }       
       }
     }
-    case SET_USER: {
-      return {
-        ...state,
-        user: action.payload
-      }
-    }
     default: {
       return state;
     }
   }
-};   
+};

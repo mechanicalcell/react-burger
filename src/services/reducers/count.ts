@@ -2,10 +2,11 @@ import { COUNT_BUN_UP,
          COUNT_BUN_DOWN,
          COUNT_INGREDIENT_UP,
          COUNT_INGREDIENT_DOWN,
-         DELETE_COUNT
+         DELETE_COUNT,
+         TCountActions
 } from '../actions/count';
 
-const initialState = {
+const initialState: any = {
   count: { 0: 0, 
            1: 0,
            2: 0, 
@@ -24,7 +25,7 @@ const initialState = {
   }
 };
   
-export const countReducer = (state = initialState, action) => {
+export const countReducer = (state = initialState, action: TCountActions) => {
   switch (action.type) {
     case COUNT_BUN_UP: {
       return { 
