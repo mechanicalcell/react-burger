@@ -1,6 +1,6 @@
 # Getting Started with Create React App
 
-https://github.com/MechaniCell/react-burger/
+[https://github.com/MechaniCell/react-burger/](https://mechanicell.github.io/react-burger/)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
