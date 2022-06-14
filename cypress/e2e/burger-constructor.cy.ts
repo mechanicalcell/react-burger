@@ -13,6 +13,7 @@ describe('service is available', function() {
     cy.get('[data-cy="orderLoginButton"]').contains('Войти').click();
     cy.get('[data-cy="orderButtonTest"]').contains('Оформить заказ').click();
     cy.get('[data-cy="orderModalText"]').contains('идентификатор').should('exist');
+    cy.get('[data-cy="modalClose"]').click()
   });
 
 });
