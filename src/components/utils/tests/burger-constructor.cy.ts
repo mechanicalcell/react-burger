@@ -16,3 +16,5 @@ describe('service is available', function() {
   });
 
 });
+
+export {}
