@@ -20,7 +20,7 @@ const initialState = {
   data: []
 };
   
-const ingredientReducer = (state = initialState, action: TIngredientActions) => {
+export const ingredientReducer = (state = initialState, action: TIngredientActions) => {
   switch (action.type) {
     case GET_INGREDIENTS: {
       return {

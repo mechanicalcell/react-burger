@@ -151,7 +151,7 @@ return (
       <p className={`${styles.text_ingredient_container} text text_type_digits-medium mr-2`}>{totalPrice}</p>    
       <p className='mr-10'><CurrencyIcon type="primary" /></p>
       <Button onClick={onClick} type="primary" size="medium" >
-        Оформить заказ 
+        <p data-cy='orderButtonTest'>Оформить заказ</p> 
       </Button>
     </div>
   </div>  

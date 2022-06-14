@@ -7,7 +7,7 @@ export default function OrderDetails() {
   return (
     <div> 
       <p className={`${styles.order_number} mt-4`}>{orderNumber}</p>
-      <p className={`${styles.order_id_text} text text_type_main-medium mt-8`}>идентификатор заказа</p>  
+      <p data-cy="orderModalText" className={`${styles.order_id_text} text text_type_main-medium mt-8`}>идентификатор заказа</p>  
       <div className={`${styles.order_icon} mt-15`}>
         <CheckMarkIcon type="primary" />
       </div>
