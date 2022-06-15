@@ -116,9 +116,9 @@ const onClick = useCallback<TonClick>(() => {
 return (
   <div className={`${styles.right_section} ml-10 pt-25`}>
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      <div ref={bunDropTarget} className='ml-10' style={{ border: '2px solid #4C4CFF',
-                                                          height: '80px',
-                                                          borderColor }}>
+      <div ref={bunDropTarget} data-cy="bunContainer" className='ml-10' style={{ border: '2px solid #4C4CFF',
+                                                             height: '80px',
+                                                             borderColor }}>
         {newArrBun.map((item: TingredientPropTypes) => item.type === 'bun' && 
         <ConstructorElement
           key={item._id}

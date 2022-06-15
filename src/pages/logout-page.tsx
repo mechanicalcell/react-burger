@@ -17,7 +17,7 @@ export function LogoutPage() {
   const accessToken = getCookie('token');
 
   useEffect(() => {
-    if (path === '/logout' && getResult.user.email !== null) {
+    if (path === '/logout' && (getResult.user.email !== null || getResult.user.email)) {
       dispatch(getProfileResult(accessToken, refreshToken))
       dispatch(userLogout(refreshToken))
       localStorage.removeItem('token'); 

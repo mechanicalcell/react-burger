@@ -18,7 +18,7 @@ export const socketMiddleware = (wsUrl: string, wsActions: {
       const { loginResult } = getState().login; 
       const { getResult } = getState().profile; 
 
-      if (type === wsInit && (loginResult.success || getResult.success)) {
+      if (type === wsInit) {
         socket = new WebSocket(`${wsUrl}${payload}`);
       }
       if (socket) {

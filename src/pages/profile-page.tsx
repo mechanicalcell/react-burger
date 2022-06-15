@@ -118,7 +118,7 @@ export function ProfilePage() {
   }
   useEffect(() => {
     if (getResult.user.name === null || getResult.user.email === null) {  
-      dispatch(getProfileResult(accessToken, refreshToken))
+      dispatch(getProfileResult(getCookie('token'), localStorage.getItem('token')))
     }  
   }, [dispatch, accessToken, refreshToken, getResult.user.name, getResult.user.email])
   useEffect(() => {

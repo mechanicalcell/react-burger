@@ -68,12 +68,12 @@ const { getResult } = useSelector((store: any) => store.profile);
 const { loginResult } = useSelector((store: any) => store.login);
 const dispatch = useDispatch()
 useEffect(() => {
-if (path === '/feed' &&(getResult.success || loginResult.success)) {
+if (path === '/feed') {
   dispatch({type: WS_CONNECTION_START, payload: 'orders/all'})
 } else {
     dispatch({type: WS_CONNECTION_CLOSED})
 }
-}, [dispatch, getResult, loginResult]);
+}, [dispatch]);
 const { orders, wsConnected } = useSelector((store: any) => store.orders);
 
 return (
