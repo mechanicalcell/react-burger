@@ -3,7 +3,7 @@
 Учебный проект. React TypeScript
 
 
-[Ссылка на проект](https://mechanicell.github.io/react-burger/)
+[Ссылка на проект: https://mechanicell.github.io/react-burger/](https://mechanicell.github.io/react-burger/)
 
 
 ## Запуск и сборка приложения
