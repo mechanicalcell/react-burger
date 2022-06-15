@@ -130,6 +130,7 @@ return (
         />)} 
       </div>     
       <div ref={ingredientDropTarget} 
+           data-cy="ingredientContainer"
            style={{ borderColor }} 
            className={styles.over_flow_container_BC}>
         {newArrBurgerConstructor.map((item: TingredientPropTypes, index: number) => item.type !== 'bun' &&

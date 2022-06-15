@@ -14,6 +14,8 @@ describe('service is available', function() {
     cy.get('[data-cy="orderButtonTest"]').contains('Оформить заказ').click();
     cy.get('[data-cy="orderModalText"]').contains('идентификатор').should('exist');
     cy.get('[data-cy="modalClose"]').click()
+    cy.get('[data-cy="ingredient"]').eq(2).trigger('dragstart');
+    cy.get('[data-cy="ingredientContainer"]').trigger('drop');
   });
 
 });

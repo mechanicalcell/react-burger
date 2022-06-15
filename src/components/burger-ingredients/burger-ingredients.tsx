@@ -38,6 +38,7 @@ return (
              state: { background: location } 
            }} 
            ref={dragRef} 
+           data-cy="ingredient"
            onClick={onClick} 
            className={`${styles.ingredients} mb-8`}>
       {count[index] > 0 && (<Counter count={count[index]} size="default" />)} 
@@ -80,6 +81,7 @@ return (
              state: { background: location }
            }} 
            ref={dragRef} 
+           data-cy="bun"
            onClick={onClick} 
            className={`${styles.ingredients} mb-8`}>
       {count[index] > 0 && (<Counter count={count[index]} size="default" />)}
