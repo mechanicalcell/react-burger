@@ -1,7 +1,6 @@
 import styles from '../feed-details/feed-details.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useRouteMatch } from 'react-router-dom';
-import { TingredientPropTypes } from '../utils/types';
+import { useParams } from 'react-router-dom';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,10 +9,8 @@ import { WS_CONNECTION_CLOSED, WS_CONNECTION_START } from '../../services/action
 import { getCookie } from '../utils/cookie';
 
 const OrderDetails: FC<any> = ({ item }) => {
-const { orders, wsConnected } = useSelector((store: any) => store.orders);
 const { data } = useSelector((store: any) => store.data);
 const orderIngredients = data.filter((i: any) => item.ingredients.includes(i._id))
-const sumIngredients = orderIngredients.map((i: any) => i.price).reduce((sum: number, item: number ) => sum += item,0)
 
 return (orderIngredients.map((i: any) => 
   <div key={uuidv4()} className={styles.feed_details_sum_icon_container}>
@@ -28,9 +25,8 @@ return (orderIngredients.map((i: any) =>
 }  
 
 export default function OrdersDetails() {
-    const dispatch = useDispatch() 
-    const { path } = useRouteMatch();
-    const { getResult } = useSelector((store: any) => store.profile);
+const dispatch = useDispatch() 
+const { getResult } = useSelector((store: any) => store.profile);
 const { loginResult } = useSelector((store: any) => store.login);
    
 useEffect(() => {
@@ -41,7 +37,7 @@ if ((getResult.success || loginResult.success)) {
 }
 }, [dispatch, getResult, loginResult]);
 const { data } = useSelector((store: any) => store.data)  
-const { orders, wsConnected } = useSelector((store: any) => store.orders);    
+const { orders } = useSelector((store: any) => store.orders);    
 const { id } = useParams<{id: string}>()  
 
 return (<div>{

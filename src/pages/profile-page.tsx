@@ -1,6 +1,6 @@
 import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
-import { getProfileEmailInputAction, getProfileNameInputAction, getProfilePasswordInputAction, patchProfileResult, TOKEN_NULL } from '../services/actions/get-patch';
+import { getProfileEmailInputAction, getProfileNameInputAction, getProfilePasswordInputAction, patchProfileResult } from '../services/actions/get-patch';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
@@ -109,23 +109,22 @@ export function ProfilePage() {
           profilePasswordInput,
           getResult, 
           patchResult } = useSelector((store: any) => store.profile);  
-  const accessToken = getCookie('token');
-  const refreshToken = localStorage.getItem('token')
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
-    dispatch(getProfileResult(accessToken, refreshToken))
-    dispatch(patchProfileResult(accessToken, profileNameInput, profileEmailInput, profilePasswordInput))
+    dispatch(getProfileResult(getCookie('token'), getCookie('refreshToken')))
+    dispatch(patchProfileResult(getCookie('token'), profileNameInput, profileEmailInput, profilePasswordInput))
   }
+
   useEffect(() => {
     if (getResult.user.name === null || getResult.user.email === null) {  
-      dispatch(getProfileResult(getCookie('token'), localStorage.getItem('token')))
+      dispatch(getProfileResult(getCookie('token'), getCookie('refreshToken')))
     }  
-  }, [dispatch, accessToken, refreshToken, getResult.user.name, getResult.user.email])
+  }, [dispatch, getResult, getResult.user.name, getResult.user.email])
   useEffect(() => {
     if (patchResult.success) {  
-      dispatch(getProfileResult(accessToken, refreshToken))
+      dispatch(getProfileResult(getCookie('token'), getCookie('refreshToken')))
     }  
-  }, [dispatch, patchResult.success, accessToken, refreshToken])
+  }, [dispatch, patchResult.success])
   return (
     <div>
       <div className={styles.profile_container}>

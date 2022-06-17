@@ -96,7 +96,7 @@ const res = await fetch(`${baseUrl}auth/user`, {
     'Content-type': 'application/json',
     Authorization: `Bearer ${accessToken}`
   },
-})
+}) 
 return res.json()
 }
 

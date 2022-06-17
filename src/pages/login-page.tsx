@@ -84,10 +84,10 @@ export function LoginPage() {
   [ dispatch, loginEmailInput, loginPasswordInput]
   ); 
   useEffect(() => {
-      if (!logoutResult.success && (loginResult['success'] || getResult.user.email)) { 
+      if (!logoutResult.success && (loginResult['success'] || !!getResult.user.email)) { 
         history.replace({ pathname: location.state ? (location.state.from.pathname) : ('/')})
       }
-  }, [loginResult['success'], getResult.user.email, history, location.state])
+  }, [loginResult, getResult.user.email, logoutResult.success, history, location.state])
 
   return (
     <div className={styles.login_container}>

@@ -2,6 +2,7 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { ILocation } from '../components/modal-switch/modal-switch-types';
 import { getCookie } from '../components/utils/cookie';
 import { WS_CONNECTION_CLOSED, WS_CONNECTION_START } from '../services/action-types';
 import { convertDate } from './feed-page';
@@ -12,13 +13,14 @@ export function ProfileOrders() {
     const profileStyle = path === '/profile' ? 'text text_type_main-large' : 'text text_type_main-large text_color_inactive'
     const orderHistoryStyle = path === '/profile/orders' || path === '/profile/orders:id' ? 'text text_type_main-large' : 'text text_type_main-large text_color_inactive'
     const logoutStyle = path === '/logout' ? 'text text_type_main-large' : 'text text_type_main-large text_color_inactive'  
-  
+    let location = useLocation<ILocation>()
+
   return (
     <div className={`${styles.profile_order_container}`}>
-      <NavLink to={{ pathname: `/profile` }} className={profileStyle}> 
+      <NavLink to={{ pathname: `/profile`, state: { background: location } }} className={profileStyle}> 
         <p className="text text_type_main-medium">Профиль</p> 
       </NavLink>
-      <NavLink to={{ pathname: `/profile/orders` }} className={`${orderHistoryStyle} mt-6`}> 
+      <NavLink to={{ pathname: `/profile/orders`, state: { background: location } }} className={`${orderHistoryStyle} mt-6`}> 
         <p className="text text_type_main-medium">История заказов</p>  
       </NavLink>
       <NavLink to={{ pathname: `/logout` }} className={`${logoutStyle} mt-6`}> 
@@ -29,9 +31,10 @@ export function ProfileOrders() {
 } 
 
 const UserOrder: FC<any> = ({ item, onOpen }) => {
+const { ordersModalVisible } = useSelector((store: any) => store.order);  
 const history = useHistory();
 const location = useLocation() 
-const { orders, wsConnected } = useSelector((store: any) => store.orders);
+const { orders } = useSelector((store: any) => store.orders);
 const { data } = useSelector((store: any) => store.data);
 const orderIngredients = data.filter((i: any) => item.ingredients.includes(i._id))
 const sumIngredients = orderIngredients.map((i: any) => i.price).reduce((sum: number, item: number ) => sum += item,0)
@@ -39,6 +42,13 @@ const onClick = () => {
   history.push({ pathname: `/profile/orders/${item._id}` });
   onOpen();
 }
+
+useEffect(() => {
+  if (!ordersModalVisible) {
+    history.push({ pathname: `/profile/orders` })
+  }
+}, [ordersModalVisible, history]);
+
 
 return orders.success && (
 <Link to={{
@@ -72,13 +82,13 @@ const { getResult } = useSelector((store: any) => store.profile);
 const { loginResult } = useSelector((store: any) => store.login);
 const dispatch = useDispatch()
 useEffect(() => {
-if (getResult.success || loginResult.success) {
+if (path === '/profile/orders') {
   dispatch({type: WS_CONNECTION_START, payload: `orders?token=${getCookie('token')}`})
 } else {
     dispatch({type: WS_CONNECTION_CLOSED})
 }
-}, [dispatch, getResult, loginResult]);
-const { orders, wsConnected } = useSelector((store: any) => store.orders);
+}, [dispatch, getResult, loginResult, path]);
+const { orders } = useSelector((store: any) => store.orders);
 
 return (
 <div>

@@ -1,11 +1,13 @@
-import { DELETE_ORDER_NUMBER, INGREDIENT_IS_VISIBLE, ORDER_IS_VISIBLE, ORDER_NUMBER_REQUEST, ORDER_TOTAL_PRICE, TOrderActions } from "../actions/order";
+import { DELETE_ORDER_NUMBER, FEED_IS_VISIBLE, INGREDIENT_IS_VISIBLE, ORDERS_IS_VISIBLE, ORDER_IS_VISIBLE, ORDER_NUMBER_REQUEST, ORDER_TOTAL_PRICE, TOrderActions } from "../actions/order";
 import { orderReducer } from "./order";
 
 const initialState = {
   orderNumber: null,
   orderTotalPrice: 0,
   ingredientModalVisible: true,
-  orderModalVisible: false  
+  feedModalVisible: true,
+  orderModalVisible: false,
+  ordersModalVisible: true    
 };
     
 describe('newpassword reducer', () => {
@@ -58,6 +60,18 @@ describe('newpassword reducer', () => {
     expect(orderReducer(initialState, action)).toEqual(expectedState)
   })
 
+  it('should handle FEED_IS_VISIBLE', () => {
+    const action = {
+        type: FEED_IS_VISIBLE,
+        feedModalVisible: false || true
+      }  
+    const expectedState = {
+        ...initialState, 
+        feedModalVisible: action.feedModalVisible
+    }  
+    expect(orderReducer(initialState, action)).toEqual(expectedState)
+  })
+
   it('should handle ORDER_IS_VISIBLE', () => {
     const action = {
         type: ORDER_IS_VISIBLE,
@@ -66,6 +80,18 @@ describe('newpassword reducer', () => {
     const expectedState = {
         ...initialState, 
         orderModalVisible: action.orderModalVisible
+    }  
+    expect(orderReducer(initialState, action)).toEqual(expectedState)
+  })
+
+  it('should handle ORDERS_IS_VISIBLE', () => {
+    const action = {
+        type: ORDERS_IS_VISIBLE,
+        ordersModalVisible: false || true
+      }  
+    const expectedState = {
+        ...initialState, 
+        ordersModalVisible: action.ordersModalVisible
     }  
     expect(orderReducer(initialState, action)).toEqual(expectedState)
   })

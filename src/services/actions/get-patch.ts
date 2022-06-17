@@ -3,6 +3,7 @@ import { getUserDataRequest,
          patchUserDataRequest } from "../api";
 import { AppDispatch, AppThunk } from "../..";
 import { tokenRefreshAction } from "./login";
+import { getCookie } from "../../components/utils/cookie";
 
 export const PROFILE_NAME_INPUT: 'PROFILE_NAME_INPUT' = 'PROFILE_NAME_INPUT';
 export const PROFILE_EMAIL_INPUT: 'PROFILE_EMAIL_INPUT' = 'PROFILE_EMAIL_INPUT';
@@ -118,7 +119,7 @@ export const getProfileResult: AppThunk = (accessToken: string, refreshToken: st
       const r = await Promise.resolve(res)
       if (r.success) {
         dispatch(getProfileResultAction(r));
-      } else {
+      } else { 
         return await Promise.reject(r);
         }
     } catch(r: any) {
@@ -126,7 +127,7 @@ export const getProfileResult: AppThunk = (accessToken: string, refreshToken: st
            r.message === 'Token is invalid') { 
         dispatch(tokenNullAction())
         try {  
-          const res = await tokenRefreshRequest(refreshToken)
+          const res = await tokenRefreshRequest(getCookie('refreshToken'))
           const r = await Promise.resolve(res)
           if (r.success) {
             dispatch(tokenRefreshAction(r.success, r.accessToken, r.refreshToken))

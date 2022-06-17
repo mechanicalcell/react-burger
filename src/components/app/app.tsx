@@ -2,25 +2,20 @@ import { useEffect } from 'react';
 import AppHeader from '../app-header/app-header';
 import { useDispatch } from 'react-redux';
 import { getItems } from '../../services/actions';
-import { orderTotalPriceAction, ORDER_TOTAL_PRICE } from '../../services/actions/order';
+import { orderTotalPriceAction } from '../../services/actions/order';
 import { useSelector } from 'react-redux';
-import { BrowserRouter as Router, useRouteMatch } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { getCookie, setCookie } from '../utils/cookie';
-import { getProfileResult, userResetAction, USER_RESET } from '../../services/actions/get-patch';
+import { getProfileResult, userResetAction } from '../../services/actions/get-patch';
 import { ModalSwitch } from '../modal-switch/modal-switch';
-
-const refreshToken = localStorage.getItem('token')
-const accessToken = getCookie('token');
 
 function App() {
 const dispatch = useDispatch();
 const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
 const { loginResult, logoutResult } = useSelector((store: any) => store.login);
-const { getResult,
-        patchResult } = useSelector((store: any) => store.profile);  
 
-if (loginResult.refreshToken) {
-  localStorage.setItem('token', loginResult.refreshToken);
+if (!!loginResult.refreshToken) {
+  setCookie('refreshToken', loginResult.refreshToken)
   setCookie('token', loginResult.accessToken.split('Bearer ')[1])
 } 
 
@@ -31,8 +26,8 @@ if (logoutResult.success) {
 }, [dispatch, logoutResult]);
 
 useEffect(() => {
-  dispatch(getProfileResult(accessToken, refreshToken)) 
-}, [dispatch, getProfileResult, accessToken, refreshToken]);
+  dispatch(getProfileResult(getCookie('token'), getCookie('refreshToken')))
+}, [dispatch]);
 
 useEffect(() => {
   const setPrice = () => {
@@ -41,7 +36,7 @@ useEffect(() => {
     dispatch(orderTotalPriceAction(sum))
   }
   setPrice();
-}, [newArrBurgerConstructor, newArrBun])
+}, [newArrBurgerConstructor, newArrBun, dispatch])
 
 useEffect(() => {
   dispatch(getItems());

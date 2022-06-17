@@ -1,4 +1,4 @@
-import React, { FC, RefObject, SyntheticEvent } from "react"
+import React, { FC, RefObject, useEffect } from "react"
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-ingredients.module.css';
@@ -66,7 +66,7 @@ const [{isDrag},dragRef] = useDrag<{item: TingredientPropTypes}, void, {isDrag: 
 const dispatch = useDispatch(); 
 const onClick = () => {
   dispatch(ingredientIdCopyAction(item))
-  history.replace({ pathname: `/ingredients/${item._id}` })
+  history.push({ pathname: `/ingredients/${item._id}` })
   onOpen();
 }
 const image = (
@@ -96,7 +96,9 @@ return (
 }  
   
 export default function BurgerIngredients({ onOpen }: { onOpen: () => void }) {
-  
+
+const { ingredientModalVisible } = useSelector((store: any) => store.order);    
+const history = useHistory();
 const { data } = useSelector((store: any) => store.data);
 const [current, setCurrent] = React.useState('bun');
 const [textColor, setTextColor] = React.useState({
@@ -138,6 +140,12 @@ const getDomRect = () => {
     setCurrent('main')
   }
 } 
+
+useEffect(() => {
+  if (!ingredientModalVisible) {
+    history.push({ pathname: `/` })
+  }
+}, [ingredientModalVisible, history]);
 
 return (
   <div className={styles.left_section}>

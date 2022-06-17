@@ -2,7 +2,9 @@ import { ORDER_NUMBER_REQUEST,
     DELETE_ORDER_NUMBER,
     ORDER_TOTAL_PRICE,
     INGREDIENT_IS_VISIBLE,
+    FEED_IS_VISIBLE,
     ORDER_IS_VISIBLE,
+    ORDERS_IS_VISIBLE,
     TOrderActions
 } from '../actions/order';
 
@@ -10,7 +12,9 @@ const initialState = {
 orderNumber: null,
 orderTotalPrice: 0,
 ingredientModalVisible: true,
-orderModalVisible: false  
+feedModalVisible: true,
+orderModalVisible: false,
+ordersModalVisible: true  
 };
 
 export const orderReducer = (state = initialState, action: TOrderActions) => {
@@ -39,10 +43,22 @@ case INGREDIENT_IS_VISIBLE: {
    ingredientModalVisible: action.ingredientModalVisible
  };
 }
+case FEED_IS_VISIBLE: {
+ return {
+   ...state,
+   feedModalVisible: action.feedModalVisible
+ };
+}
 case ORDER_IS_VISIBLE: {
  return {
    ...state,
    orderModalVisible: action.orderModalVisible
+ };
+}
+case ORDERS_IS_VISIBLE: {
+ return {
+   ...state,
+   ordersModalVisible: action.ordersModalVisible
  };
 }
 default: {

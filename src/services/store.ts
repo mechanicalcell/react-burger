@@ -10,7 +10,6 @@ import {
   WS_GET_MESSAGE,
   WS_SEND_MESSAGE
 } from './action-types';
-import { getUserDataRequest } from './api';
 
 const wsUrl = 'wss://norma.nomoreparties.space/';
 

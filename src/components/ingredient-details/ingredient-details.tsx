@@ -5,8 +5,9 @@ import { TingredientPropTypes } from '../utils/types';
 
 export default function IngredientDetails() {
 const { id } = useParams<{id: string}>()  
-const { data } = useSelector((store: any) => store.data)  
-return (data.filter((item: TingredientPropTypes) => item._id === id).map((item: TingredientPropTypes) => 
+const { data, isLoading } = useSelector((store: any) => store.data) 
+
+return (!isLoading && data.filter((item: TingredientPropTypes) => item._id === id).map((item: TingredientPropTypes) => 
   (<div key={item._id} className={styles.ingredient_details_box}> 
     <div className={styles.img_box}> 
       <img src={item.image} alt={item.name} />

@@ -45,7 +45,7 @@ export interface IResetUserAction {
 
 export interface ITokenRefreshAction {
   readonly type: typeof TOKEN_REFRESH;
-  "success": boolean,
+  "success": boolean | null,
   "accessToken": string | null,
   "refreshToken": string | null
 }
@@ -86,7 +86,7 @@ export const resetUserAction = (logoutResult: {
   logoutResult
 });
 
-export const tokenRefreshAction = (success: boolean, accessToken: string, refreshToken: string): ITokenRefreshAction => ({
+export const tokenRefreshAction = (success: boolean | null, accessToken: string | null, refreshToken: string | null): ITokenRefreshAction => ({
   type: TOKEN_REFRESH,
   success,
   accessToken,
