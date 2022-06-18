@@ -8,7 +8,14 @@ import { ORDER_NUMBER_REQUEST,
     TOrderActions
 } from '../actions/order';
 
-const initialState = {
+const initialState: {
+  orderNumber: number | null,
+  orderTotalPrice: number,
+  ingredientModalVisible: boolean,
+  feedModalVisible: boolean,
+  orderModalVisible: boolean,
+  ordersModalVisible: boolean  
+  } = {
 orderNumber: null,
 orderTotalPrice: 0,
 ingredientModalVisible: true,

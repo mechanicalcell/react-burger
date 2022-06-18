@@ -1,9 +1,9 @@
 import styles from './order-details.module.css';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../..';
 
 export default function OrderDetails() {
-  const { orderNumber } = useSelector((store: any) => store.order)
+  const { orderNumber } = useAppSelector(store => store.order)
   return (
     <div> 
       <p className={`${styles.order_number} mt-4`}>{orderNumber}</p>

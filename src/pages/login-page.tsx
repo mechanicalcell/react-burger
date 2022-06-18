@@ -1,9 +1,9 @@
 import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { Link, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '..';
+import { useAppSelector } from '..';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
 import { getLoginEmailInputAction, getLoginPasswordInputAction, userLogin } from '../services/actions/login';
@@ -11,7 +11,7 @@ import styles from './page-container.module.css';
 import { ILoginPage } from './login-page-types';        
 
 function LoginEmailInput() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
@@ -40,7 +40,7 @@ function LoginEmailInput() {
 } 
 
 function LoginPasswordInput() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
@@ -70,13 +70,13 @@ function LoginPasswordInput() {
 
 export function LoginPage() {
   const location = useLocation<ILoginPage>()
-  const dispatch = useDispatch();    
+  const dispatch = useAppDispatch();    
   const history = useHistory(); 
-  const { getResult } = useSelector((store: any) => store.profile);    
+  const { getResult } = useAppSelector(store => store.profile);    
   const { loginEmailInput,
           loginPasswordInput,
           loginResult,
-          logoutResult } = useSelector((store: any) => store.login);  
+          logoutResult } = useAppSelector(store => store.login);  
   const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()
     dispatch(userLogin(loginEmailInput, loginPasswordInput))

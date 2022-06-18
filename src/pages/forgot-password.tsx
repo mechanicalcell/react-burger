@@ -2,17 +2,16 @@ import React, { FormEvent } from 'react';
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { Link } from 'react-router-dom';
 import { getPasswordReset } from '../services/actions/password-reset';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import styles from './page-container.module.css';
+import { useAppDispatch, useAppSelector } from '..';
 
 export function ForgotPasswordPage() {
-  const { passwordResetResult } = useSelector((store: any) => store.reset) 
+  const { passwordResetResult } = useAppSelector(store => store.reset) 
   const history = useHistory();   
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)

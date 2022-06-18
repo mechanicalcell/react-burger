@@ -13,7 +13,6 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { ProtectedRoute } from '../protected-route/protected-route';
-import { useDispatch, useSelector } from 'react-redux';
 import styles from '../app/app.module.css';
 import { deleteOrderNumberAction, feedIsVisibleAction, getOrder, ingredientIsVisibleAction, orderIsVisibleAction, ordersIsVisibleAction } from '../../services/actions/order';
 import { deleteBurgerConstructorAction, deleteIngredientDetailAction, deleteIngredientsAction, moveBunsAction, moveIngredientsAction } from '../../services/actions/copy-arr';
@@ -27,11 +26,12 @@ import FeedDetailsPage from '../../pages/feed-details-page';
 import FeedDetails from '../feed-details/feed-details';
 import OrdersDetailsPage from '../../pages/orders-details-page';
 import OrdersDetails from '../orders-details/orders-details';
+import { useAppDispatch, useAppSelector } from '../..';
 
 export function ModalSwitch() {
-const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
-const { ingredientModalVisible, ordersModalVisible, feedModalVisible, orderModalVisible } = useSelector((store: any) => store.order);
-const dispatch = useDispatch();
+const { newArrBurgerConstructor, newArrBun } = useAppSelector(store => store.isNewArr);
+const { ingredientModalVisible, ordersModalVisible, feedModalVisible, orderModalVisible } = useAppSelector(store => store.order);
+const dispatch = useAppDispatch();
 
 const ingredientModal = (
   <Modal header="Детали ингредиента" onClose={handleCloseModal}> 
@@ -120,7 +120,7 @@ const deleteIngredient = (item: TingredientPropTypes , index: number) => {
   dispatch(countIngredientDownAction(index))
 };
 
-const { orderTotalPrice } = useSelector((store: any) => store.order);    
+const { orderTotalPrice } = useAppSelector(store => store.order);    
   let location = useLocation<ILocation>()
   let background = location.state && location.state.background;
   return (

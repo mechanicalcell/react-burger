@@ -1,14 +1,14 @@
 import styles from '../feed-details/feed-details.module.css';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useRouteMatch } from 'react-router-dom';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { convertDate } from '../../pages/feed-page';
 import { WS_CONNECTION_CLOSED, WS_CONNECTION_START } from '../../services/action-types';
+import { useAppDispatch, useAppSelector } from '../..';
 
-const FeedOrderDetails: FC<any> = ({ item }) => {
-const { data } = useSelector((store: any) => store.data);
+const FeedOrderDetails: FC<any> = ({ item }): any => {
+const { data } = useAppSelector(store => store.data);
 const orderIngredients = data.filter((i: any) => item.ingredients.includes(i._id))
 
 return (orderIngredients.map((i: any) => 
@@ -24,13 +24,13 @@ return (orderIngredients.map((i: any) =>
 }  
 
 export default function FeedDetails() {
-const dispatch = useDispatch() 
+const dispatch = useAppDispatch() 
 const { path } = useRouteMatch();
-const { getResult } = useSelector((store: any) => store.profile);
-const { loginResult } = useSelector((store: any) => store.login);
+const { getResult } = useAppSelector(store => store.profile);
+const { loginResult } = useAppSelector(store => store.login);
 const { id } = useParams<{id: string}>()  
-const { data } = useSelector((store: any) => store.data)  
-const { orders } = useSelector((store: any) => store.orders);    
+const { data } = useAppSelector(store => store.data)  
+const { orders } = useAppSelector(store => store.orders);    
 
 useEffect(() => {
 if (getResult.success || loginResult.success) {

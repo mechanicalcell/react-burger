@@ -1,7 +1,7 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "..";
 import { WS_CONNECTION_CLOSED, WS_CONNECTION_START } from "../services/action-types";
 import styles from './page-container.module.css';
 
@@ -27,10 +27,10 @@ export const convertDate = (date: string): string => {
 const Order: FC<any> = ({ item, onOpen }) => {
 const history = useHistory();
 const location = useLocation() 
-const { data } = useSelector((store: any) => store.data);
+const { data } = useAppSelector(store => store.data);
 const orderIngredients = data.filter((i: any) => item.ingredients.includes(i._id))
 const sumIngredients = orderIngredients.map((i: any) => i.price).reduce((sum: number, item: number ) => sum += item,0)
-const { feedModalVisible } = useSelector((store: any) => store.order);
+const { feedModalVisible } = useAppSelector(store => store.order);
 const onClick = () => {
   history.push({ pathname: `/feed/${item._id}` })
   onOpen()
@@ -69,8 +69,8 @@ return (
   
 const FeedPage: FC<any> = ({onOpen}) => {
 const { path } = useRouteMatch();
-const dispatch = useDispatch()
-const { orders } = useSelector((store: any) => store.orders);
+const dispatch = useAppDispatch()
+const { orders } = useAppSelector(store => store.orders);
 
 useEffect(() => {
 if (path === '/feed') {

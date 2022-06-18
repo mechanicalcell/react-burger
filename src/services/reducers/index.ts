@@ -13,8 +13,12 @@ import { GET_INGREDIENTS,
          TIngredientActions
 } from '../actions/index';
 import { wsReducer } from '../ws-reducer';
+import { TingredientPropTypes } from '../../components/utils/types';
 
-const initialState = {
+const initialState: { isLoading: boolean,
+                      hasError: boolean,
+                      data: Array<TingredientPropTypes> 
+                    } = {
   isLoading: false,
   hasError: false,
   data: []

@@ -2,15 +2,15 @@ import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { Link } from 'react-router-dom';
 import { registerEmailInputAction, registerNameInputAction, registerPasswordInputAction, userRegistration } from '../services/actions/user-registration';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
 import styles from './page-container.module.css';
+import { useAppDispatch } from '..';
+import { useAppSelector } from '..';
 
 function RegisterNameInput() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
@@ -39,7 +39,7 @@ function RegisterNameInput() {
 } 
   
 function RegisterEmailInput() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
@@ -68,7 +68,7 @@ function RegisterEmailInput() {
 } 
 
 function RegisterPasswordInput() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
@@ -97,12 +97,12 @@ function RegisterPasswordInput() {
 } 
     
 export function RegisterPage() {
-  const dispatch = useDispatch();    
+  const dispatch = useAppDispatch();    
   const history = useHistory();
   const { registerNameInput, 
           registerEmailInput,
           registerPasswordInput,
-          registrationResult } = useSelector((store: any) => store.register);  
+          registrationResult } = useAppSelector(store => store.register);  
   const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()
     dispatch(userRegistration(registerNameInput, registerEmailInput, registerPasswordInput))

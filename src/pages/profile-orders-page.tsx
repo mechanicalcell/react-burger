@@ -1,7 +1,7 @@
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '..';
 import { ILocation } from '../components/modal-switch/modal-switch-types';
 import { getCookie } from '../components/utils/cookie';
 import { WS_CONNECTION_CLOSED, WS_CONNECTION_START } from '../services/action-types';
@@ -31,11 +31,11 @@ export function ProfileOrders() {
 } 
 
 const UserOrder: FC<any> = ({ item, onOpen }) => {
-const { ordersModalVisible } = useSelector((store: any) => store.order);  
+const { ordersModalVisible } = useAppSelector(store => store.order);  
 const history = useHistory();
 const location = useLocation() 
-const { orders } = useSelector((store: any) => store.orders);
-const { data } = useSelector((store: any) => store.data);
+const { orders } = useAppSelector(store => store.orders);
+const { data } = useAppSelector(store => store.data);
 const orderIngredients = data.filter((i: any) => item.ingredients.includes(i._id))
 const sumIngredients = orderIngredients.map((i: any) => i.price).reduce((sum: number, item: number ) => sum += item,0)
 const onClick = () => {
@@ -78,9 +78,9 @@ return orders.success && (
   
 const ProfileOrdersPage: FC<any> = ({onOpen}) => {
 const { path } = useRouteMatch();
-const { getResult } = useSelector((store: any) => store.profile);
-const { loginResult } = useSelector((store: any) => store.login);
-const dispatch = useDispatch()
+const { getResult } = useAppSelector(store => store.profile);
+const { loginResult } = useAppSelector(store => store.login);
+const dispatch = useAppDispatch()
 useEffect(() => {
 if (path === '/profile/orders') {
   dispatch({type: WS_CONNECTION_START, payload: `orders?token=${getCookie('token')}`})
@@ -88,7 +88,7 @@ if (path === '/profile/orders') {
     dispatch({type: WS_CONNECTION_CLOSED})
 }
 }, [dispatch, getResult, loginResult, path]);
-const { orders } = useSelector((store: any) => store.orders);
+const { orders } = useAppSelector(store => store.orders);
 
 return (
 <div>

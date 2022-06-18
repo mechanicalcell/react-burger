@@ -101,7 +101,7 @@ export type TLoginActions =
   | ITokenRefreshAction;
 
 export const userLogin: AppThunk = (email: string, password: string) => { 
-  return async function(dispatch: AppDispatch) {
+  return async function(dispatch: AppDispatch | AppThunk) {
     try {  
     const res = await loginRequest(email, password)
     const r = await Promise.resolve(res)
@@ -116,8 +116,8 @@ export const userLogin: AppThunk = (email: string, password: string) => {
   };
 }
 
-export const userLogout: AppThunk = (refreshToken: string | null) => { 
-  return async function(dispatch: AppDispatch) {
+export const userLogout: AppThunk = (refreshToken: string ) => { 
+  return async function(dispatch: AppDispatch | AppThunk) {
     try {
       const res = await logoutRequest(refreshToken) 
       const r = await Promise.resolve(res)

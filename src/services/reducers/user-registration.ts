@@ -5,7 +5,17 @@ import { USER_REGISTRATION,
          TUserRegistrationActions
 } from '../actions/user-registration';
 
-const initialState = {
+const initialState: {
+  registrationResult: {
+    "success": boolean | null,
+    "user": {},
+    "accessToken": string | null,
+    "refreshToken": string | null
+  } ,
+  registerNameInput: string,
+  registerEmailInput: string,
+  registerPasswordInput: string
+} = {
   registrationResult: {
     "success": null,
     "user": {},

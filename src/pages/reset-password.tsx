@@ -1,16 +1,15 @@
 import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { codeInputAction, getNewPassword, newPasswordInputAction } from '../services/actions/new-password';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './page-container.module.css';
+import { useAppDispatch, useAppSelector } from '..';
 
 function PasswordInput() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
@@ -39,7 +38,7 @@ function PasswordInput() {
 } 
 
 function CodeInput() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
@@ -68,9 +67,9 @@ function CodeInput() {
 } 
   
 export function ResetPasswordPage() {
-  const dispatch = useDispatch();  
-  const { newPasswordInput, codeInput, newPassword } = useSelector((store: any) => store.newPassword);
-  const { passwordResetResult } = useSelector((store: any) => store.reset) 
+  const dispatch = useAppDispatch();  
+  const { newPasswordInput, codeInput, newPassword } = useAppSelector(store => store.newPassword);
+  const { passwordResetResult } = useAppSelector(store => store.reset) 
   const history = useHistory();   
   const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()  

@@ -76,7 +76,7 @@ const res = await fetch(`${baseUrl}auth/login`, {
 return res.json()
 }
 
-export const logoutRequest: any = async (refreshToken: string) => {
+export const logoutRequest = async (refreshToken: string) => {
 const res = await fetch(`${baseUrl}auth/logout`, {
   method: 'POST',
   body: JSON.stringify({

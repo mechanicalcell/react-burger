@@ -1,17 +1,16 @@
 import React, { FormEvent, RefObject } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'; 
 import { getProfileEmailInputAction, getProfileNameInputAction, getProfilePasswordInputAction, patchProfileResult } from '../services/actions/get-patch';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { NavLink, useRouteMatch } from 'react-router-dom';
 import { getProfileResult } from '../services/actions/get-patch';
 import { getCookie } from '../components/utils/cookie';
 import styles from './page-container.module.css';
+import { useAppDispatch, useAppSelector } from '..';
 
 function ProfileNameInput() {
-  const dispatch = useDispatch();
-  const { getResult } = useSelector((store: any) => store.profile);  
+  const dispatch = useAppDispatch();
+  const { getResult } = useAppSelector(store => store.profile);  
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
@@ -40,8 +39,8 @@ function ProfileNameInput() {
 } 
   
 function ProfileEmailInput() {
-  const dispatch = useDispatch();
-  const { getResult } = useSelector((store: any) => store.profile);  
+  const dispatch = useAppDispatch();
+  const { getResult } = useAppSelector(store => store.profile);  
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
@@ -70,7 +69,7 @@ function ProfileEmailInput() {
 } 
 
 function ProfilePasswordInput() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [value, setValue] = React.useState('')
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value) 
@@ -103,12 +102,12 @@ export function ProfilePage() {
   const profileStyle = path === '/profile' ? 'text text_type_main-large' : 'text text_type_main-large text_color_inactive'
   const orderHistoryStyle = path === '/profile/orders' || path === '/profile/orders:id' ? 'text text_type_main-large' : 'text text_type_main-large text_color_inactive'
   const logoutStyle = path === '/logout' ? 'text text_type_main-large' : 'text text_type_main-large text_color_inactive'  
-  const dispatch = useDispatch();    
+  const dispatch = useAppDispatch();    
   const { profileNameInput, 
           profileEmailInput,
           profilePasswordInput,
           getResult, 
-          patchResult } = useSelector((store: any) => store.profile);  
+          patchResult } = useAppSelector(store => store.profile);  
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
     dispatch(getProfileResult(getCookie('token'), getCookie('refreshToken')))

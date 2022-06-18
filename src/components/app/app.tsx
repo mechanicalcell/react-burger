@@ -1,20 +1,19 @@
 import { useEffect } from 'react';
 import AppHeader from '../app-header/app-header';
-import { useDispatch } from 'react-redux';
 import { getItems } from '../../services/actions';
 import { orderTotalPriceAction } from '../../services/actions/order';
-import { useSelector } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { getCookie, setCookie } from '../utils/cookie';
 import { getProfileResult, userResetAction } from '../../services/actions/get-patch';
 import { ModalSwitch } from '../modal-switch/modal-switch';
+import { useAppDispatch, useAppSelector } from '../..';
 
 function App() {
-const dispatch = useDispatch();
-const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
-const { loginResult, logoutResult } = useSelector((store: any) => store.login);
+const dispatch = useAppDispatch();
+const { newArrBurgerConstructor, newArrBun } = useAppSelector(store => store.isNewArr);
+const { loginResult, logoutResult } = useAppSelector(store => store.login);
 
-if (!!loginResult.refreshToken) {
+if (!!loginResult.refreshToken && loginResult.refreshToken !== null && loginResult.accessToken !== null) {
   setCookie('refreshToken', loginResult.refreshToken)
   setCookie('token', loginResult.accessToken.split('Bearer ')[1])
 } 

@@ -1,13 +1,13 @@
 import styles from '../ingredient-details/ingredient-details.module.css';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { TingredientPropTypes } from '../utils/types';
+import { useAppSelector } from '../..';
 
 export default function IngredientDetails() {
 const { id } = useParams<{id: string}>()  
-const { data, isLoading } = useSelector((store: any) => store.data) 
+const { data } = useAppSelector(store => store.data) 
 
-return (!isLoading && data.filter((item: TingredientPropTypes) => item._id === id).map((item: TingredientPropTypes) => 
+return (<div>{data.filter((item: TingredientPropTypes) => item._id === id).map((item: TingredientPropTypes) => 
   (<div key={item._id} className={styles.ingredient_details_box}> 
     <div className={styles.img_box}> 
       <img src={item.image} alt={item.name} />
@@ -19,7 +19,7 @@ return (!isLoading && data.filter((item: TingredientPropTypes) => item._id === i
       <div className={'text text_type_main-small'}>Жиры,г {item.fat}</div>
       <div className={'text text_type_main-small'}>Углеводы,г {item.carbohydrates}</div>  
     </div>  
-  </div>)) 
+  </div>))}</div> 
 ) 
 }
 

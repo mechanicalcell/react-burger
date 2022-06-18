@@ -4,23 +4,22 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import styles from './burger-ingredients.module.css';
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useRef } from 'react';
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDrag } from "react-dnd";
 import { ingredientIdCopyAction } from "../../services/actions/copy-arr";
 import { TIngredients } from "./burger-ingredients-types";
 import { TingredientPropTypes } from "../utils/types";
+import { useAppDispatch, useAppSelector } from "../..";
 
 const Ingredients: FC<TIngredients> = ({ onOpen, ingrType, item, index }) => {
 const history = useHistory(); 
 const location = useLocation()    
-const { count } = useSelector((store: any) => store.count);
+const { count } = useAppSelector(store => store.count);
 const [,dragRef] = useDrag({
   type: "ingredient",
   item: {item}
 });
-const dispatch = useDispatch(); 
+const dispatch = useAppDispatch(); 
 const onClick = () => {
   dispatch(ingredientIdCopyAction(item))
   history.push({ pathname: `/ingredients/${item._id}` })
@@ -55,7 +54,7 @@ return (
 const Bun: FC<TIngredients> = ({ onOpen, ingrType, item, index }) => {
 const history = useHistory();  
 const location = useLocation()  
-const { count } = useSelector((store: any) => store.count);
+const { count } = useAppSelector(store => store.count);
 const [{isDrag},dragRef] = useDrag<{item: TingredientPropTypes}, void, {isDrag: boolean}>({
   type: "bun",
   item: {item},
@@ -63,7 +62,7 @@ const [{isDrag},dragRef] = useDrag<{item: TingredientPropTypes}, void, {isDrag: 
     isDrag: monitor.isDragging() 
   })      
 });
-const dispatch = useDispatch(); 
+const dispatch = useAppDispatch(); 
 const onClick = () => {
   dispatch(ingredientIdCopyAction(item))
   history.push({ pathname: `/ingredients/${item._id}` })
@@ -97,9 +96,9 @@ return (
   
 export default function BurgerIngredients({ onOpen }: { onOpen: () => void }) {
 
-const { ingredientModalVisible } = useSelector((store: any) => store.order);    
+const { ingredientModalVisible } = useAppSelector(store => store.order);    
 const history = useHistory();
-const { data } = useSelector((store: any) => store.data);
+const { data, isLoading, hasError } = useAppSelector(store => store.data);
 const [current, setCurrent] = React.useState('bun');
 const [textColor, setTextColor] = React.useState({
   bunColor: 'text text_type_main-medium text_color_inactive mb-6',
@@ -164,30 +163,30 @@ return (
     <div onScroll={getDomRect} className={styles.over_flow_container_BI}>
       <p ref={headerBunRef} className={textColor.bunColor} >Булки</p>  
       <div className={`${styles.BI_container} pl-4`}> 
-        {data.isLoading && 'Загрузка...'} 
-        {data.hasError && 'Произошла ошибка'}            
-        {!data.isLoading &&
-        !data.hasError &&
+        {isLoading && 'Загрузка...'} 
+        {hasError && 'Произошла ошибка'}            
+        {!isLoading &&
+        !hasError &&
         !!data.length && 
         data.map((item: TingredientPropTypes, index: number) => item.type ==='bun' &&
         <Bun index={index} key={item._id} onOpen={onOpen} item={item} ingrType='bun' /> )} 
       </div> 
       <p ref={headerSauceRef} className={textColor.sauceColor}>Соусы</p>  
       <div className={`${styles.BI_container} pl-4`}> 
-        {data.isLoading && 'Загрузка...'} 
-        {data.hasError && 'Произошла ошибка'}            
-        {!data.isLoading &&
-        !data.hasError &&
+        {isLoading && 'Загрузка...'} 
+        {hasError && 'Произошла ошибка'}            
+        {!isLoading &&
+        !hasError &&
         !!data.length && 
         data.map((item: TingredientPropTypes, index: number) => item.type ==='sauce' &&
         <Ingredients index={index} key={item._id} onOpen={onOpen} item={item} ingrType='sauce' /> )}
       </div>   
       <p ref={headerMainRef} className={textColor.mainColor}>Начинки</p>  
       <div className={`${styles.BI_container} pl-4`}>
-        {data.isLoading && 'Загрузка...'}
-        {data.hasError && 'Произошла ошибка'}
-        {!data.isLoading &&
-        !data.hasError &&
+        {isLoading && 'Загрузка...'}
+        {hasError && 'Произошла ошибка'}
+        {!isLoading &&
+        !hasError &&
         !!data.length &&
         data.map((item: TingredientPropTypes, index: number) => item.type ==='main' &&
         <Ingredients index={index} key={item._id} onOpen={onOpen} item={item} ingrType='main' /> )}

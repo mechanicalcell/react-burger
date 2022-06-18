@@ -3,11 +3,9 @@ import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
-import { useSelector } from 'react-redux';
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { useDrag } from "react-dnd";
-import { useDispatch } from 'react-redux';
-import { useRef, FC, ReactNode, ReactElement, ReactHTMLElement, HTMLAttributes, Ref, JSXElementConstructor, RefObject, MutableRefObject } from 'react';
+import { useRef, FC } from 'react';
 import { useCallback } from 'react';
 import { useMemo } from 'react';
 import { reorderBurgerConstructorAction } from "../../services/actions/copy-arr";
@@ -17,11 +15,12 @@ import { TConstructorIngredientsProps,
          TingredientsHandleDrop,
          TBurgerConstructorProps,
          TonClick } from './burger-constructor-types';
+import { useAppDispatch, useAppSelector } from '../..';
 
 const ConstructorIngredients: FC<TConstructorIngredientsProps> = ({item, index, deleteIngredient}) => {
-const dispatch = useDispatch();
+const dispatch = useAppDispatch();
 
-const { newArrBurgerConstructor } = useSelector((store: any) => store.isNewArr);
+const { newArrBurgerConstructor } = useAppSelector(store => store.isNewArr);
 const [{ isDrag }, dragRef] = useDrag<{item: TingredientPropTypes; index: number}, void, { isDrag: boolean; }>({
   type: "ingredients",
   item: {item, index},
@@ -74,7 +73,7 @@ const BurgerConstructor: FC<TBurgerConstructorProps> = ({ onOpen,
                                                           totalPrice,
                                                           ingredientHandleDrop,
                                                           bunHandleDrop }) => {
-const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
+const { newArrBurgerConstructor, newArrBun } = useAppSelector(store => store.isNewArr);
 
 const [{isHoverIngredient}, ingredientDropTarget] = useDrop<{item: TingredientPropTypes; index: number}, void, { isHoverIngredient: boolean; }>({
   accept: "ingredient",
@@ -100,8 +99,8 @@ const borderColor = isHoverBun || isHoverIngredient ? 'gray' : 'transparent';
 
 const history = useHistory()
 
-const { getResult } = useSelector((store: any) => store.profile);  
-const { loginResult } = useSelector((store: any) => store.login);  
+const { getResult } = useAppSelector(store => store.profile);  
+const { loginResult } = useAppSelector(store => store.login);  
 
 const onClick = useCallback<TonClick>(() => {
   if (getResult.user.email === null && loginResult.success === null) { 

@@ -1,18 +1,17 @@
-import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
 import { getProfileResult } from '../services/actions/get-patch';
-import { useSelector } from 'react-redux';
 import { deleteCookie, getCookie } from '../components/utils/cookie';
 import { userLogout } from '../services/actions/login';
+import { useAppDispatch, useAppSelector } from '..';
 
 export function LogoutPage() {
-  const { logoutResult } = useSelector((store: any) => store.login);  
-  const { getResult } = useSelector((store: any) => store.profile);    
+  const { logoutResult } = useAppSelector(store => store.login);  
+  const { getResult } = useAppSelector(store => store.profile);    
   const history = useHistory();     
   const { path } = useRouteMatch();
-  const dispatch = useDispatch(); 
+  const dispatch = useAppDispatch(); 
 
   useEffect(() => {
     if (path === '/logout' && (getResult.user.email !== null || getResult.user.email)) {

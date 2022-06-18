@@ -1,7 +1,11 @@
 import { PASSWORD_REQUEST, TPasswordResetActions
 } from '../actions/password-reset';
 
-const initialState = {
+const initialState: {
+  passwordResetResult: {success: boolean | null,
+                        message: string | null
+                      }
+} = {
   passwordResetResult: {success: null, message: null}
 };
 
