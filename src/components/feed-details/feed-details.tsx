@@ -33,7 +33,7 @@ const { data } = useAppSelector(store => store.data)
 const { orders } = useAppSelector(store => store.orders);    
 
 useEffect(() => {
-if (getResult.success || loginResult.success) {
+if (data) {
   dispatch({type: WS_CONNECTION_START, payload: 'orders/all'})
 } else {
     dispatch({type: WS_CONNECTION_CLOSED})
