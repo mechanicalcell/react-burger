@@ -28,18 +28,18 @@ export default function OrdersDetails() {
 const dispatch = useAppDispatch() 
 const { getResult } = useAppSelector(store => store.profile);
 const { loginResult } = useAppSelector(store => store.login);
-   
+const { data } = useAppSelector(store => store.data)  
+
 useEffect(() => {
-if ((getResult.success || loginResult.success)) {
+if (data) {
   dispatch({type: WS_CONNECTION_START, payload: `orders?token=${getCookie('token')}`})
 } else {
     dispatch({type: WS_CONNECTION_CLOSED})
 }
-}, [dispatch, getResult, loginResult]);
-const { data } = useAppSelector(store => store.data)  
+}, [dispatch, getResult, loginResult, data]);
+
 const { orders } = useAppSelector(store => store.orders);    
 const { id } = useParams<{id: string}>()  
-
 return (<div>{
     orders.success && orders.orders.filter((item: any) => item._id === id).map((item: any) => 
 <div key={uuidv4()} className={styles.main_container}>
