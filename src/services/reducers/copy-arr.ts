@@ -1,3 +1,4 @@
+import { TingredientPropTypes } from '../../components/utils/types';
 import { DELETE_INGREDIENTS,
          DELETE_INGREDIENT_DETAIL,
          MOVE_INGREDIENTS,
@@ -8,7 +9,12 @@ import { DELETE_INGREDIENTS,
          TCopyArrActions
 } from '../actions/copy-arr';
 
-const initialState = {
+const initialState: {
+  newArrBurgerConstructor: TingredientPropTypes[] | [], 
+  newArrIngredientDetails: {},
+  newArrBun: TingredientPropTypes | [] | any,
+  ingredientIdCopy: number | null | any
+} = {
   newArrBurgerConstructor: [], 
   newArrIngredientDetails: {},
   newArrBun: [],

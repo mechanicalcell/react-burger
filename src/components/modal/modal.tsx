@@ -14,7 +14,9 @@ const ModalHeader: FC<TModalHeader> = ({header, onClose}) => {
       <div className={styles.modal_header_text}>
         {header}
       </div>
-      <CloseIcon onClick={onClose} type="primary" />
+      <div data-cy="modalClose">
+        <CloseIcon onClick={onClose} type="primary" />
+      </div>
     </div>
   )
 } 

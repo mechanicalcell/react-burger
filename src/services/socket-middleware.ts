@@ -1,5 +1,3 @@
-import { getCookie } from "../components/utils/cookie";
-
 export const socketMiddleware = (wsUrl: string, wsActions: {
     wsInit: string,
     wsSendMessage: string,
@@ -12,13 +10,11 @@ export const socketMiddleware = (wsUrl: string, wsActions: {
     let socket: WebSocket | null = null;
 
     return (next: any) => (action: any) => {
-      const { dispatch, getState } = store;
+      const { dispatch } = store;
       const { type, payload } = action;
       const { wsInit, wsSendMessage, onOpen, onClose, onError, onMessage } = wsActions;
-      const { loginResult } = getState().login; 
-      const { getResult } = getState().profile; 
 
-      if (type === wsInit && (loginResult.success || getResult.success)) {
+      if (type === wsInit) {
         socket = new WebSocket(`${wsUrl}${payload}`);
       }
       if (socket) {

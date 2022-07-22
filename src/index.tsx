@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/app/app';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { initStore } from './services/store'
@@ -39,6 +39,9 @@ export type AppDispatch = typeof store.dispatch;
 export type AppThunk<ReturnType = void> = ActionCreator<
   ThunkAction<ReturnType, Action, RootState, TApplicationActions>
 >;
+
+export const useAppDispatch = () => useDispatch<AppDispatch | AppThunk>() 
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector; 
 
 ReactDOM.render(
   <React.StrictMode>

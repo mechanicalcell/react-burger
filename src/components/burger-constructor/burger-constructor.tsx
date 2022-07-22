@@ -3,11 +3,9 @@ import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
-import { useSelector } from 'react-redux';
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { useDrag } from "react-dnd";
-import { useDispatch } from 'react-redux';
-import { useRef, FC, ReactNode, ReactElement, ReactHTMLElement, HTMLAttributes, Ref, JSXElementConstructor, RefObject, MutableRefObject } from 'react';
+import { useRef, FC } from 'react';
 import { useCallback } from 'react';
 import { useMemo } from 'react';
 import { reorderBurgerConstructorAction } from "../../services/actions/copy-arr";
@@ -17,11 +15,12 @@ import { TConstructorIngredientsProps,
          TingredientsHandleDrop,
          TBurgerConstructorProps,
          TonClick } from './burger-constructor-types';
+import { useAppDispatch, useAppSelector } from '../..';
 
 const ConstructorIngredients: FC<TConstructorIngredientsProps> = ({item, index, deleteIngredient}) => {
-const dispatch = useDispatch();
+const dispatch = useAppDispatch();
 
-const { newArrBurgerConstructor } = useSelector((store: any) => store.isNewArr);
+const { newArrBurgerConstructor } = useAppSelector(store => store.isNewArr);
 const [{ isDrag }, dragRef] = useDrag<{item: TingredientPropTypes; index: number}, void, { isDrag: boolean; }>({
   type: "ingredients",
   item: {item, index},
@@ -74,7 +73,7 @@ const BurgerConstructor: FC<TBurgerConstructorProps> = ({ onOpen,
                                                           totalPrice,
                                                           ingredientHandleDrop,
                                                           bunHandleDrop }) => {
-const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
+const { newArrBurgerConstructor, newArrBun } = useAppSelector(store => store.isNewArr);
 
 const [{isHoverIngredient}, ingredientDropTarget] = useDrop<{item: TingredientPropTypes; index: number}, void, { isHoverIngredient: boolean; }>({
   accept: "ingredient",
@@ -100,8 +99,8 @@ const borderColor = isHoverBun || isHoverIngredient ? 'gray' : 'transparent';
 
 const history = useHistory()
 
-const { getResult } = useSelector((store: any) => store.profile);  
-const { loginResult } = useSelector((store: any) => store.login);  
+const { getResult } = useAppSelector(store => store.profile);  
+const { loginResult } = useAppSelector(store => store.login);  
 
 const onClick = useCallback<TonClick>(() => {
   if (getResult.user.email === null && loginResult.success === null) { 
@@ -116,9 +115,9 @@ const onClick = useCallback<TonClick>(() => {
 return (
   <div className={`${styles.right_section} ml-10 pt-25`}>
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      <div ref={bunDropTarget} className='ml-10' style={{ border: '2px solid #4C4CFF',
-                                                          height: '80px',
-                                                          borderColor }}>
+      <div ref={bunDropTarget} data-cy="bunContainer" className='ml-10' style={{ border: '2px solid #4C4CFF',
+                                                             height: '80px',
+                                                             borderColor }}>
         {newArrBun.map((item: TingredientPropTypes) => item.type === 'bun' && 
         <ConstructorElement
           key={item._id}
@@ -130,6 +129,7 @@ return (
         />)} 
       </div>     
       <div ref={ingredientDropTarget} 
+           data-cy="ingredientContainer"
            style={{ borderColor }} 
            className={styles.over_flow_container_BC}>
         {newArrBurgerConstructor.map((item: TingredientPropTypes, index: number) => item.type !== 'bun' &&
@@ -151,7 +151,7 @@ return (
       <p className={`${styles.text_ingredient_container} text text_type_digits-medium mr-2`}>{totalPrice}</p>    
       <p className='mr-10'><CurrencyIcon type="primary" /></p>
       <Button onClick={onClick} type="primary" size="medium" >
-        Оформить заказ 
+        <p data-cy='orderButtonTest'>Оформить заказ</p> 
       </Button>
     </div>
   </div>  

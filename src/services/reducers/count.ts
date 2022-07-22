@@ -6,7 +6,12 @@ import { COUNT_BUN_UP,
          TCountActions
 } from '../actions/count';
 
-const initialState: any = {
+interface ICountState {
+ [x: number]: number
+}
+
+const initialState: {count: ICountState}
+ = {
   count: { 0: 0, 
            1: 0,
            2: 0, 

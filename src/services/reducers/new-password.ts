@@ -4,7 +4,14 @@ import { NEW_PASSWORD,
          TNewPasswordActions
 } from '../actions/new-password';
 
-const initialState = {
+const initialState: {
+  newPassword: {
+    "password": string,
+    "token": string
+  },
+  newPasswordInput: string,
+  codeInput: string
+  } = {
 newPassword: {
   "password": "",
   "token": ""

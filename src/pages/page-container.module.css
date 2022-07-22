@@ -121,6 +121,7 @@
 
 .feed_order_container {
   /* border: 2px dashed #4C4CFF; */
+  background-color: #28282e;
   border-radius: 30px;
   padding-left: 24px;
   padding-right: 24px;

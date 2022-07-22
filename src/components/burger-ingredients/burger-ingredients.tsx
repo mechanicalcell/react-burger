@@ -1,26 +1,25 @@
-import React, { FC, RefObject, SyntheticEvent } from "react"
+import React, { FC, RefObject, useEffect } from "react"
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-ingredients.module.css';
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useRef } from 'react';
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDrag } from "react-dnd";
 import { ingredientIdCopyAction } from "../../services/actions/copy-arr";
 import { TIngredients } from "./burger-ingredients-types";
 import { TingredientPropTypes } from "../utils/types";
+import { useAppDispatch, useAppSelector } from "../..";
 
 const Ingredients: FC<TIngredients> = ({ onOpen, ingrType, item, index }) => {
 const history = useHistory(); 
 const location = useLocation()    
-const { count } = useSelector((store: any) => store.count);
+const { count } = useAppSelector(store => store.count);
 const [,dragRef] = useDrag({
   type: "ingredient",
   item: {item}
 });
-const dispatch = useDispatch(); 
+const dispatch = useAppDispatch(); 
 const onClick = () => {
   dispatch(ingredientIdCopyAction(item))
   history.push({ pathname: `/ingredients/${item._id}` })
@@ -38,6 +37,7 @@ return (
              state: { background: location } 
            }} 
            ref={dragRef} 
+           data-cy="ingredient"
            onClick={onClick} 
            className={`${styles.ingredients} mb-8`}>
       {count[index] > 0 && (<Counter count={count[index]} size="default" />)} 
@@ -54,7 +54,7 @@ return (
 const Bun: FC<TIngredients> = ({ onOpen, ingrType, item, index }) => {
 const history = useHistory();  
 const location = useLocation()  
-const { count } = useSelector((store: any) => store.count);
+const { count } = useAppSelector(store => store.count);
 const [{isDrag},dragRef] = useDrag<{item: TingredientPropTypes}, void, {isDrag: boolean}>({
   type: "bun",
   item: {item},
@@ -62,10 +62,10 @@ const [{isDrag},dragRef] = useDrag<{item: TingredientPropTypes}, void, {isDrag: 
     isDrag: monitor.isDragging() 
   })      
 });
-const dispatch = useDispatch(); 
+const dispatch = useAppDispatch(); 
 const onClick = () => {
   dispatch(ingredientIdCopyAction(item))
-  history.replace({ pathname: `/ingredients/${item._id}` })
+  history.push({ pathname: `/ingredients/${item._id}` })
   onOpen();
 }
 const image = (
@@ -80,6 +80,7 @@ return (
              state: { background: location }
            }} 
            ref={dragRef} 
+           data-cy="bun"
            onClick={onClick} 
            className={`${styles.ingredients} mb-8`}>
       {count[index] > 0 && (<Counter count={count[index]} size="default" />)}
@@ -94,8 +95,10 @@ return (
 }  
   
 export default function BurgerIngredients({ onOpen }: { onOpen: () => void }) {
-  
-const { data } = useSelector((store: any) => store.data);
+
+const { ingredientModalVisible } = useAppSelector(store => store.order);    
+const history = useHistory();
+const { data, isLoading, hasError } = useAppSelector(store => store.data);
 const [current, setCurrent] = React.useState('bun');
 const [textColor, setTextColor] = React.useState({
   bunColor: 'text text_type_main-medium text_color_inactive mb-6',
@@ -137,6 +140,12 @@ const getDomRect = () => {
   }
 } 
 
+useEffect(() => {
+  if (!ingredientModalVisible) {
+    history.push({ pathname: `/` })
+  }
+}, [ingredientModalVisible, history]);
+
 return (
   <div className={styles.left_section}>
     <p className="text text_type_main-large mt-10 mb-5">Соберите бургер</p> 
@@ -154,30 +163,30 @@ return (
     <div onScroll={getDomRect} className={styles.over_flow_container_BI}>
       <p ref={headerBunRef} className={textColor.bunColor} >Булки</p>  
       <div className={`${styles.BI_container} pl-4`}> 
-        {data.isLoading && 'Загрузка...'} 
-        {data.hasError && 'Произошла ошибка'}            
-        {!data.isLoading &&
-        !data.hasError &&
+        {isLoading && 'Загрузка...'} 
+        {hasError && 'Произошла ошибка'}            
+        {!isLoading &&
+        !hasError &&
         !!data.length && 
         data.map((item: TingredientPropTypes, index: number) => item.type ==='bun' &&
         <Bun index={index} key={item._id} onOpen={onOpen} item={item} ingrType='bun' /> )} 
       </div> 
       <p ref={headerSauceRef} className={textColor.sauceColor}>Соусы</p>  
       <div className={`${styles.BI_container} pl-4`}> 
-        {data.isLoading && 'Загрузка...'} 
-        {data.hasError && 'Произошла ошибка'}            
-        {!data.isLoading &&
-        !data.hasError &&
+        {isLoading && 'Загрузка...'} 
+        {hasError && 'Произошла ошибка'}            
+        {!isLoading &&
+        !hasError &&
         !!data.length && 
         data.map((item: TingredientPropTypes, index: number) => item.type ==='sauce' &&
         <Ingredients index={index} key={item._id} onOpen={onOpen} item={item} ingrType='sauce' /> )}
       </div>   
       <p ref={headerMainRef} className={textColor.mainColor}>Начинки</p>  
       <div className={`${styles.BI_container} pl-4`}>
-        {data.isLoading && 'Загрузка...'}
-        {data.hasError && 'Произошла ошибка'}
-        {!data.isLoading &&
-        !data.hasError &&
+        {isLoading && 'Загрузка...'}
+        {hasError && 'Произошла ошибка'}
+        {!isLoading &&
+        !hasError &&
         !!data.length &&
         data.map((item: TingredientPropTypes, index: number) => item.type ==='main' &&
         <Ingredients index={index} key={item._id} onOpen={onOpen} item={item} ingrType='main' /> )}

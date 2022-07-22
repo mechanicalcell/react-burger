@@ -6,7 +6,29 @@ import { LOGIN_EMAIL_INPUT,
          TLoginActions
 } from '../actions/login';
 
-const initialState = {
+interface ILoginResult {
+  "success": boolean | null,
+  "accessToken": string | null,
+  "refreshToken": string | null,
+  "user": {
+    "email": string | null,
+    "name": string | null
+  }
+}
+
+interface ILogoutResult {
+  "success": boolean | null,
+  "message": string | null
+}
+
+interface ILoginState {
+  loginResult: ILoginResult, 
+  loginEmailInput: string,
+  loginPasswordInput: string,
+  logoutResult: ILogoutResult
+}
+
+const initialState: ILoginState = {
   loginResult: {
     "success": null,
     "accessToken": null,

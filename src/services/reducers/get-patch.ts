@@ -8,35 +8,35 @@ import { PROFILE_NAME_INPUT,
 } from '../actions/get-patch';
 import { TProfileActions } from '../actions/get-patch';
 
-const initialState: {
-  profileNameInput: string,
-  profileEmailInput: string,
-  profilePasswordInput: string,
-  user : {},
-  getResult: {
-    "success": string| null,
-    "user": {
-      "email": string | null,
-      "name": string | null
-    }
-  } ,
-  patchResult: {
-    "success": string | null,
-    "user": {
-      "email": string | null,
-      "name": string | null
-    }
-  },
-  loginResult: {
-    "success": boolean | null,
-    "accessToken": string | null,
-    "refreshToken": string | null,
-    "user": {
-      "email": string | null,
-      "name": string | null
-    }
-  }, 
-} = {
+interface IUser {
+  "email": string | null,
+  "name": string | null
+}
+
+interface IGetResult {
+  "success": boolean | null,
+  "user": IUser
+}
+
+interface IGetPatchState {
+    profileNameInput: string,
+    profileEmailInput: string,
+    profilePasswordInput: string,
+    user : {},
+    getResult: IGetResult, 
+    patchResult: {
+      "success": boolean | null,
+      "user": IUser
+    },
+    loginResult: {
+      "success": boolean | null,
+      "accessToken": string | null,
+      "refreshToken": string | null,
+      "user": IUser
+    } 
+}
+
+const initialState: IGetPatchState = {
   profileNameInput: '',
   profileEmailInput: '',
   profilePasswordInput: '',

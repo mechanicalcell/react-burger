@@ -13,9 +13,8 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { ProtectedRoute } from '../protected-route/protected-route';
-import { useDispatch, useSelector } from 'react-redux';
 import styles from '../app/app.module.css';
-import { deleteOrderNumberAction, getOrder, ingredientIsVisibleAction, orderIsVisibleAction } from '../../services/actions/order';
+import { deleteOrderNumberAction, feedIsVisibleAction, getOrder, ingredientIsVisibleAction, orderIsVisibleAction, ordersIsVisibleAction } from '../../services/actions/order';
 import { deleteBurgerConstructorAction, deleteIngredientDetailAction, deleteIngredientsAction, moveBunsAction, moveIngredientsAction } from '../../services/actions/copy-arr';
 import { countBunDownAction, countBunUpAction, countIngredientDownAction, countIngredientUpAction, deleteCountAction } from '../../services/actions/count';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,11 +26,12 @@ import FeedDetailsPage from '../../pages/feed-details-page';
 import FeedDetails from '../feed-details/feed-details';
 import OrdersDetailsPage from '../../pages/orders-details-page';
 import OrdersDetails from '../orders-details/orders-details';
+import { useAppDispatch, useAppSelector } from '../..';
 
 export function ModalSwitch() {
-const { newArrBurgerConstructor, newArrBun } = useSelector((store: any) => store.isNewArr);
-const { ingredientModalVisible, orderModalVisible } = useSelector((store: any) => store.order);
-const dispatch = useDispatch();
+const { newArrBurgerConstructor, newArrBun } = useAppSelector(store => store.isNewArr);
+const { ingredientModalVisible, ordersModalVisible, feedModalVisible, orderModalVisible } = useAppSelector(store => store.order);
+const dispatch = useAppDispatch();
 
 const ingredientModal = (
   <Modal header="Детали ингредиента" onClose={handleCloseModal}> 
@@ -57,27 +57,27 @@ const ordersModal = (
   </Modal>
 );
 
-function orderNumberRequest() {
+const orderNumberRequest = useCallback(() => {
   const ingredientId: string[] = [];
   newArrBurgerConstructor.map((item: TingredientPropTypes) => ingredientId.push(item._id));
   newArrBun.map((item: TingredientPropTypes) => ingredientId.push(item._id));
   if (ingredientId.length !== 0) {
   return dispatch(getOrder(ingredientId))
   } 
-}
+}, [dispatch, newArrBun, newArrBurgerConstructor]);
 
 function handleOpenIngredientModal() {
   dispatch(ingredientIsVisibleAction(true)) 
   dispatch(orderIsVisibleAction(false))     
 }
 
-function handleOpenFeedModal() {
-  dispatch(ingredientIsVisibleAction(true)) 
+const handleOpenFeedModal = useCallback(() => {
+  dispatch(feedIsVisibleAction(true)) 
   dispatch(orderIsVisibleAction(false))     
-}
+}, [dispatch]);
 
 const handleOpenOrdersModal = useCallback(() => {
-  dispatch(ingredientIsVisibleAction(true)) 
+  dispatch(ordersIsVisibleAction(true)) 
   dispatch(orderIsVisibleAction(false))     
 }, [dispatch]);  
 
@@ -91,7 +91,9 @@ const handleOpenOrderModal = useCallback(() => {
 
 function handleCloseModal() {
   dispatch(ingredientIsVisibleAction(false)) 
+  dispatch(feedIsVisibleAction(false))   
   dispatch(orderIsVisibleAction(false))     
+  dispatch(ordersIsVisibleAction(false)) 
   dispatch(deleteIngredientDetailAction())
   dispatch(deleteOrderNumberAction())
 }
@@ -118,7 +120,7 @@ const deleteIngredient = (item: TingredientPropTypes , index: number) => {
   dispatch(countIngredientDownAction(index))
 };
 
-const { orderTotalPrice } = useSelector((store: any) => store.order);    
+const { orderTotalPrice } = useAppSelector(store => store.order);    
   let location = useLocation<ILocation>()
   let background = location.state && location.state.background;
   return (
@@ -171,9 +173,9 @@ const { orderTotalPrice } = useSelector((store: any) => store.order);
     <div className={styles.hidden}> 
       {background && ingredientModalVisible &&
       <Route path='/ingredients/:id'>{ingredientModal}</Route>} 
-      {background && ingredientModalVisible &&
+      {background && feedModalVisible &&
       <Route path='/feed/:id'>{feedModal}</Route>} 
-      {background && ingredientModalVisible &&
+      {background && ordersModalVisible &&
       <Route path='/profile/orders/:id'>{ordersModal}</Route>} 
       {orderModalVisible && orderModal} 
     </div>  
