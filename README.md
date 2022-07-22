@@ -2,18 +2,18 @@
 
 Учебный проект Stellar Burger - сайт компании по изготовлению и продаже бургеров. На сайте можно собрать бургер, завести личный кабинет и в режиме реального времени посмотреть все свои заказы.
 
-Технологический стек:
-### -React
-### -Redux
-### -React Router
-### -React DnD
-### -TypeScript
-### -Websocket
-### -Unit test's Jest
-### -E2E test's Cypress
-### -Git
+## Технологический стек:
+#### ○ React
+#### ○ Redux
+#### ○ React Router
+#### ○ React DnD
+#### ○ TypeScript
+#### ○ Websocket
+#### ○ Unit test's Jest
+#### ○ E2E test's Cypress
+#### ○ Git
 
-Функционал: 
+## Функционал: 
 - перетаскивание ингредиентов DnD
 - сортировка ингредиентов
 - просмотр детальной информации ингредиентов (модальное окно)  
@@ -22,8 +22,7 @@
 - восстановление пароля
 - оформление заказа
 
-Ссылка на проект: [https://mechanicell.github.io/react-burger/](https://mechanicell.github.io/react-burger/)
-
+## Ссылка на проект: [https://mechanicell.github.io/react-burger/](https://mechanicell.github.io/react-burger/)
 
 ## Запуск и сборка приложения
 
