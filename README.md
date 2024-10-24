@@ -22,7 +22,7 @@
 - восстановление пароля
 - оформление заказа
 
-## Ссылка на проект: [https://mechanicell.github.io/react-burger/](https://mechanicell.github.io/react-burger/)
+## Ссылка на проект: [https://mechanicalcell.github.io/react-burger/](https://mechanicalcell.github.io/react-burger/)
 
 ## Запуск и сборка приложения
 
